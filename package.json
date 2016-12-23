@@ -49,8 +49,12 @@
   },
   "dependencies": {
     "axios": "^0.15.3",
+    "body-parser": "^1.15.2",
     "bootstrap": "^3.3.7",
+    "date-fns": "^1.21.1",
     "express": "^4.14.0",
+    "express-jwt": "^5.1.0",
+    "jsonwebtoken": "^7.2.1",
     "react": "^15.4.1",
     "react-bootstrap": "^0.30.7",
     "react-dom": "^15.4.1",

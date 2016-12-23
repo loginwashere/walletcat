@@ -1,27 +1,27 @@
-import React, { Component } from 'react';
-import axios, { CancelToken } from 'axios';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { ListGroup } from 'react-bootstrap';
 import AppCurrency from '../AppCurrency/AppCurrency';
+import {
+  fetchAppCurrenciesIfNeeded,
+  fetchUserCurrenciesIfNeeded
+} from '../../actions';
 
-class AppCurrencies extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      currencies: [
-
-      ]
-    };
-  }
-
+export class AppCurrencies extends Component {
   render() {
+    const { currencies, userCurrencies, dispatch } = this.props;
     return (
       <div>
         <h1>App Currencies</h1>
         <ListGroup>
-          {this.state.currencies.map((currency) => {
+          {currencies.map((currency) => {
+            const userCurrency = userCurrencies
+              .filter(userCurrency => userCurrency.currencyId === currency.id)[0];
             return (
-              <AppCurrency key={currency.id} currency={currency} />
+              <AppCurrency key={currency.id}
+                           currency={currency}
+                           userCurrency={userCurrency}
+                           dispatch={dispatch} />
             );
           })}
         </ListGroup>
@@ -30,25 +30,34 @@ class AppCurrencies extends Component {
   }
 
   componentDidMount() {
-    axios
-      .get('/api/currencies', {
-        cancelToken: new CancelToken((c) => {
-          this.serverRequestCancel = c;
-        })
-      })
-      .then((result) => {
-        this.setState({
-          currencies: result.data.currencies
-        });
-      })
-      .catch((result) => {
-        console.log(111, result);
-      });
-  }
-
-  componentWillUnmount() {
-    this.serverRequestCancel && this.serverRequestCancel();
+    const { dispatch } = this.props;
+    dispatch(fetchAppCurrenciesIfNeeded());
+    dispatch(fetchUserCurrenciesIfNeeded());
   }
 }
 
-export default AppCurrencies;
+AppCurrencies.propTypes = {
+  currencies: PropTypes.array.isRequired,
+};
+
+function mapStateToProps(state) {
+  const {
+    isFetching,
+    lastUpdated,
+    items: currencies
+  }  = state.currencies || {
+    isFetching: true,
+    items: []
+  }
+
+  const { items: userCurrencies } = state.userCurrencies || { items: [] };
+
+  return {
+    isFetching,
+    lastUpdated,
+    currencies,
+    userCurrencies
+  };
+}
+
+export default connect(mapStateToProps)(AppCurrencies);

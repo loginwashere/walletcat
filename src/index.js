@@ -1,25 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { Router, browserHistory } from 'react-router';
-import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
-import thunk from 'redux-thunk';
-import createLogger from 'redux-logger';
+import { syncHistoryWithStore } from 'react-router-redux';
+import axios from 'axios';
 import routes from './routes';
-import reducers from './reducers';
+import store from './store';
+import { logoutUser } from './actions';
 
-const middleware = [ thunk ];
-if (process.env.NODE_ENV !== 'production') {
-  middleware.push(createLogger());
-}
-
-const store = createStore(
-  combineReducers({
-    ...reducers,
-    routing: routerReducer
-  }),
-  applyMiddleware(...middleware)
+// Add a response interceptor
+axios.interceptors.response.use(
+  response => {
+    console.log(response);
+    return response;
+  },
+  error => {
+    console.log(error, error.response.status, store.dispatch);
+    if (error.response.status === 401) {
+      logoutUser()(store.dispatch);
+    }
+    return Promise.reject(error);
+  }
 );
 
 const history = syncHistoryWithStore(browserHistory, store);

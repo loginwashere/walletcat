@@ -1,53 +1,54 @@
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
-import axios, { CancelToken } from 'axios';
+import { addUserCurrency, removeUserCurrency } from '../../actions';
 
 class AppCurrency extends Component {
-  handleAddCurrency = () => {
-    const userId = 1;
+  handleAddUserCurrency = () => {
+    const { dispatch, currency } = this.props;
+    dispatch(addUserCurrency(currency));
+  }
 
-    axios
-      .post(`/api/users/${userId}/currencies`, {
-        currencyId: 1,
-        cancelToken: new CancelToken((c) => {
-          this.serverRequestCancel = c;
-        })
-      })
-      .then((result) => {
-        this.props.router.push();
-      })
-      .catch((result) => {
-        console.log(111);
-      });
+  handleRemoveUserCurrency = () => {
+    const { dispatch, userCurrency } = this.props;
+    dispatch(removeUserCurrency(userCurrency));
   }
 
   render() {
+    const { currency, userCurrency } = this.props;
     return (
       <li className="list-group-item">
-        <Button className="pull-right"
-                bsSize="xsmall"
-                onClick={this.handleAddCurrency}>Add to My Currencies</Button>
+        {
+          userCurrency
+            ? <Button className="pull-right"
+                  bsSize="xsmall"
+                  onClick={this.handleRemoveUserCurrency}>Remove from My Currencies</Button>
+            : <Button className="pull-right"
+                  bsSize="xsmall"
+                  onClick={this.handleAddUserCurrency}>Add to My Currencies</Button>
+        }
         <h4 className="list-group-item-heading">
-          {this.props.currency.name}
+          {currency.name}
         </h4>
         <p className="list-group-item-text">
-          {this.props.currency.description}
+          {currency.description}
         </p>
       </li>
     );
   }
-
-  componentWillUnmount() {
-    this.serverRequestCancel && this.serverRequestCancel();
-  }
 }
 
 AppCurrency.propTypes = {
-  currency: React.PropTypes.shape({
+  currency: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired
-  })
+  }),
+  userCurrency: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    userId: PropTypes.number.isRequired,
+    currencyId: PropTypes.number.isRequired
+  }),
+  dispatch: PropTypes.func.isRequired
 }
 
 export default AppCurrency;

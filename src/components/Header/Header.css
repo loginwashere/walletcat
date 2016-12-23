@@ -1,0 +1,6 @@
+.navbar-nav > li.profile > a {
+  padding: 0 0 0 5px!important
+}
+.navbar-nav > li.profile > a span.profile-username {
+  padding: 0 5px 0 5px!important
+}

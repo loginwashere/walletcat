@@ -5,6 +5,7 @@ import Accounts  from './Accounts/Accounts';
 import Blotter  from './Blotter/Blotter';
 import Categories  from './Categories/Categories';
 import ContactUs  from './ContactUs/ContactUs';
+import About  from './About/About';
 import Login  from './Login/Login';
 import Logout  from './Logout/Logout';
 import AppCurrencies  from './AppCurrencies/AppCurrencies';
@@ -25,6 +26,7 @@ export  {
   Blotter,
   Categories,
   ContactUs,
+  About,
   Login,
   Logout,
   AppCurrencies,
