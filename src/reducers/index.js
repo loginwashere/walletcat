@@ -13,7 +13,9 @@ import {
   INVALIDATE_USER_CURRENCY_LIST,
   REQUEST_USER_CURRENCY_LIST,
   RECEIVE_USER_CURRENCY_LIST,
-  INVALIDATE_CATEGORY_LIST, REQUEST_CATEGORY_LIST, RECEIVE_CATEGORY_LIST
+  INVALIDATE_CATEGORY_LIST, REQUEST_CATEGORY_LIST, RECEIVE_CATEGORY_LIST,
+  INVALIDATE_ACCOUNT_LIST, REQUEST_ACCOUNT_LIST, RECEIVE_ACCOUNT_LIST,
+  INVALIDATE_TRANSACTION_LIST, REQUEST_TRANSACTION_LIST, RECEIVE_TRANSACTION_LIST
 } from '../actions';
 
 export function currencies(state = {
@@ -156,7 +158,6 @@ export function userCurrencies(state = {
   }
 }
 
-
 export function categories(state = {
   isFetching: false,
   didInvalidate: false,
@@ -184,11 +185,67 @@ export function categories(state = {
   }
 }
 
+export function accounts(state = {
+  isFetching: false,
+  didInvalidate: false,
+  items: []
+}, action) {
+  switch (action.type) {
+    case INVALIDATE_ACCOUNT_LIST:
+      return Object.assign({}, state, {
+        didInvalidate: true
+      })
+    case REQUEST_ACCOUNT_LIST:
+      return Object.assign({}, state, {
+        isFetching: true,
+        didInvalidate: false
+      })
+    case RECEIVE_ACCOUNT_LIST:
+      return Object.assign({}, state, {
+        isFetching: false,
+        didInvalidate: false,
+        items: action.accounts,
+        lastUpdated: action.receivedAt
+      })
+    default:
+      return state
+  }
+}
+
+export function transactions(state = {
+  isFetching: false,
+  didInvalidate: false,
+  items: []
+}, action) {
+  switch (action.type) {
+    case INVALIDATE_TRANSACTION_LIST:
+      return Object.assign({}, state, {
+        didInvalidate: true
+      })
+    case REQUEST_TRANSACTION_LIST:
+      return Object.assign({}, state, {
+        isFetching: true,
+        didInvalidate: false
+      })
+    case RECEIVE_TRANSACTION_LIST:
+      return Object.assign({}, state, {
+        isFetching: false,
+        didInvalidate: false,
+        items: action.transactions,
+        lastUpdated: action.receivedAt
+      })
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   alerts: alerts,
   auth: auth,
   currencies: currencies,
   userCurrencies: userCurrencies,
   categories: categories,
+  accounts: accounts,
+  transactions: transactions,
   routing: routerReducer
 });

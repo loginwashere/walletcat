@@ -2,7 +2,7 @@ import App  from './App/App';
 import Header from './Header/Header';
 import Home  from './Home/Home';
 import Accounts  from './Accounts/Accounts';
-import Blotter  from './Blotter/Blotter';
+import Transactions  from './Transactions/Transactions';
 import Categories  from './Categories/Categories';
 import ContactUs  from './ContactUs/ContactUs';
 import About  from './About/About';
@@ -23,7 +23,7 @@ export  {
   Header,
   Home,
   Accounts,
-  Blotter,
+  Transactions,
   Categories,
   ContactUs,
   About,

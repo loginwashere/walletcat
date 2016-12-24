@@ -10,12 +10,8 @@ import { logoutUser } from './actions';
 
 // Add a response interceptor
 axios.interceptors.response.use(
-  response => {
-    console.log(response);
-    return response;
-  },
+  undefined,
   error => {
-    console.log(error, error.response.status, store.dispatch);
     if (error.response.status === 401) {
       logoutUser()(store.dispatch);
     }

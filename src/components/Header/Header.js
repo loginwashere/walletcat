@@ -32,8 +32,8 @@ export class Header extends Component {
             {isAuthenticated && <LinkContainer to="/accounts">
               <NavItem eventKey={1}>Accounts</NavItem>
             </LinkContainer>}
-            {isAuthenticated && <LinkContainer to="/blotter">
-              <NavItem eventKey={2} href="#">Blotter</NavItem>
+            {isAuthenticated && <LinkContainer to="/transactions">
+              <NavItem eventKey={2} href="#">Transactions</NavItem>
             </LinkContainer>}
             {isAuthenticated && <LinkContainer to="/categories">
               <NavItem eventKey={3} href="#">Categories</NavItem>

@@ -17,7 +17,6 @@ export class UserCurrencies extends Component {
           {currencies.map((currency) => {
             const userCurrency = userCurrencies
               .filter(userCurrency => userCurrency.currencyId === currency.id)[0];
-            console.log(userCurrency);
             return (
               userCurrency && <AppCurrency key={currency.id}
                            currency={currency}

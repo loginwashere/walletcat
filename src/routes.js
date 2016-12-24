@@ -5,7 +5,7 @@ import {
   Home,
   Accounts,
   NotFound,
-  Blotter,
+  Transactions,
   Categories,
   RecurringPayments,
   Profile,
@@ -28,7 +28,7 @@ export default () => {
 
       <Route path="accounts" component={Accounts}/>
 
-      <Route path="blotter" component={Blotter}/>
+      <Route path="transactions" component={Transactions}/>
       <Route path="categories" component={Categories}/>
       <Route path="currencies/">
         <Route path="app" component={AppCurrencies}/>

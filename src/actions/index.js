@@ -5,6 +5,8 @@ const API_URL = 'http://localhost:3000/api/';
 const API_APP_CURRENCY_LIST_URL = `${API_URL}currencies`;
 const API_USER_CURRENCY_LIST_URL = `${API_URL}user-currencies`;
 const API_CATEGORY_LIST_URL = `${API_URL}categories`;
+const API_ACCOUNT_LIST_URL = `${API_URL}accounts`;
+const API_TRANSACTION_LIST_URL = `${API_URL}transactions`;
 
 // There are three possible states for our login
 // process and we need actions for each of them
@@ -358,7 +360,6 @@ export function fetchUserCurrenciesIfNeeded() {
   };
 }
 
-
 export const INVALIDATE_CATEGORY_LIST = 'INVALIDATE_CATEGORY_LIST';
 
 export function invalidateCategories() {
@@ -428,3 +429,140 @@ export function fetchCategoriesIfNeeded() {
   };
 }
 
+export const INVALIDATE_ACCOUNT_LIST = 'INVALIDATE_ACCOUNT_LIST';
+
+export function invalidateAccounts() {
+  return {
+    type: INVALIDATE_ACCOUNT_LIST
+  };
+}
+
+export const REQUEST_ACCOUNT_LIST = 'REQUEST_ACCOUNT_LIST';
+
+export function requestAccounts() {
+  return {
+    type: REQUEST_ACCOUNT_LIST
+  }
+}
+
+export const RECEIVE_ACCOUNT_LIST = 'RECEIVE_ACCOUNT_LIST';
+
+export function receiveAccounts(json) {
+  return {
+    type: RECEIVE_ACCOUNT_LIST,
+    accounts: json.data.accounts,
+    receivedAt: Date.now()
+  }
+}
+
+function fetchAccounts() {
+  return dispatch => {
+    dispatch(requestAccounts());
+    const token = localStorage.getItem('token');
+    return axios
+      .get(API_ACCOUNT_LIST_URL, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then(json => dispatch(receiveAccounts(json)))
+      .catch((error) => {
+        dispatch(alertAdd({
+          message: error.response.data.error,
+          description: error.message
+        }));
+      });
+  }
+}
+
+function shouldFetchAccounts(state) {
+  const accounts = state.accounts;
+  if (!accounts.isFetching) {
+    return true
+  } else if (accounts.isFetching) {
+    return false
+  } else {
+    return accounts.didInvalidate
+  }
+}
+
+export function fetchAccountsIfNeeded() {
+  return (dispatch, getState) => {
+    if (shouldFetchAccounts(getState())) {
+      // Dispatch a thunk from thunk!
+      return dispatch(fetchAccounts());
+    } else {
+      // Let the calling code know there's nothing to wait for.
+      return Promise.resolve();
+    }
+  };
+}
+
+export const INVALIDATE_TRANSACTION_LIST = 'INVALIDATE_TRANSACTION_LIST';
+
+export function invalidateTransactions() {
+  return {
+    type: INVALIDATE_TRANSACTION_LIST
+  };
+}
+
+export const REQUEST_TRANSACTION_LIST = 'REQUEST_TRANSACTION_LIST';
+
+export function requestTransactions() {
+  return {
+    type: REQUEST_TRANSACTION_LIST
+  }
+}
+
+export const RECEIVE_TRANSACTION_LIST = 'RECEIVE_TRANSACTION_LIST';
+
+export function receiveTransactions(json) {
+  return {
+    type: RECEIVE_TRANSACTION_LIST,
+    transactions: json.data.transactions,
+    receivedAt: Date.now()
+  }
+}
+
+function fetchTransactions() {
+  return dispatch => {
+    dispatch(requestTransactions());
+    const token = localStorage.getItem('token');
+    return axios
+      .get(API_TRANSACTION_LIST_URL, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then(json => dispatch(receiveTransactions(json)))
+      .catch((error) => {
+        dispatch(alertAdd({
+          message: error.response.data.error,
+          description: error.message
+        }));
+      });
+  }
+}
+
+function shouldFetchTransactions(state) {
+  const transactions = state.transactions;
+  if (!transactions.isFetching) {
+    return true
+  } else if (transactions.isFetching) {
+    return false
+  } else {
+    return transactions.didInvalidate
+  }
+}
+
+export function fetchTransactionsIfNeeded() {
+  return (dispatch, getState) => {
+    if (shouldFetchTransactions(getState())) {
+      // Dispatch a thunk from thunk!
+      return dispatch(fetchTransactions());
+    } else {
+      // Let the calling code know there's nothing to wait for.
+      return Promise.resolve();
+    }
+  };
+}

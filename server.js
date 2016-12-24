@@ -70,6 +70,43 @@ categories.push({
   updated: format(new Date())
 })
 
+let accounts = [];
+accounts.push({
+  id: 1,
+  userId: users[0].id,
+  currencyId: userCurrencies[0].id,
+  name: 'Wallet',
+  description: 'My Wallet',
+  amount: 0,
+  created: format(new Date()),
+  updated: format(new Date())
+});
+accounts.push({
+  id: 2,
+  userId: users[0].id,
+  currencyId: userCurrencies[0].id,
+  name: 'Stash',
+  description: 'My Stash',
+  amount: 0,
+  created: format(new Date()),
+  updated: format(new Date())
+});
+
+let transactions = [];
+transactions.push({
+  id: 1,
+  userId: users[0].id,
+  fromAccountId: accounts[0].id,
+  toAccountId: accounts[1].id,
+  categoryId: categories[0].id,
+  fromAmount: 100,
+  toAmount: 100,
+  description: 'description',
+  date: format(new Date()),
+  created: format(new Date()),
+  updated: format(new Date())
+});
+
 const app = express();
 
 const jwtMiddleware = expressJwt({
@@ -208,13 +245,14 @@ app.post('/api/user-currencies', (req, res) => {
   res.json(newUserCurrecny);
 });
 
-app.delete('/api/user-currencies/:userCurrencyId', (req, res) => {
+app.delete('/api/user-currencies/:id', (req, res) => {
   const userCurrency = userCurrencies
     .filter((userCurrency) => userCurrency.userId === req.user.sub)
-    .filter((userCurrency) => userCurrency.id === req.params.userCurrencyId);
+    .filter((userCurrency) => userCurrency.id === req.params.id)
+    [0];
   if (userCurrency) {
-    const userCurrencyIndex = userCurrencies.indexOf(userCurrency);
-    userCurrencies.splice(userCurrencyIndex, 1);
+    const index = userCurrencies.indexOf(userCurrency);
+    userCurrencies.splice(index, 1);
   }
   res
     .status(204)
@@ -241,13 +279,91 @@ app.post('/api/categories', (req, res) => {
   res.json(category);
 });
 
-app.delete('/api/categories/:categoryId', (req, res) => {
+app.delete('/api/categories/:id', (req, res) => {
   const category = categories
     .filter((category) => category.userId === req.user.sub)
-    .filter((category) => category.id === req.params.categoryId);
+    .filter((category) => category.id === req.params.id)
+    [0];
   if (category) {
-    const categoryIndex = categories.indexOf(category);
-    categories.splice(categoryIndex, 1);
+    const index = categories.indexOf(category);
+    categories.splice(index, 1);
+  }
+  res
+    .status(204)
+    .json();
+});
+
+app.get('/api/accounts', (req, res) => {
+  res.json({
+    accounts: accounts
+      .filter(account => account.userId === req.user.sub)
+  });
+});
+
+app.post('/api/accounts', (req, res) => {
+  const account = {
+    id: accounts.length + 1,
+    userId: req.user.sub,
+    name: req.body.name,
+    description: req.body.description,
+    currencyId: req.body.currencyId,
+    amount: req.body.amount,
+    created: format(new Date()),
+    updated: format(new Date())
+  };
+  accounts.push(account)
+  res.json(account);
+});
+
+app.delete('/api/accounts/:id', (req, res) => {
+  const account = accounts
+    .filter((account) => account.userId === req.user.sub)
+    .filter((account) => account.id === req.params.id)
+    [0];
+  if (account) {
+    const index = accounts.indexOf(account);
+    accounts.splice(index, 1);
+  }
+  res
+    .status(204)
+    .json();
+});
+
+app.get('/api/transactions', (req, res) => {
+  res.json({
+    transactions: transactions
+      .filter(transaction => transaction.userId === req.user.sub)
+  });
+});
+
+app.post('/api/transactions', (req, res) => {
+  const account = {
+    id: accounts.length + 1,
+    userId: req.user.sub,
+    fromAccountId: req.body.fromAccountId,
+    toAccountId: req.body.toAccountId,
+    rate: req.body.rate,
+    name: req.body.name,
+    description: req.body.description,
+    fromAmount: req.body.fromAmount,
+    toAmount: req.body.toAmount,
+    categoryId: req.body.categoryId,
+    date: req.body.date,
+    created: format(new Date()),
+    updated: format(new Date())
+  };
+  accounts.push(account)
+  res.json(account);
+});
+
+app.delete('/api/transactions/:id', (req, res) => {
+  const account = accounts
+    .filter((account) => account.userId === req.user.sub)
+    .filter((account) => account.id === req.params.id)
+    [0];
+  if (account) {
+    const index = accounts.indexOf(account);
+    accounts.splice(index, 1);
   }
   res
     .status(204)

@@ -9,16 +9,16 @@ export class Categories extends Component {
     const { categories } = this.props;
     return (
       <div>
-      <h1>Categories</h1>
+        <h1>Categories</h1>
         <ListGroup>
-            {categories.map(category => {
-              return (
-                <Category key={category.id}
-                          category={category} />
-              );
-            })}
-          </ListGroup>
-        </div>
+          {categories.map(category => {
+            return (
+              <Category key={category.id}
+                        category={category} />
+            );
+          })}
+        </ListGroup>
+      </div>
     );
   }
 

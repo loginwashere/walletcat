@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Blotter from './Blotter';
+import Transaction from './Transaction';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<Blotter />, div);
+  ReactDOM.render(<Transaction />, div);
 });
