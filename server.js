@@ -114,6 +114,19 @@ const jwtMiddleware = expressJwt({
   })
   .unless({
     path: [
+      { url: '/' },
+      { url: '/accounts' },
+      { url: '/transactions' },
+      { url: '/categories' },
+      { url: '/recurring-payments' },
+      { url: '/currencies' },
+      { url: '/reports' },
+      { url: '/about' },
+      { url: '/contact-us' },
+      { url: '/profile' },
+      { url: '/logout' },
+      { url: '/login' },
+      { url: '/register' },
       {
         url: '/api/auth',
         methods: ['POST']
