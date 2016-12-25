@@ -115,19 +115,6 @@ const jwtMiddleware = expressJwt({
   })
   .unless({
     path: [
-      '/',
-      /^accounts.*/,
-      /^transactions.*/,
-      /^categories.*/,
-      /^recurring-payments.*/,
-      /^currencies.*/,
-      /^reports.*/,
-      '/about',
-      '/contact-us',
-      '/profile',
-      '/logout',
-      '/login',
-      '/register',
       {
         url: '/api/auth',
         methods: ['POST']
@@ -136,19 +123,6 @@ const jwtMiddleware = expressJwt({
         url: '/api/users',
         methods: ['POST']
       }
-    ],
-    ext: [
-      'html',
-      'ico',
-      'js',
-      'css',
-      'json',
-      'map',
-      'woff',
-      'woff2',
-      'svg',
-      'ttf',
-      'eot'
     ]
   });
 
@@ -164,7 +138,7 @@ function errorHandler(err, req, res, next) {
 }
 
 app.use(bodyParser.json());
-app.use(jwtMiddleware);
+app.use('/api/*', jwtMiddleware);
 app.use(errorHandler);
 // Express only serves static assets in production
 if (process.env.NODE_ENV === 'production') {
