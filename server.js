@@ -115,24 +115,19 @@ const jwtMiddleware = expressJwt({
   })
   .unless({
     path: [
-      { url: '/' },
-      { url: '/index.html' },
-      { url: '/favicon.ico' },
-      { url: '/asset-manifest.json' },
-      { url: /^static.*/ },
-
-      { url: /^accounts.*/ },
-      { url: /^transactions.*/ },
-      { url: /^categories.*/ },
-      { url: /^recurring-payments.*/ },
-      { url: /^currencies.*/ },
-      { url: /^reports.*/ },
-      { url: '/about' },
-      { url: '/contact-us' },
-      { url: '/profile' },
-      { url: '/logout' },
-      { url: '/login' },
-      { url: '/register' },
+      '/',
+      /^accounts.*/,
+      /^transactions.*/,
+      /^categories.*/,
+      /^recurring-payments.*/,
+      /^currencies.*/,
+      /^reports.*/,
+      '/about',
+      '/contact-us',
+      '/profile',
+      '/logout',
+      '/login',
+      '/register',
       {
         url: '/api/auth',
         methods: ['POST']
@@ -141,6 +136,19 @@ const jwtMiddleware = expressJwt({
         url: '/api/users',
         methods: ['POST']
       }
+    ],
+    ext: [
+      'html',
+      'ico',
+      'js',
+      'css',
+      'json',
+      'map',
+      'woff',
+      'woff2',
+      'svg',
+      'ttf',
+      'eot'
     ]
   });
 
