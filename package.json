@@ -54,6 +54,7 @@
     "date-fns": "^1.21.1",
     "express": "^4.14.0",
     "express-jwt": "^5.1.0",
+    "express-unless": "^0.3.0",
     "jsonwebtoken": "^7.2.1",
     "react": "^15.4.1",
     "react-bootstrap": "^0.30.7",

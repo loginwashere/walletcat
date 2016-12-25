@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const expressJwt = require('express-jwt');
 const jwt = require('jsonwebtoken');
 const format = require('date-fns/format');
+const unless = require('express-unless');
 
 const hashSecret = 'abcdefg';
 const jwtSecret = 'shhhhhhared-secret';
@@ -115,19 +116,23 @@ const jwtMiddleware = expressJwt({
   .unless({
     path: [
       { url: '/' },
-      { url: '/accounts' },
-      { url: '/transactions' },
-      { url: '/categories' },
-      { url: '/recurring-payments' },
-      { url: '/currencies' },
-      { url: '/reports' },
+      { url: '/index.html' },
+      { url: '/favicon.ico' },
+      { url: '/asset-manifest.json' },
+      { url: '/static/*' },
+
+      { url: '/accounts*' },
+      { url: '/transactions*' },
+      { url: '/categories*' },
+      { url: '/recurring-payments*' },
+      { url: '/currencies*' },
+      { url: '/reports/*' },
       { url: '/about' },
       { url: '/contact-us' },
       { url: '/profile' },
       { url: '/logout' },
       { url: '/login' },
       { url: '/register' },
-      { url: '/static' },
       {
         url: '/api/auth',
         methods: ['POST']
@@ -155,7 +160,9 @@ app.use(jwtMiddleware);
 app.use(errorHandler);
 // Express only serves static assets in production
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('build'));
+  const staticMiddleware = express.static('build');
+  staticMiddleware.unless = unless;
+  app.use(staticMiddleware.unless({ method: 'OPTIONS' }));
 }
 
 app.set('port', (process.env.PORT || 3001));
