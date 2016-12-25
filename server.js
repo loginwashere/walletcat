@@ -127,6 +127,7 @@ const jwtMiddleware = expressJwt({
       { url: '/logout' },
       { url: '/login' },
       { url: '/register' },
+      { url: '/static' },
       {
         url: '/api/auth',
         methods: ['POST']
