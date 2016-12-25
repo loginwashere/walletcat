@@ -141,7 +141,7 @@ app.use(jwtMiddleware);
 app.use(errorHandler);
 // Express only serves static assets in production
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('client/build'));
+  app.use(express.static('build'));
 }
 
 app.set('port', (process.env.PORT || 3001));
