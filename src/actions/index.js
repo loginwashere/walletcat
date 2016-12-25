@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { push } from 'react-router-redux';
 
-const API_URL = 'http://localhost:3000/api/';
+const API_URL = `${process.env.PUBLIC_URL || 'http://localhost:3000/'}api/`;
 const API_APP_CURRENCY_LIST_URL = `${API_URL}currencies`;
 const API_USER_CURRENCY_LIST_URL = `${API_URL}user-currencies`;
 const API_CATEGORY_LIST_URL = `${API_URL}categories`;
