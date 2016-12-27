@@ -1,10 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { Badge } from 'react-bootstrap';
+import format from 'date-fns/format';
+
 import './Transaction.css';
 
 export default class Transaction extends Component {
   render() {
     const { transaction, fromAccount, toAccount, category } = this.props;
+    const date = format(new Date(transaction.date), 'YYYY-MM-DD HH:mm:ss')
     return (
       <li className="list-group-item">
         <p>
@@ -16,7 +19,7 @@ export default class Transaction extends Component {
           To {toAccount.name}
         </p>
         <p className="list-group-item-text">
-          <Badge pullRight>{transaction.date}</Badge>
+          <Badge pullRight>{date}</Badge>
           {category && category.name}
         </p>
         {transaction.description && <p>{transaction.description}</p>}
