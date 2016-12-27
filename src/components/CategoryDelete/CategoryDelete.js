@@ -56,7 +56,8 @@ export class CategoryDelete extends Component {
               onSubmit={this.handleSubmit}>
           <Col sm={12}>
             <Alert bsStyle="warning">
-              Are you  sure you want to delete category <strong>{category.name}</strong>?
+              Are you  sure you want to delete category
+              <strong>{category.name}</strong>?
             </Alert>
           </Col>
 
@@ -89,12 +90,12 @@ CategoryDelete.propTypes = {
   category: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired
-  })
+    description: PropTypes.string
+  }).isRequired,
+  dispatch: PropTypes.func.isRequired
 }
 
 function mapStateToProps(state, ownProps) {
-  console.log(ownProps)
   const category = state.categories.items
     .filter(category => category.id === +ownProps.params.categoryId)[0] || {};
 

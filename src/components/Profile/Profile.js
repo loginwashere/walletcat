@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import {
   Image,
   Form,
@@ -9,14 +9,14 @@ import {
 } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
-class Profile extends Component {
+export class Profile extends Component {
   render() {
     const { user } = this.props;
     return (
       <div>
         <h1>Profile</h1>
-        <Image src={`${user.avatar}&s=250`} circle />
-        <Form horizontal>
+        { user && <Image src={`${user.avatar}&s=250`} circle /> }
+        { user && <Form horizontal>
           <FormGroup controlId="formHorizontalEmail">
             <Col componentClass={ControlLabel} sm={2}>
               Email
@@ -40,10 +40,18 @@ class Profile extends Component {
                            disabled />
             </Col>
           </FormGroup>
-        </Form>
+        </Form>}
       </div>
     );
   }
+}
+
+Profile.propTypes = {
+  user: PropTypes.shape({
+    username: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    avatar: PropTypes.string.isRequired
+  }).isRequired
 }
 
 function mapStateToProps(state) {

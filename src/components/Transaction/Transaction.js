@@ -10,14 +10,14 @@ export default class Transaction extends Component {
         <h4 className="list-group-item-heading">
           {transaction.name}
         </h4>
-        {fromAccount && <p>
+        <p>
           <Badge bsStyle="danger" pullRight>{transaction.fromAmount}</Badge>
           From {fromAccount.name}
-        </p>}
-        {toAccount && <p>
+        </p>
+        <p>
           <Badge bsStyle="success" pullRight>{transaction.toAmount}</Badge>
           To {toAccount.name}
-        </p>}
+        </p>
         <p className="list-group-item-text">
           <Badge pullRight>{transaction.date}</Badge>
           {category && category.name}
@@ -31,21 +31,22 @@ export default class Transaction extends Component {
 Transaction.propTypes = {
   transaction: PropTypes.shape({
     id: PropTypes.number.isRequired,
-    description: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    description: PropTypes.string,
     date: PropTypes.string.isRequired,
     fromAmount: PropTypes.number.isRequired,
     toAmount: PropTypes.number.isRequired
-  }),
+  }).isRequired,
   fromAccount: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired
-  }),
+  }).isRequired,
   toAccount: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired
-  }),
+  }).isRequired,
   category: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired
-  })
+  }).isRequired
 }

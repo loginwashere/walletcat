@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import {
@@ -98,6 +98,10 @@ export class AccountCreate extends Component {
       </div>
     );
   }
+}
+
+AccountCreate.PropTypes = {
+  dispatch: PropTypes.func.isRequired
 }
 
 export default connect()(AccountCreate);

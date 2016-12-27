@@ -7,21 +7,21 @@ export class AppAlertList extends Component {
     const { items, dispatch } = this.props;
     return (
       <div>
-        {items && items.map((alert) => <AppAlert key={alert.id}
-                                                 alert={alert}
-                                                 dispatch={dispatch} />)}
+        {items.map((alert) => <AppAlert key={alert.id}
+                                        alert={alert}
+                                        dispatch={dispatch} />)}
       </div>
     );
   }
 }
 
 AppAlertList.propTypes = {
-  alerts: PropTypes.array
+  items: PropTypes.array.isRequired
 }
 
 function mapStateToProps(state) {
   const { alerts } = state;
-  const { items } = alerts;
+  const { items } = alerts || [];
   return { items };
 }
 

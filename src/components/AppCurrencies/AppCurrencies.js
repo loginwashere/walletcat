@@ -38,6 +38,7 @@ export class AppCurrencies extends Component {
 
 AppCurrencies.propTypes = {
   currencies: PropTypes.array.isRequired,
+  userCurrencies: PropTypes.array.isRequired
 };
 
 function mapStateToProps(state) {

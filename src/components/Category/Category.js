@@ -10,9 +10,9 @@ export default class Category extends Component {
         <h4 className="list-group-item-heading">
           {category.name}
         </h4>
-        <p className="list-group-item-text">
+        {category.description && <p className="list-group-item-text">
           {category.description}
-        </p>
+        </p>}
       </Link>
     );
   }
@@ -22,6 +22,6 @@ Category.propTypes = {
   category: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired
-  })
+    description: PropTypes.string
+  }).isRequired
 }

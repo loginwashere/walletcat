@@ -4,7 +4,7 @@ import { routerMiddleware } from 'react-router-redux';
 import { browserHistory } from 'react-router';
 
 const middleware = [ thunk, routerMiddleware(browserHistory) ];
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
   middleware.push(createLogger());
 }
 

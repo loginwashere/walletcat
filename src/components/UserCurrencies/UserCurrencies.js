@@ -38,6 +38,8 @@ export class UserCurrencies extends Component {
 
 UserCurrencies.propTypes = {
   currencies: PropTypes.array.isRequired,
+  userCurrencies: PropTypes.array.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {

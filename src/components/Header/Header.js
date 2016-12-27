@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import {
   Nav,
@@ -81,7 +81,7 @@ export class Header extends Component {
             </NavDropdown>}
             {isAuthenticated && <NavDropdown eventKey={6}
                                              title="Reports"
-                                            id="basic-nav-dropdown">
+                                             id="basic-nav-dropdown">
               <LinkContainer to="/reports/calendar">
                 <MenuItem eventKey={6.1}>Calendar</MenuItem>
               </LinkContainer>
@@ -121,6 +121,16 @@ export class Header extends Component {
       </Navbar>
     );
   }
+}
+
+Header.propTypes = {
+  user: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    username: PropTypes.string.isRequired,
+    avatar: PropTypes.string
+  }),
+  isAuthenticated: PropTypes.bool.isRequired,
+  dispatch: PropTypes.func.isRequired
 }
 
 function mapStateToProps(state) {

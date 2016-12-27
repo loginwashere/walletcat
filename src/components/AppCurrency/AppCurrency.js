@@ -41,8 +41,8 @@ AppCurrency.propTypes = {
   currency: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired
-  }),
+    description: PropTypes.string
+  }).isRequired,
   userCurrency: PropTypes.shape({
     id: PropTypes.number.isRequired,
     userId: PropTypes.number.isRequired,

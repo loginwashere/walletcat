@@ -119,12 +119,12 @@ CategoryView.propTypes = {
   category: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired
-  })
+    description: PropTypes.string
+  }).isRequired,
+  dispatch: PropTypes.func.isRequired
 }
 
 function mapStateToProps(state, ownProps) {
-  console.log(ownProps)
   const category = state.categories.items
     .filter(category => category.id === +ownProps.params.categoryId)[0] || {};
 

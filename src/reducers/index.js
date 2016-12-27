@@ -255,12 +255,12 @@ export function transactions(state = {
 }
 
 export default combineReducers({
-  alerts: alerts,
-  auth: auth,
-  currencies: currencies,
-  userCurrencies: userCurrencies,
-  categories: categories,
-  accounts: accounts,
-  transactions: transactions,
+  alerts,
+  auth,
+  currencies,
+  userCurrencies,
+  categories,
+  accounts,
+  transactions,
   routing: routerReducer
 });

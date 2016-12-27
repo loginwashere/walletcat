@@ -55,7 +55,8 @@ export class Transactions extends Component {
 Transactions.propTypes = {
   transactions: PropTypes.array.isRequired,
   accounts: PropTypes.array.isRequired,
-  categories: PropTypes.array.isRequired
+  categories: PropTypes.array.isRequired,
+  dispatch: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {

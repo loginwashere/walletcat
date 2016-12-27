@@ -6,10 +6,6 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 
 export default class AppComponent extends Component {
-  handleAlertDismiss() {
-    this.setState({alertVisible: false});
-  }
-
   render() {
     return (
       <div>
