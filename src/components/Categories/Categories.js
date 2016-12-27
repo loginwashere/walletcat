@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { ListGroup } from 'react-bootstrap';
+import { ListGroup, Button } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 import Category from '../Category/Category';
 import { fetchCategoriesIfNeeded } from '../../actions';
 
@@ -9,7 +10,12 @@ export class Categories extends Component {
     const { categories } = this.props;
     return (
       <div>
-        <h1>Categories</h1>
+        <h1>
+          Categories
+          <LinkContainer to="/categories/create">
+            <Button className="pull-right">Create</Button>
+          </LinkContainer>
+        </h1>
         <ListGroup>
           {categories.map(category => {
             return (

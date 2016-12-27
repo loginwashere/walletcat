@@ -4,10 +4,16 @@ import {
   App,
   Home,
   Accounts,
+  AccountCreate,
   NotFound,
   Transactions,
+  TransactionCreate,
   Categories,
+  CategoryCreate,
+  CategoryView,
+  CategoryDelete,
   RecurringPayments,
+  RecurringPaymentCreate,
   Profile,
   About,
   ContactUs,
@@ -27,19 +33,30 @@ export default () => {
       <IndexRoute component={Home}/>
 
       <Route path="accounts" component={Accounts}/>
+      <Route path="accounts/create" component={AccountCreate}/>
 
       <Route path="transactions" component={Transactions}/>
+      <Route path="transactions/create" component={TransactionCreate}/>
+
       <Route path="categories" component={Categories}/>
+      <Route path="categories/create" component={CategoryCreate}/>
+      <Route path="categories/:categoryId" component={CategoryView}/>
+      <Route path="categories/:categoryId/delete" component={CategoryDelete}/>
+
       <Route path="currencies/">
         <Route path="app" component={AppCurrencies}/>
         <Route path="user" component={UserCurrencies}/>
       </Route>
+
       <Route path="recurring-payments" component={RecurringPayments}/>
+      <Route path="recurring-payments/create" component={RecurringPaymentCreate}/>
+
       <Route path="reports/">
         <Route path="by-period" component={ReportByPeriod}/>
         <Route path="by-category" component={ReportByCategory}/>
         <Route path="calendar" component={ReportCalendar}/>
       </Route>
+
       <Route path="profile" component={Profile}/>
 
       <Route path="about" component={About}/>

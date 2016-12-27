@@ -1,5 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-import { ListGroup } from 'react-bootstrap';
+import {
+  ListGroup,
+  Button
+} from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 import { connect } from 'react-redux';
 import Transaction from '../Transaction/Transaction';
 import {
@@ -13,7 +17,12 @@ export class Transactions extends Component {
     const { transactions, accounts, categories } = this.props;
     return (
       <div>
-        <h1>Transactions</h1>
+        <h1>
+          Transactions
+          <LinkContainer to="/transactions/create">
+            <Button className="pull-right">Create</Button>
+          </LinkContainer>
+        </h1>
         <ListGroup>
           {transactions.map(transaction => {
             const fromAccount = accounts

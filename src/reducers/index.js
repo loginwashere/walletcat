@@ -14,6 +14,7 @@ import {
   REQUEST_USER_CURRENCY_LIST,
   RECEIVE_USER_CURRENCY_LIST,
   INVALIDATE_CATEGORY_LIST, REQUEST_CATEGORY_LIST, RECEIVE_CATEGORY_LIST,
+  REQUEST_CATEGORY_CREATE, RECEIVE_CATEGORY_CREATE,
   INVALIDATE_ACCOUNT_LIST, REQUEST_ACCOUNT_LIST, RECEIVE_ACCOUNT_LIST,
   INVALIDATE_TRANSACTION_LIST, REQUEST_TRANSACTION_LIST, RECEIVE_TRANSACTION_LIST
 } from '../actions';
@@ -179,6 +180,20 @@ export function categories(state = {
         didInvalidate: false,
         items: action.categories,
         lastUpdated: action.receivedAt
+      })
+    case REQUEST_CATEGORY_CREATE:
+      return Object.assign({}, state, {
+        isFetching: true,
+        didInvalidate: false
+      })
+    case RECEIVE_CATEGORY_CREATE:
+      return Object.assign({}, state, {
+        isFetching: false,
+        didInvalidate: false,
+        items: [
+          ...state.items,
+          ...[action.category]
+        ],
       })
     default:
       return state

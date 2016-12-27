@@ -430,6 +430,49 @@ export function fetchCategoriesIfNeeded() {
   };
 }
 
+export const REQUEST_CATEGORY_CREATE = 'REQUEST_CATEGORY_CREATE';
+
+export function requestCategoryCreate() {
+  return {
+    type: REQUEST_CATEGORY_CREATE
+  }
+}
+
+export const RECEIVE_CATEGORY_CREATE = 'RECEIVE_CATEGORY_CREATE';
+
+export function receiveCategoryCreate(json) {
+  return {
+    type: RECEIVE_CATEGORY_CREATE,
+    category: json.data,
+    receivedAt: Date.now()
+  }
+}
+
+export function createCategory(params) {
+  return dispatch => {
+    dispatch(requestCategoryCreate());
+    const token = localStorage.getItem('token');
+    return axios({
+        url: API_CATEGORY_LIST_URL,
+        method: 'post',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        data: params
+      })
+      .then(json => {
+        dispatch(receiveCategoryCreate(json));
+        dispatch(push('/categories'));
+      })
+      .catch((error) => {
+        dispatch(alertAdd({
+          message: error.response.data.error,
+          description: error.message
+        }));
+      });
+  }
+}
+
 export const INVALIDATE_ACCOUNT_LIST = 'INVALIDATE_ACCOUNT_LIST';
 
 export function invalidateAccounts() {

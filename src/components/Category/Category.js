@@ -1,17 +1,19 @@
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 
 export default class Category extends Component {
   render() {
     const { category } = this.props;
     return (
-      <li className="list-group-item">
+      <Link to={`/categories/${category.id}`}
+            className="list-group-item">
         <h4 className="list-group-item-heading">
           {category.name}
         </h4>
         <p className="list-group-item-text">
           {category.description}
         </p>
-      </li>
+      </Link>
     );
   }
 }
