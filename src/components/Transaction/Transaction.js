@@ -7,9 +7,6 @@ export default class Transaction extends Component {
     const { transaction, fromAccount, toAccount, category } = this.props;
     return (
       <li className="list-group-item">
-        <h4 className="list-group-item-heading">
-          {transaction.name}
-        </h4>
         <p>
           <Badge bsStyle="danger" pullRight>{transaction.fromAmount}</Badge>
           From {fromAccount.name}
@@ -31,7 +28,6 @@ export default class Transaction extends Component {
 Transaction.propTypes = {
   transaction: PropTypes.shape({
     id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
     description: PropTypes.string,
     date: PropTypes.string.isRequired,
     fromAmount: PropTypes.number.isRequired,

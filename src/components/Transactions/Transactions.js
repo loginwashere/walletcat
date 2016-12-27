@@ -6,11 +6,7 @@ import {
 import { LinkContainer } from 'react-router-bootstrap';
 import { connect } from 'react-redux';
 import Transaction from '../Transaction/Transaction';
-import {
-  fetchTransactionsIfNeeded,
-  fetchAccountsIfNeeded,
-  fetchCategoriesIfNeeded
-} from '../../actions';
+import { fetchTransactionsAccountsCategoriesIfNeeded } from '../../actions';
 
 export class Transactions extends Component {
   render() {
@@ -32,11 +28,15 @@ export class Transactions extends Component {
             const category = categories
               .filter(category => category.id === transaction.categoryId)[0];
             return (
-              <Transaction key={transaction.id}
-                           transaction={transaction}
-                           fromAccount={fromAccount}
-                           toAccount={toAccount}
-                           category={category} />
+              transaction
+              && toAccount
+              && fromAccount
+              && category
+              && <Transaction key={transaction.id}
+                              transaction={transaction}
+                              fromAccount={fromAccount}
+                              toAccount={toAccount}
+                              category={category} />
             );
           })}
         </ListGroup>
@@ -46,9 +46,7 @@ export class Transactions extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    dispatch(fetchTransactionsIfNeeded());
-    dispatch(fetchAccountsIfNeeded());
-    dispatch(fetchCategoriesIfNeeded());
+    dispatch(fetchTransactionsAccountsCategoriesIfNeeded());
   }
 }
 

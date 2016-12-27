@@ -5,7 +5,6 @@ import Transaction from './Transaction';
 it('renders without crashing', () => {
   const transaction = {
     id: 1,
-    name: 'test',
     description: 'test',
     date: '',
     fromAmount: 100,

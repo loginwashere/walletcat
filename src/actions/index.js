@@ -99,12 +99,10 @@ export function loginUser(creds) {
           dispatch(push('/'));
         }
       })
-      .catch((error) => {
-        dispatch(alertAdd({
+      .catch(error => dispatch(alertAdd({
           message: error.response.data.error,
           description: error.message
-        }));
-      });
+      })));
   }
 }
 
@@ -155,12 +153,10 @@ function fetchAppCurrencies() {
         }
       })
       .then(json => dispatch(receiveAppCurrencies(json)))
-      .catch((error) => {
-        dispatch(alertAdd({
+      .catch(error => dispatch(alertAdd({
           message: error.response.data.error,
           description: error.message
-        }));
-      });
+      })));
   }
 }
 
@@ -247,12 +243,10 @@ export function addUserCurrency(currency) {
         }
       })
       .then(json => dispatch(receiveAddUserCurrency(json)))
-      .catch((error) => {
-        dispatch(alertAdd({
+      .catch(error => dispatch(alertAdd({
           message: error.response.data.error,
           description: error.message
-        }));
-      });
+      })));
   }
 }
 
@@ -282,12 +276,10 @@ export function removeUserCurrency(userCurrency) {
         }
       })
       .then(json => dispatch(receiveRemoveUserCurrency(userCurrency)))
-      .catch((error) => {
-        dispatch(alertAdd({
+      .catch(error => dispatch(alertAdd({
           message: error.response.data.error,
           description: error.message
-        }));
-      });
+      })));
   }
 }
 
@@ -329,12 +321,10 @@ function fetchUserCurrencies() {
         }
       })
       .then(json => dispatch(receiveUserCurrencies(json)))
-      .catch((error) => {
-        dispatch(alertAdd({
+      .catch(error => dispatch(alertAdd({
           message: error.response.data.error,
           description: error.message
-        }));
-      });
+      })));
   }
 }
 
@@ -398,12 +388,10 @@ function fetchCategories() {
         }
       })
       .then(json => dispatch(receiveCategories(json)))
-      .catch((error) => {
-        dispatch(alertAdd({
+      .catch(error => dispatch(alertAdd({
           message: error.response.data.error,
           description: error.message
-        }));
-      });
+      })));
   }
 }
 
@@ -464,12 +452,10 @@ export function createCategory(params) {
         dispatch(receiveCategoryCreate(json));
         dispatch(push('/categories'));
       })
-      .catch((error) => {
-        dispatch(alertAdd({
+      .catch(error => dispatch(alertAdd({
           message: error.response.data.error,
           description: error.message
-        }));
-      });
+      })));
   }
 }
 
@@ -510,12 +496,10 @@ function fetchAccounts() {
         }
       })
       .then(json => dispatch(receiveAccounts(json)))
-      .catch((error) => {
-        dispatch(alertAdd({
+      .catch(error => dispatch(alertAdd({
           message: error.response.data.error,
           description: error.message
-        }));
-      });
+      })));
   }
 }
 
@@ -579,12 +563,10 @@ function fetchTransactions() {
         }
       })
       .then(json => dispatch(receiveTransactions(json)))
-      .catch((error) => {
-        dispatch(alertAdd({
+      .catch(error => dispatch(alertAdd({
           message: error.response.data.error,
           description: error.message
-        }));
-      });
+      })));
   }
 }
 
@@ -609,4 +591,19 @@ export function fetchTransactionsIfNeeded() {
       return Promise.resolve();
     }
   };
+}
+
+export function fetchTransactionsAccountsCategoriesIfNeeded() {
+  return dispatch => Promise.all([
+    dispatch(fetchTransactionsIfNeeded()),
+    dispatch(fetchAccountsIfNeeded()),
+    dispatch(fetchCategoriesIfNeeded())
+  ]);
+}
+
+export function fetchAppAndUserCurrenciesIfNeeded() {
+  return dispatch => Promise.all([
+    dispatch(fetchAppCurrenciesIfNeeded()),
+    dispatch(fetchUserCurrenciesIfNeeded())
+  ]);
 }

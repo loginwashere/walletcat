@@ -2,10 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { ListGroup } from 'react-bootstrap';
 import AppCurrency from '../AppCurrency/AppCurrency';
-import {
-  fetchAppCurrenciesIfNeeded,
-  fetchUserCurrenciesIfNeeded
-} from '../../actions';
+import { fetchAppAndUserCurrenciesIfNeeded } from '../../actions';
 
 export class AppCurrencies extends Component {
   render() {
@@ -18,7 +15,7 @@ export class AppCurrencies extends Component {
             const userCurrency = userCurrencies
               .filter(userCurrency => userCurrency.currencyId === currency.id)[0];
             return (
-              <AppCurrency key={currency.id}
+              currency && <AppCurrency key={currency.id}
                            currency={currency}
                            userCurrency={userCurrency}
                            dispatch={dispatch} />
@@ -31,8 +28,7 @@ export class AppCurrencies extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    dispatch(fetchAppCurrenciesIfNeeded());
-    dispatch(fetchUserCurrenciesIfNeeded());
+    dispatch(fetchAppAndUserCurrenciesIfNeeded());
   }
 }
 
