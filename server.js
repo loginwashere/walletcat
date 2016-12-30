@@ -380,7 +380,7 @@ app.get('*', (req, res) => {
     .sendFile(`${__dirname}/build/index.html`);
 });
 
-app.listen(app.get('port'), () => {
+app.listen(process.env.NODE_APP_SOCKET || app.get('port'), () => {
   console.log(`Find the server at: http://localhost:${app.get('port')}/`); // eslint-disable-line no-console
   fs.openSync('/tmp/app-initialized', 'w');
 });
