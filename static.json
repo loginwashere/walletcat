@@ -10,5 +10,10 @@
   "routes": {
     "/assets/*": "/assets/",
     "/**": "index.html"
+  },
+  "proxies": {
+    "/api/": {
+      "origin": "${REACT_APP_PUBLIC_URL}"
+    }
   }
 }
