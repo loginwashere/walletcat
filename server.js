@@ -148,7 +148,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use(staticMiddleware.unless({ method: 'OPTIONS' }));
 }
 
-app.set('port', (process.env.PORT || 3001));
+app.set('port', (process.env.NODE_APP_PORT || 3001));
 
 app.get('/api/currencies', (req, res) => {
   res.json({
