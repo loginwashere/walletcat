@@ -58,6 +58,6 @@ function mapStateToProps(state) {
   };
 }
 
-const UserCurrenciesConnected = connect(mapStateToProps)(UserCurrencies);
+export const UserCurrenciesConnected = connect(mapStateToProps)(UserCurrencies);
 
 export default UserCurrenciesConnected;
