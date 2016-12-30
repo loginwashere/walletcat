@@ -3,24 +3,24 @@ import { IndexRoute, Route } from 'react-router';
 import {
   App,
   Home,
-  Accounts,
-  AccountCreate,
+  AccountsConnected,
+  AccountCreateConnected,
   NotFound,
-  Transactions,
-  TransactionCreate,
-  Categories,
-  CategoryCreate,
-  CategoryView,
-  CategoryDelete,
+  TransactionsConnected,
+  TransactionCreateConnected,
+  CategoriesConnected,
+  CategoryCreateConnected,
+  CategoryViewConnected,
+  CategoryDeleteConnected,
   RecurringPayments,
-  RecurringPaymentCreate,
-  Profile,
+  RecurringPaymentCreateConnected,
+  ProfileConnected,
   About,
   ContactUs,
-  Login,
+  LoginConnected,
   Register,
-  AppCurrencies,
-  UserCurrencies,
+  AppCurrenciesConnected,
+  UserCurrenciesConnected,
   ReportByPeriod,
   ReportByCategory,
   ReportCalendar,
@@ -32,24 +32,26 @@ export default () => {
     <Route path="/" component={App}>
       <IndexRoute component={Home}/>
 
-      <Route path="accounts" component={Accounts}/>
-      <Route path="accounts/create" component={AccountCreate}/>
+      <Route path="accounts" component={AccountsConnected}/>
+      <Route path="accounts/create" component={AccountCreateConnected}/>
 
-      <Route path="transactions" component={Transactions}/>
-      <Route path="transactions/create" component={TransactionCreate}/>
+      <Route path="transactions" component={TransactionsConnected}/>
+      <Route path="transactions/create" component={TransactionCreateConnected}/>
 
-      <Route path="categories" component={Categories}/>
-      <Route path="categories/create" component={CategoryCreate}/>
-      <Route path="categories/:categoryId" component={CategoryView}/>
-      <Route path="categories/:categoryId/delete" component={CategoryDelete}/>
+      <Route path="categories" component={CategoriesConnected}/>
+      <Route path="categories/create" component={CategoryCreateConnected}/>
+      <Route path="categories/:categoryId" component={CategoryViewConnected}/>
+      <Route path="categories/:categoryId/delete"
+             component={CategoryDeleteConnected}/>
 
       <Route path="currencies/">
-        <Route path="app" component={AppCurrencies}/>
-        <Route path="user" component={UserCurrencies}/>
+        <Route path="app" component={AppCurrenciesConnected}/>
+        <Route path="user" component={UserCurrenciesConnected}/>
       </Route>
 
       <Route path="recurring-payments" component={RecurringPayments}/>
-      <Route path="recurring-payments/create" component={RecurringPaymentCreate}/>
+      <Route path="recurring-payments/create"
+             component={RecurringPaymentCreateConnected}/>
 
       <Route path="reports/">
         <Route path="by-period" component={ReportByPeriod}/>
@@ -57,11 +59,11 @@ export default () => {
         <Route path="calendar" component={ReportCalendar}/>
       </Route>
 
-      <Route path="profile" component={Profile}/>
+      <Route path="profile" component={ProfileConnected}/>
 
       <Route path="about" component={About}/>
       <Route path="contact-us" component={ContactUs}/>
-      <Route path="login" component={Login}/>
+      <Route path="login" component={LoginConnected}/>
       <Route path="logout" component={Logout}/>
       <Route path="register" component={Register}/>
 
