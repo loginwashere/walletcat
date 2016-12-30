@@ -5,6 +5,7 @@ const expressJwt = require('express-jwt');
 const jwt = require('jsonwebtoken');
 const format = require('date-fns/format');
 const unless = require('express-unless');
+const fs = require('fs');
 
 const hashSecret = 'abcdefg';
 const jwtSecret = 'shhhhhhared-secret';
@@ -381,4 +382,5 @@ app.get('*', (req, res) => {
 
 app.listen(app.get('port'), () => {
   console.log(`Find the server at: http://localhost:${app.get('port')}/`); // eslint-disable-line no-console
+  fs.openSync('/tmp/app-initialized', 'w');
 });
