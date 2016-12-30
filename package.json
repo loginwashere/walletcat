@@ -105,6 +105,17 @@
   "babel": {
     "presets": [
       "react-app"
+    ],
+    "plugins": [
+      [
+        "lodash",
+        {
+          "id": [
+            "react-bootstrap",
+            "react-router-bootstrap"
+          ]
+        }
+      ]
     ]
   },
   "proxy": "http://localhost:3001/"
