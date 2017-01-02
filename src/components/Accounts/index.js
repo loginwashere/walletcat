@@ -10,7 +10,7 @@ import { fetchAccountsAndAppAndUserCurrenciesIfNeeded } from '../../actions';
 
 export class Accounts extends Component {
   render() {
-    const { accounts } = this.props;
+    const { accounts, currencies, userCurrencies } = this.props;
     return (
       <div>
         <h1>
@@ -21,9 +21,17 @@ export class Accounts extends Component {
         </h1>
         <ListGroup>
           {accounts.map(account => {
+            const accountUserCurrency = userCurrencies
+              .filter(item => item.id === account.currencyId)[0];
+            const accountCurrency = accountUserCurrency && currencies
+              .filter(item => item.id === accountUserCurrency.currencyId)[0];
             return (
-              <Account key={account.id}
-                       account={account} />
+              account
+              && accountUserCurrency
+              && accountCurrency
+              && <Account key={account.id}
+                       account={account}
+                       accountCurrency={accountCurrency} />
             );
           })}
         </ListGroup>
@@ -39,6 +47,8 @@ export class Accounts extends Component {
 
 Accounts.propTypes = {
   accounts: PropTypes.array.isRequired,
+  userCurrencies: PropTypes.array.isRequired,
+  currencies: PropTypes.array.isRequired
 };
 
 function mapStateToProps(state) {
@@ -50,11 +60,15 @@ function mapStateToProps(state) {
     isFetching: true,
     items: []
   }
+  const { items: currencies } = state.currencies || { items: [] };
+  const { items: userCurrencies } = state.userCurrencies || { items: [] };
 
   return {
     isFetching,
     lastUpdated,
-    accounts
+    accounts,
+    currencies,
+    userCurrencies
   };
 }
 

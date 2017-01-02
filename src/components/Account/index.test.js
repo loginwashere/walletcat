@@ -7,6 +7,11 @@ it('renders without crashing', () => {
     id: 1,
     name: 'Wallet'
   }
+  const accountCurrency = {
+    id: 1,
+    name: 'USD'
+  }
   const div = document.createElement('div');
-  ReactDOM.render(<Account account={account} />, div);
+  ReactDOM.render(<Account account={account}
+                           accountCurrency={accountCurrency} />, div);
 });

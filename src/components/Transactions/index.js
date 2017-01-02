@@ -41,9 +41,6 @@ export class Transactions extends Component {
               .filter(item => item.id === toAccountUserCurrency.currencyId)[0];
             const category = categories
               .filter(category => category.id === transaction.categoryId)[0];
-            console.log(
-              [fromAccount,fromAccountUserCurrency,fromAccountCurrency,toAccount,toAccountUserCurrency,toAccountCurrency,category]
-            )
             return (
               transaction
               && toAccount

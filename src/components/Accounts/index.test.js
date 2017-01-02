@@ -10,7 +10,22 @@ it('renders without crashing', () => {
       name: 'Wallet'
     }
   ];
+  const currencies = [
+    {
+      id: 1,
+      name: 'USD'
+    }
+  ];
+  const userCurrencies = [
+    {
+      id: 1,
+      currencyId: 1,
+      userId: 1
+    }
+  ];
   const div = document.createElement('div');
   ReactDOM.render(<Accounts accounts={accounts}
+                            currencies={currencies}
+                            userCurrencies={userCurrencies}
                             dispatch={store.dispatch} />, div);
 });
