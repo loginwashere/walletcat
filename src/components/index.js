@@ -1,5 +1,6 @@
 export * from './App';
 export * from './Header';
+export * from './HeaderProfile';
 export * from './Home';
 export * from './Accounts';
 export * from './Account';

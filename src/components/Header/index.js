@@ -5,14 +5,11 @@ import {
   Navbar,
   NavItem,
   NavDropdown,
-  MenuItem,
-  Image
+  MenuItem
 } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { IndexLink } from 'react-router';
-import { Logout } from '..';
-
-import './style.css';
+import { Logout, HeaderProfile } from '..';
 
 export class Header extends Component {
   render() {
@@ -100,12 +97,8 @@ export class Header extends Component {
             </LinkContainer>
           </Nav>
           <Nav pullRight>
-            {isAuthenticated && <LinkContainer to="/profile"
-                                               className={'profile'}>
-              <NavItem eventKey={9} href="#">
-                <Image src={user.avatar} circle />
-                <span className={'profile-username'}>{user.username}</span>
-              </NavItem>
+            {isAuthenticated && <LinkContainer to="/profile">
+              <HeaderProfile user={user} eventKey={9} />
             </LinkContainer>}
             {!isAuthenticated && <LinkContainer to="/login">
               <NavItem eventKey={10} href="#">Login</NavItem>
@@ -124,11 +117,7 @@ export class Header extends Component {
 }
 
 Header.propTypes = {
-  user: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    username: PropTypes.string.isRequired,
-    avatar: PropTypes.string
-  }),
+  user: PropTypes.object,
   isAuthenticated: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired
 }
