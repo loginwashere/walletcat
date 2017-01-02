@@ -1,16 +1,19 @@
 import React, { Component, PropTypes } from 'react';
 import { NavItem, Image } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 
-import './style.css';
+import './style.less';
 
 export class HeaderProfile extends Component {
   render() {
-    const { user, eventKey } = this.props;
+    const { user } = this.props;
     return (
-      <NavItem eventKey={eventKey} href="#" className={'profile'}>
-        <Image src={user.avatar} circle />
-        <span className={'profile-username'}>{user.username}</span>
-      </NavItem>
+      <LinkContainer to="/profile">
+        <NavItem className={'profile'} eventKey={9}>
+          <Image src={user.avatar} circle />
+          <span className={'profile-username'}>{user.username}</span>
+        </NavItem>
+      </LinkContainer>
     );
   }
 }
@@ -21,7 +24,7 @@ HeaderProfile.propTypes = {
     username: PropTypes.string.isRequired,
     avatar: PropTypes.string
   }).isRequired,
-  eventKey: PropTypes.number
+  eventKey: PropTypes.number.isRequired
 }
 
 export default HeaderProfile;

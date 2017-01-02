@@ -115,6 +115,7 @@ module.exports = {
         exclude: [
           /\.html$/,
           /\.(js|jsx)$/,
+          /\.less$/,
           /\.css$/,
           /\.json$/,
           /\.svg$/
@@ -131,6 +132,11 @@ module.exports = {
         include: paths.appSrc,
         loader: 'babel',
 
+      },
+      {
+        test: /\.less$/,
+        loader: ExtractTextPlugin.extract('style', 'css?importLoaders=1!less')
+        // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
       },
       // The notation here is somewhat confusing.
       // "postcss" loader applies autoprefixer to our CSS.

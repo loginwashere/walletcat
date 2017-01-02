@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Badge } from 'react-bootstrap';
 import format from 'date-fns/format';
 
-import './style.css';
+import './style.less';
 
 export class Transaction extends Component {
   render() {

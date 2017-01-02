@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { HeaderConnected, AppAlertListConnected } from '..';
 
-import 'bootstrap/dist/css/bootstrap.css';
-import './style.css';
+import './style.less';
 
 export class App extends Component {
   render() {

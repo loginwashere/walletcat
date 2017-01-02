@@ -97,14 +97,12 @@ export class Header extends Component {
             </LinkContainer>
           </Nav>
           <Nav pullRight>
-            {isAuthenticated && <LinkContainer to="/profile">
-              <HeaderProfile user={user} eventKey={9} />
-            </LinkContainer>}
+            {isAuthenticated && <HeaderProfile eventKey={9} user={user} />}
             {!isAuthenticated && <LinkContainer to="/login">
               <NavItem eventKey={10} href="#">Login</NavItem>
             </LinkContainer>}
             {isAuthenticated && <LinkContainer to="/logout">
-              <Logout dispatch={dispatch} />
+              <Logout eventKey={9} dispatch={dispatch} />
             </LinkContainer>}
             {!isAuthenticated && <LinkContainer to="/register">
               <NavItem eventKey={12} href="#">Register</NavItem>

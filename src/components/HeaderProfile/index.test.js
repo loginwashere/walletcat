@@ -9,5 +9,5 @@ it('renders without crashing', () => {
     username: 'test',
     avatar: ''
   }
-  ReactDOM.render(<HeaderProfile user={user} />, div);
+  ReactDOM.render(<HeaderProfile user={user} eventKey={1} />, div);
 });

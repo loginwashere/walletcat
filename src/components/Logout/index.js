@@ -9,14 +9,16 @@ export class Logout extends Component {
   }
 
   render() {
+    const { eventKey } = this.props;
     return (
-      <NavItem eventKey={11} onClick={this.handleClick}>Logout</NavItem>
+      <NavItem eventKey={eventKey} onClick={this.handleClick}>Logout</NavItem>
     );
   }
 }
 
 Logout.propTypes = {
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  eventKey: PropTypes.number.isRequired
 };
 
 export default Logout;
