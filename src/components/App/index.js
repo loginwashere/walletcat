@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { HeaderConnected, AppAlertListConnected } from '..';
+import { HeaderConnected, AppAlertListConnected, Footer } from '..';
 
 import './style.less';
 
@@ -12,6 +12,7 @@ export class App extends Component {
           <AppAlertListConnected />
           {this.props.children}
         </div>
+        <Footer />
       </div>
     );
   }

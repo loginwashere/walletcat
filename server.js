@@ -157,7 +157,7 @@ app.get('/api/currencies', (req, res) => {
 });
 
 app.post('/api/users', (req, res) => {
-  if (!req.body.email || !req.body.password) {
+  if (!req.body.email || !req.body.password || !req.body.username) {
     res.status(400).json({
       error: 'Validation error'
     })
@@ -165,8 +165,8 @@ app.post('/api/users', (req, res) => {
   const user = {
     id: users.length + 1,
     email: req.body.email,
-    avatar: `https://www.gravatar.com/avatar/${md5(req.body.email)}?s=50`,
     username: req.body.username,
+    avatar: `https://www.gravatar.com/avatar/${md5(req.body.email)}?s=50`,
     password: hashPassword(req.body.password),
     created: format(new Date()),
     updated: format(new Date())

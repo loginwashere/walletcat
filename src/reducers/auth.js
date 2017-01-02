@@ -2,7 +2,10 @@ import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
-  LOGOUT_SUCCESS
+  LOGOUT_SUCCESS,
+  REGISTER_REQUEST,
+  REGISTER_SUCCESS,
+  REGISTER_FAILURE
 } from '../actions';
 
 export default function auth(
@@ -37,6 +40,25 @@ export default function auth(
       return Object.assign({}, state, {
         isFetching: true,
         isAuthenticated: false
+      });
+    case REGISTER_REQUEST:
+      return Object.assign({}, state, {
+        isFetching: true,
+        isAuthenticated: false,
+        user: action.params
+      });
+    case REGISTER_SUCCESS:
+      return Object.assign({}, state, {
+        isFetching: false,
+        isAuthenticated: false,
+        errorMessage: '',
+        user: action.user
+      });
+    case REGISTER_FAILURE:
+      return Object.assign({}, state, {
+        isFetching: false,
+        isAuthenticated: false,
+        errorMessage: action.message
       });
     default:
       return state;

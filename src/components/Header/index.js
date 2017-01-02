@@ -89,12 +89,6 @@ export class Header extends Component {
                 <MenuItem eventKey={6.3}>By Period</MenuItem>
               </LinkContainer>
             </NavDropdown>}
-            <LinkContainer to="/about">
-              <NavItem eventKey={7} href="#">About</NavItem>
-            </LinkContainer>
-            <LinkContainer to="/contact-us">
-              <NavItem eventKey={8} href="#">Contact Us</NavItem>
-            </LinkContainer>
           </Nav>
           <Nav pullRight>
             {isAuthenticated && <HeaderProfile eventKey={9} user={user} />}

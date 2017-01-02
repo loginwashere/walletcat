@@ -30,3 +30,4 @@ export * from './Register';
 export * from './NotFound';
 export * from './AppAlert';
 export * from './AppAlertList';
+export * from './Footer';

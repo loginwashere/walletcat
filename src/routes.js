@@ -18,7 +18,7 @@ import {
   About,
   ContactUs,
   LoginConnected,
-  Register,
+  RegisterConnected,
   AppCurrenciesConnected,
   UserCurrenciesConnected,
   ReportByPeriod,
@@ -65,7 +65,7 @@ export default () => {
       <Route path="contact-us" component={ContactUs}/>
       <Route path="login" component={LoginConnected}/>
       <Route path="logout" component={Logout}/>
-      <Route path="register" component={Register}/>
+      <Route path="register" component={RegisterConnected}/>
 
       <Route path="*" component={NotFound}/>
 

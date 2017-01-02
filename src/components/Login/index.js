@@ -5,10 +5,8 @@ import {
   FormGroup,
   Col,
   FormControl,
-  Checkbox,
   Button,
-  ControlLabel,
-  HelpBlock
+  ControlLabel
 } from 'react-bootstrap';
 import { loginUser } from '../../actions';
 
@@ -18,8 +16,7 @@ export class Login extends Component {
 
     this.state = {
       email: '',
-      password: '',
-      rememberMe: false
+      password: ''
     }
   }
 
@@ -29,18 +26,10 @@ export class Login extends Component {
     const { dispatch } = this.props;
     const params = {
       email: this.state.email,
-      password: this.state.password,
-      rememberMe: this.state.rememberMe
+      password: this.state.password
     };
 
     dispatch(loginUser(params));
-  }
-
-  getValidationState = () => {
-    const length = this.state.value.length;
-    if (length > 10) return 'success';
-    else if (length > 5) return 'warning';
-    else if (length > 0) return 'error';
   }
 
   handleEmailChange = (e) => {
@@ -49,10 +38,6 @@ export class Login extends Component {
 
   handlePasswordChange = (e) => {
     this.setState({ password: e.target.value });
-  }
-
-  handleRememberMeChange = (e) => {
-    this.setState({ rememberMe: e.target.value });
   }
 
   render() {
@@ -72,7 +57,6 @@ export class Login extends Component {
                            onChange={this.handleEmailChange}
                            value={this.state.email} />
               <FormControl.Feedback />
-              <HelpBlock>Validation is based on string length.</HelpBlock>
             </Col>
           </FormGroup>
 
@@ -86,15 +70,6 @@ export class Login extends Component {
                            placeholder="Password"
                            onChange={this.handlePasswordChange}
                            value={this.state.password} />
-            </Col>
-          </FormGroup>
-
-          <FormGroup>
-            <Col smOffset={2} sm={10}>
-              <Checkbox onChange={this.handleRememberMeChange}
-                        value={this.state.rememberMe}>
-                Remember me
-              </Checkbox>
             </Col>
           </FormGroup>
 
