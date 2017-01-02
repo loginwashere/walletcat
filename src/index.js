@@ -19,6 +19,10 @@ axios.interceptors.response.use(
   }
 );
 
+if (process.env.NODE_ENV === 'production') {
+  require('offline-plugin/runtime').install();
+}
+
 const history = syncHistoryWithStore(browserHistory, store);
 
 ReactDOM.render(
