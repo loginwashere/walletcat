@@ -7,7 +7,8 @@ it('renders without crashing', () => {
   const accounts = [
     {
       id: 1,
-      name: 'Wallet'
+      name: 'Wallet',
+      amount: 0
     }
   ];
   const currencies = [

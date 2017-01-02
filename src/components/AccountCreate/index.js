@@ -9,7 +9,10 @@ import {
   Button,
   ControlLabel
 } from 'react-bootstrap';
-import { createCategory } from '../../actions';
+import {
+  createAccount,
+  fetchAppAndUserCurrenciesIfNeeded
+} from '../../actions';
 
 export class AccountCreate extends Component {
   constructor(props) {
@@ -17,7 +20,9 @@ export class AccountCreate extends Component {
 
     this.state = {
       name: '',
-      description: ''
+      description: '',
+      currencyId: '',
+      amount: 0
     }
   }
 
@@ -27,17 +32,12 @@ export class AccountCreate extends Component {
     const { dispatch } = this.props;
     const params = {
       name: this.state.name,
-      description: this.state.description
+      description: this.state.description,
+      currencyId: parseInt(this.state.currencyId, 10),
+      amount: this.state.amount
     };
 
-    dispatch(createCategory(params));
-  }
-
-  getValidationState = () => {
-    const length = this.state.value.length;
-    if (length > 10) return 'success';
-    else if (length > 5) return 'warning';
-    else if (length > 0) return 'error';
+    dispatch(createAccount(params));
   }
 
   handleNameChange = (e) => {
@@ -48,7 +48,16 @@ export class AccountCreate extends Component {
     this.setState({ description: e.target.value });
   }
 
+  handleCurrencyChange = (e) => {
+    this.setState({ currencyId: e.target.value });
+  }
+
+  handleAmountChange = (e) => {
+    this.setState({ amount: e.target.value });
+  }
+
   render() {
+    const { currencies, userCurrencies } = this.props;
     return (
       <div>
         <h1>New Account</h1>
@@ -68,6 +77,28 @@ export class AccountCreate extends Component {
             </Col>
           </FormGroup>
 
+          <FormGroup controlId="formControlsSelect">
+            <Col componentClass={ControlLabel} sm={2}>
+              Currency
+            </Col>
+            <Col sm={10}>
+              <FormControl componentClass="select"
+                           placeholder="Currency"
+                           onChange={this.handleCurrencyChange}
+                           value={this.state.currencyId}>
+                <option value="0" key={0}>Select Currency</option>
+                {userCurrencies.map(userCurrency => {
+                  const currency = currencies
+                    .filter(currency => currency.id === userCurrency.currencyId)[0];
+                    return (
+                      <option value={userCurrency.id}
+                              key={userCurrency.id}>{currency.name}</option>
+                    )
+                })}
+              </FormControl>
+            </Col>
+          </FormGroup>
+
           <FormGroup controlId="formHorizontalDescription">
             <Col componentClass={ControlLabel} sm={2}>
               Description
@@ -77,6 +108,18 @@ export class AccountCreate extends Component {
                            placeholder="Description"
                            onChange={this.handleDescriptionChange}
                            value={this.state.description} />
+            </Col>
+          </FormGroup>
+
+          <FormGroup controlId="formHorizontalDescription">
+            <Col componentClass={ControlLabel} sm={2}>
+              Amount
+            </Col>
+            <Col sm={10}>
+              <FormControl type="number"
+                           placeholder="Amount"
+                           onChange={this.handleAmountChange}
+                           value={this.state.amount} />
             </Col>
           </FormGroup>
 
@@ -98,12 +141,29 @@ export class AccountCreate extends Component {
       </div>
     );
   }
+
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch(fetchAppAndUserCurrenciesIfNeeded());
+  }
 }
 
 AccountCreate.PropTypes = {
+  userCurrencies: PropTypes.array.isRequired,
+  currencies: PropTypes.array.isRequired,
   dispatch: PropTypes.func.isRequired
 }
 
-export const AccountCreateConnected = connect()(AccountCreate);
+function mapStateToProps(state) {
+  const { items: currencies } = state.currencies || { items: [] };
+  const { items: userCurrencies } = state.userCurrencies || { items: [] };
+
+  return {
+    currencies,
+    userCurrencies
+  }
+}
+
+export const AccountCreateConnected = connect(mapStateToProps)(AccountCreate);
 
 export default AccountCreateConnected;

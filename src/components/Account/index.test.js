@@ -5,7 +5,8 @@ import Account from '.';
 it('renders without crashing', () => {
   const account = {
     id: 1,
-    name: 'Wallet'
+    name: 'Wallet',
+    amount: 0
   }
   const accountCurrency = {
     id: 1,

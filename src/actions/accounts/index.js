@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { push } from 'react-router-redux';
 import { alertAdd } from '..';
 import { API_URL } from '../../apiUrl';
 
@@ -68,4 +69,45 @@ export function fetchAccountsIfNeeded() {
       return Promise.resolve();
     }
   };
+}
+
+export const ACCOUNT_CREATE_REQUEST = 'ACCOUNT_CREATE_REQUEST';
+export const ACCOUNT_CREATE_RECEIVE = 'ACCOUNT_CREATE_RECEIVE';
+export const ACCOUNT_CREATE_FAILURE = 'ACCOUNT_CREATE_FAILURE';
+
+function accountCreateRequest(params) {
+  return {
+    type: ACCOUNT_CREATE_REQUEST
+  }
+}
+
+function accountCreateReceive(json) {
+  return {
+    type: ACCOUNT_CREATE_RECEIVE,
+    account: json.data,
+    receivedAt: Date.now()
+  }
+}
+
+export function createAccount(params) {
+  return dispatch => {
+    const token = localStorage.getItem('token');
+    dispatch(accountCreateRequest(params));
+    return axios({
+        url: API_ACCOUNT_LIST_URL,
+        method: 'post',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        data: params
+      })
+      .then(json => {
+        dispatch(accountCreateReceive(json));
+        dispatch(push('/accounts'));
+      })
+      .catch(error => dispatch(alertAdd({
+          message: error.response.data.error,
+          description: error.message
+      })));
+  }
 }

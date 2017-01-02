@@ -9,7 +9,7 @@ export class Account extends Component {
       <Link to={`/accounts/${account.id}`}
             className="list-group-item">
         <Badge bsStyle="danger" pullRight>
-          {0} {accountCurrency.name}
+          {account.amount} {accountCurrency.name}
         </Badge>
         <h4 className="list-group-item-heading">
           {account.name}
@@ -26,7 +26,8 @@ Account.propTypes = {
   account: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    description: PropTypes.string
+    description: PropTypes.string,
+    amount: PropTypes.number.isRequired
   }).isRequired,
   accountCurrency: PropTypes.shape({
     id: PropTypes.number.isRequired,
