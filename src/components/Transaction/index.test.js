@@ -14,9 +14,17 @@ it('renders without crashing', () => {
     id: 1,
     name: 'Stash'
   }
+  const fromAccountCurrency = {
+    id: 1,
+    name: 'USD'
+  }
   const toAccount = {
     id: 2,
     name: 'Wallet'
+  }
+  const toAccountCurrency = {
+    id: 1,
+    name: 'USD'
   }
   const category = {
     id: 1,
@@ -26,6 +34,8 @@ it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(<Transaction transaction={transaction}
                                fromAccount={fromAccount}
+                               fromAccountCurrency={fromAccountCurrency}
                                toAccount={toAccount}
+                               toAccountCurrency={toAccountCurrency}
                                category={category} />, div);
 });

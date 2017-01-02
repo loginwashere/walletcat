@@ -6,21 +6,32 @@ import './style.less';
 
 export class Transaction extends Component {
   render() {
-    const { transaction, fromAccount, toAccount, category } = this.props;
+    const {
+      transaction,
+      fromAccount,
+      fromAccountCurrency,
+      toAccount,
+      toAccountCurrency,
+      category
+    } = this.props;
     const date = format(new Date(transaction.date), 'YYYY-MM-DD HH:mm:ss')
     return (
       <li className="list-group-item">
         <p>
-          <Badge bsStyle="danger" pullRight>{transaction.fromAmount}</Badge>
-          From {fromAccount.name}
+          <Badge bsStyle="danger" pullRight>
+            {transaction.fromAmount} {fromAccountCurrency.name}
+          </Badge>
+          From <b>{fromAccount.name}</b>
         </p>
         <p>
-          <Badge bsStyle="success" pullRight>{transaction.toAmount}</Badge>
-          To {toAccount.name}
+          <Badge bsStyle="success" pullRight>
+            {transaction.toAmount} {toAccountCurrency.name}
+          </Badge>
+          To <b>{toAccount.name}</b>
         </p>
         <p className="list-group-item-text">
           <Badge pullRight>{date}</Badge>
-          {category && category.name}
+          <b>{category.name}</b>
         </p>
         {transaction.description && <p>{transaction.description}</p>}
       </li>
@@ -40,9 +51,17 @@ Transaction.propTypes = {
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired
   }).isRequired,
+  fromAccountCurrency: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
   toAccount: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired
+  }).isRequired,
+  toAccountCurrency: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
   }).isRequired,
   category: PropTypes.shape({
     id: PropTypes.number.isRequired,

@@ -6,7 +6,7 @@ import {
 } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Account } from '..';
-import { fetchAccountsIfNeeded } from '../../actions';
+import { fetchAccountsAndAppAndUserCurrenciesIfNeeded } from '../../actions';
 
 export class Accounts extends Component {
   render() {
@@ -33,7 +33,7 @@ export class Accounts extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    dispatch(fetchAccountsIfNeeded());
+    dispatch(fetchAccountsAndAppAndUserCurrenciesIfNeeded());
   }
 }
 

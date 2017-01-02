@@ -15,7 +15,7 @@ export * from './userCurrencies';
 export function fetchTransactionsAccountsCategoriesIfNeeded() {
   return dispatch => Promise.all([
     dispatch(fetchTransactionsIfNeeded()),
-    dispatch(fetchAccountsIfNeeded()),
+    dispatch(fetchAccountsAndAppAndUserCurrenciesIfNeeded()),
     dispatch(fetchCategoriesIfNeeded())
   ]);
 }
@@ -24,5 +24,12 @@ export function fetchAppAndUserCurrenciesIfNeeded() {
   return dispatch => Promise.all([
     dispatch(fetchAppCurrenciesIfNeeded()),
     dispatch(fetchUserCurrenciesIfNeeded())
+  ]);
+}
+
+export function fetchAccountsAndAppAndUserCurrenciesIfNeeded() {
+  return dispatch => Promise.all([
+    dispatch(fetchAppAndUserCurrenciesIfNeeded()),
+    dispatch(fetchAccountsIfNeeded())
   ]);
 }
