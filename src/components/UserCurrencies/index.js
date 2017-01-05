@@ -6,19 +6,28 @@ import { fetchAppAndUserCurrenciesIfNeeded } from '../../actions';
 
 export class UserCurrencies extends Component {
   render() {
-    const { currencies, userCurrencies, dispatch } = this.props;
+    const {
+      currencies,
+      currencyIds,
+      userCurrencies,
+      userCurrenciesIdsByCurrencyId,
+      dispatch
+    } = this.props;
     return (
       <div>
         <h1>User Currencies</h1>
         <ListGroup>
-          {currencies.map((currency) => {
-            const userCurrency = userCurrencies
-              .filter(userCurrency => userCurrency.currencyId === currency.id)[0];
+          {currencyIds.map(id => {
+            const currency = currencies[id];
+            const userCurrencyId = userCurrenciesIdsByCurrencyId[id];
+            const userCurrency = userCurrencyId && userCurrencies[userCurrencyId];
             return (
-              currency && userCurrency && <AppCurrency key={currency.id}
-                           currency={currency}
-                           userCurrency={userCurrency}
-                           dispatch={dispatch} />
+              currency
+              && userCurrency
+              && <AppCurrency key={currency.id}
+                              currency={currency}
+                              userCurrency={userCurrency}
+                              dispatch={dispatch} />
             );
           })}
         </ListGroup>
@@ -33,8 +42,10 @@ export class UserCurrencies extends Component {
 }
 
 UserCurrencies.propTypes = {
-  currencies: PropTypes.array.isRequired,
-  userCurrencies: PropTypes.array.isRequired,
+  currencies: PropTypes.object.isRequired,
+  currencyIds: PropTypes.array.isRequired,
+  userCurrencies: PropTypes.object.isRequired,
+  userCurrenciesIdsByCurrencyId: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
@@ -42,18 +53,28 @@ function mapStateToProps(state) {
   const {
     isFetching,
     lastUpdated,
-    items: currencies
+    items: currencies,
+    itemIds: currencyIds
   }  = state.currencies || {
     isFetching: true,
-    items: []
+    items: {},
+    itemIds: []
   }
 
-  const { items: userCurrencies } = state.userCurrencies || { items: [] };
+  const {
+    items: userCurrencies,
+    itemsByCurrencyId: userCurrenciesIdsByCurrencyId
+  } = state.userCurrencies || {
+    items: {},
+    itemsByCurrencyId: {}
+  };
 
   return {
     isFetching,
     lastUpdated,
     currencies,
+    currencyIds,
+    userCurrenciesIdsByCurrencyId,
     userCurrencies
   };
 }

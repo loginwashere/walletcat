@@ -10,7 +10,13 @@ import { fetchAccountsAndAppAndUserCurrenciesIfNeeded } from '../../actions';
 
 export class Accounts extends Component {
   render() {
-    const { accounts, currencies, userCurrencies } = this.props;
+    const {
+      accounts,
+      accountIds,
+      currencies,
+      userCurrencies,
+      userCurrenciesIdsByCurrencyId
+    } = this.props;
     return (
       <div>
         <h1>
@@ -20,18 +26,19 @@ export class Accounts extends Component {
           </LinkContainer>
         </h1>
         <ListGroup>
-          {accounts.map(account => {
-            const accountUserCurrency = userCurrencies
-              .filter(item => item.id === account.currencyId)[0];
-            const accountCurrency = accountUserCurrency && currencies
-              .filter(item => item.id === accountUserCurrency.currencyId)[0];
+          {accountIds.map(id => {
+            const account = accounts[id];
+            const accountUserCurrencyId = userCurrenciesIdsByCurrencyId[id];
+            const accountUserCurrency = userCurrencies[accountUserCurrencyId];
+            const accountCurrency = accountUserCurrency && currencies[accountUserCurrency.currencyId];
             return (
               account
+              && accountUserCurrencyId
               && accountUserCurrency
               && accountCurrency
               && <Account key={account.id}
-                       account={account}
-                       accountCurrency={accountCurrency} />
+                          account={account}
+                          accountCurrency={accountCurrency} />
             );
           })}
         </ListGroup>
@@ -46,29 +53,41 @@ export class Accounts extends Component {
 }
 
 Accounts.propTypes = {
-  accounts: PropTypes.array.isRequired,
-  userCurrencies: PropTypes.array.isRequired,
-  currencies: PropTypes.array.isRequired
+  accounts: PropTypes.object.isRequired,
+  accountIds: PropTypes.array.isRequired,
+  userCurrencies: PropTypes.object.isRequired,
+  userCurrenciesIdsByCurrencyId: PropTypes.object.isRequired,
+  currencies: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
   const {
     isFetching,
     lastUpdated,
-    items: accounts
+    items: accounts,
+    itemIds: accountIds
   }  = state.accounts || {
     isFetching: true,
-    items: []
+    items: {},
+    itemIds: []
   }
   const { items: currencies } = state.currencies || { items: [] };
-  const { items: userCurrencies } = state.userCurrencies || { items: [] };
+  const {
+    items: userCurrencies,
+    itemsByCurrencyId: userCurrenciesIdsByCurrencyId
+  } = state.userCurrencies || {
+    items: {},
+    itemsByCurrencyId: {}
+  };
 
   return {
     isFetching,
     lastUpdated,
     accounts,
+    accountIds,
     currencies,
-    userCurrencies
+    userCurrencies,
+    userCurrenciesIdsByCurrencyId
   };
 }
 

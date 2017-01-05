@@ -50,7 +50,7 @@ function fetchAccounts() {
 
 function shouldFetchAccounts(state) {
   const accounts = state.accounts;
-  if (!accounts.isFetching) {
+  if (!accounts.itemIds.length) {
     return true
   } else if (accounts.isFetching) {
     return false

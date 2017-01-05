@@ -11,52 +11,90 @@ import {
 export default function userCurrencies(state = {
   isFetching: false,
   didInvalidate: false,
-  items: []
+  items: {},
+  itemIds: [],
+  itemsByCurrencyId: {}
 }, action) {
+  let items = {}, itemsByCurrencyId = {}, newItems = {};
   switch (action.type) {
     case INVALIDATE_USER_CURRENCY_LIST:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         didInvalidate: true
-      })
+      };
     case REQUEST_USER_CURRENCY_LIST:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: true,
         didInvalidate: false
-      })
+      };
     case RECEIVE_USER_CURRENCY_LIST:
-      return Object.assign({}, state, {
+      items = {};
+      action.userCurrencies.forEach(item => items[item.id] = item);
+      newItems = {
+        ...state.items,
+        ...items
+      };
+      Object.keys(newItems)
+        .forEach(key => {
+           newItems[key] && (itemsByCurrencyId[newItems[key].currencyId] = newItems[key].id)
+        });
+      return {
+        ...state,
         isFetching: false,
         didInvalidate: false,
-        items: action.userCurrencies,
+        items: newItems,
+        itemIds: Object.keys(newItems),
+        itemsByCurrencyId: itemsByCurrencyId,
         lastUpdated: action.receivedAt
-      })
+      };
     case REQUEST_ADD_USER_CURRENCY:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: true,
         didInvalidate: false
-      })
+      };
     case RECEIVE_ADD_USER_CURRENCY:
-      return Object.assign({}, state, {
+      items = {};
+      [action.userCurrency].forEach(item => items[item.id] = item);
+      newItems = {
+        ...state.items,
+        ...items
+      };
+      Object.keys(newItems)
+        .forEach(key => {
+           newItems[key] && (itemsByCurrencyId[newItems[key].currencyId] = newItems[key].id)
+        });
+      return {
+        ...state,
         isFetching: false,
         didInvalidate: false,
-        items: [
-          ...state.items,
-          ...[action.userCurrency]
-        ],
+        items: newItems,
+        itemIds: Object.keys(newItems),
+        itemsByCurrencyId: itemsByCurrencyId,
         lastUpdated: action.receivedAt
-      })
+      };
     case REQUEST_REMOVE_USER_CURRENCY:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: true,
         didInvalidate: false
-      })
+      };
     case RECEIVE_REMOVE_USER_CURRENCY:
-      return Object.assign({}, state, {
+      let {[`${action.userCurrency.id}`]: omit, ...restItems} = state.items;
+      console.log(restItems, state.items)
+      Object.keys(restItems).forEach(key => {
+           restItems[key] && (itemsByCurrencyId[restItems[key].currencyId] = restItems[key].id)
+        });
+      return {
+        ...state,
         isFetching: false,
         didInvalidate: false,
-        items: state.items.filter(item => item.id !== action.userCurrency.id),
+        items: restItems,
+        itemIds: Object.keys(restItems),
+        itemsByCurrencyId: itemsByCurrencyId,
         lastUpdated: action.receivedAt
-      })
+      };
     default:
       return state
   }

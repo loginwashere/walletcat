@@ -9,39 +9,57 @@ import {
 export default function accounts(state = {
   isFetching: false,
   didInvalidate: false,
-  items: []
+  items: {},
+  itemIds: []
 }, action) {
+  let items, newItems;
   switch (action.type) {
     case INVALIDATE_ACCOUNT_LIST:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         didInvalidate: true
-      })
+      };
     case REQUEST_ACCOUNT_LIST:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: true,
         didInvalidate: false
-      })
+      };
     case RECEIVE_ACCOUNT_LIST:
-      return Object.assign({}, state, {
+      items = {};
+      action.accounts.forEach(item => items[item.id] = item);
+      newItems = {
+        ...state.items,
+        ...items
+      };
+      return {
+        ...state,
         isFetching: false,
         didInvalidate: false,
-        items: action.accounts,
+        items: newItems,
+        itemIds: Object.keys(newItems),
         lastUpdated: action.receivedAt
-      })
+      };
     case ACCOUNT_CREATE_REQUEST:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: true,
         didInvalidate: false
-      })
+      };
     case ACCOUNT_CREATE_RECEIVE:
-      return Object.assign({}, state, {
+      items = {};
+      [action.account].forEach(item => items[item.id] = item);
+      newItems = {
+        ...state.items,
+        ...items
+      };
+      return {
+        ...state,
         isFetching: false,
         didInvalidate: false,
-        items: [
-          ...state.items,
-          ...[action.account]
-        ],
-      })
+        items: newItems,
+        itemIds: Object.keys(newItems)
+      }
     default:
       return state
   }

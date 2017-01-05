@@ -49,7 +49,7 @@ function fetchTransactions() {
 
 function shouldFetchTransactions(state) {
   const transactions = state.transactions;
-  if (!transactions.isFetching) {
+  if (!transactions.itemIds.length) {
     return true
   } else if (transactions.isFetching) {
     return false

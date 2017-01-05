@@ -10,9 +10,13 @@ it('renders without crashing', () => {
     name: 'test',
     description: 'trest'
   };
-  const currencies = [ currency ];
-  const userCurrencies = [];
+  const currencies = {[currency.id]: currency };
+  const currencyIds = [1];
+  const userCurrencies = {};
+  const userCurrenciesIdsByCurrencyId = {};
   ReactDOM.render(<AppCurrencies currencies={currencies}
+                                 currencyIds={currencyIds}
                                  userCurrencies={userCurrencies}
+                                 userCurrenciesIdsByCurrencyId={userCurrenciesIdsByCurrencyId}
                                  dispatch={store.dispatch} />, div);
 });

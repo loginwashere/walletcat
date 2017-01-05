@@ -57,7 +57,7 @@ export class AccountCreate extends Component {
   }
 
   render() {
-    const { currencies, userCurrencies } = this.props;
+    const { currencies, userCurrencies, userCurrencyIds } = this.props;
     return (
       <div>
         <h1>New Account</h1>
@@ -87,13 +87,13 @@ export class AccountCreate extends Component {
                            onChange={this.handleCurrencyChange}
                            value={this.state.currencyId}>
                 <option value="0" key={0}>Select Currency</option>
-                {userCurrencies.map(userCurrency => {
-                  const currency = currencies
-                    .filter(currency => currency.id === userCurrency.currencyId)[0];
-                    return (
-                      <option value={userCurrency.id}
-                              key={userCurrency.id}>{currency.name}</option>
-                    )
+                {userCurrencyIds.map(userCurrencyId => {
+                  const userCurrency = userCurrencies[userCurrencyId];
+                  const currency = currencies[userCurrency.currencyId];
+                  return (
+                    <option value={userCurrency.id}
+                            key={userCurrency.id}>{currency.name}</option>
+                  )
                 })}
               </FormControl>
             </Col>
@@ -149,18 +149,26 @@ export class AccountCreate extends Component {
 }
 
 AccountCreate.PropTypes = {
-  userCurrencies: PropTypes.array.isRequired,
-  currencies: PropTypes.array.isRequired,
+  userCurrencies: PropTypes.object.isRequired,
+  userCurrencyIds: PropTypes.array.isRequired,
+  currencies: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired
 }
 
 function mapStateToProps(state) {
-  const { items: currencies } = state.currencies || { items: [] };
-  const { items: userCurrencies } = state.userCurrencies || { items: [] };
+  const { items: currencies } = state.currencies || { items: {} };
+  const {
+    items: userCurrencies,
+    itemIds: userCurrencyIds
+  } = state.userCurrencies || {
+    items: {},
+    itemIds: []
+  };
 
   return {
     currencies,
-    userCurrencies
+    userCurrencies,
+    userCurrencyIds
   }
 }
 

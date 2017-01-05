@@ -7,25 +7,37 @@ import {
 export default function transactions(state = {
   isFetching: false,
   didInvalidate: false,
-  items: []
+  items: {},
+  itemIds: []
 }, action) {
+  let items, newItems;
   switch (action.type) {
     case INVALIDATE_TRANSACTION_LIST:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         didInvalidate: true
-      })
+      };
     case REQUEST_TRANSACTION_LIST:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: true,
         didInvalidate: false
-      })
+      };
     case RECEIVE_TRANSACTION_LIST:
-      return Object.assign({}, state, {
+      items = {};
+      action.transactions.forEach(item => items[item.id] = item);
+      newItems = {
+        ...state.items,
+        ...items
+      };
+      return {
+        ...state,
         isFetching: false,
         didInvalidate: false,
-        items: action.transactions,
+        items: newItems,
+        itemIds: Object.keys(newItems),
         lastUpdated: action.receivedAt
-      })
+      };
     default:
       return state
   }

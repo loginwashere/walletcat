@@ -50,7 +50,7 @@ function fetchAppCurrencies() {
 
 function shouldFetchAppCurrencies(state) {
   const currencies = state.currencies;
-  if (!currencies.isFetching) {
+  if (!currencies.itemIds.length) {
     return true
   } else if (currencies.isFetching) {
     return false

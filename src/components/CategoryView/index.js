@@ -125,8 +125,7 @@ CategoryView.propTypes = {
 }
 
 function mapStateToProps(state, ownProps) {
-  const category = state.categories.items
-    .filter(category => category.id === +ownProps.params.categoryId)[0] || {};
+  const category = state.categories[ownProps.params.categoryId] || {};
 
   return {
     category

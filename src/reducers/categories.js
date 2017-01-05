@@ -9,39 +9,57 @@ import {
 export default function categories(state = {
   isFetching: false,
   didInvalidate: false,
-  items: []
+  items: {},
+  itemIds: []
 }, action) {
+  let items, newItems;
   switch (action.type) {
     case INVALIDATE_CATEGORY_LIST:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         didInvalidate: true
-      })
+      };
     case REQUEST_CATEGORY_LIST:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: true,
         didInvalidate: false
-      })
+      };
     case RECEIVE_CATEGORY_LIST:
-      return Object.assign({}, state, {
+      items = {};
+      action.categories.forEach(item => items[item.id] = item);
+      newItems = {
+        ...state.items,
+        ...items
+      };
+      return {
+        ...state,
         isFetching: false,
         didInvalidate: false,
-        items: action.categories,
+        items: newItems,
+        itemIds: Object.keys(newItems),
         lastUpdated: action.receivedAt
-      })
+      };
     case REQUEST_CATEGORY_CREATE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: true,
         didInvalidate: false
-      })
+      };
     case RECEIVE_CATEGORY_CREATE:
-      return Object.assign({}, state, {
+      items = {};
+      [action.account].forEach(item => items[item.id] = item);
+      newItems = {
+        ...state.items,
+        ...items
+      };
+      return {
+        ...state,
         isFetching: false,
         didInvalidate: false,
-        items: [
-          ...state.items,
-          ...[action.category]
-        ],
-      })
+        items: newItems,
+        itemIds: Object.keys(newItems)
+      };
     default:
       return state
   }

@@ -125,7 +125,7 @@ function fetchUserCurrencies() {
 
 function shouldFetchUserCurrencies(state) {
   const currencies = state.userCurrencies;
-  if (!currencies.isFetching) {
+  if (!currencies.itemIds.length) {
     return true
   } else if (currencies.isFetching) {
     return false

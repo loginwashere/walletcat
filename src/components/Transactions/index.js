@@ -12,6 +12,7 @@ export class Transactions extends Component {
   render() {
     const {
       transactions,
+      transactionIds,
       accounts,
       categories,
       userCurrencies,
@@ -26,21 +27,15 @@ export class Transactions extends Component {
           </LinkContainer>
         </h1>
         <ListGroup>
-          {transactions.map(transaction => {
-            const fromAccount = accounts
-              .filter(account => account.id === transaction.fromAccountId)[0];
-            const fromAccountUserCurrency = fromAccount && userCurrencies
-              .filter(item => item.id === fromAccount.currencyId)[0];
-            const fromAccountCurrency = fromAccountUserCurrency && currencies
-              .filter(item => item.id === fromAccountUserCurrency.currencyId)[0];
-            const toAccount = accounts
-              .filter(account => account.id === transaction.toAccountId)[0];
-            const toAccountUserCurrency = toAccount && userCurrencies
-              .filter(item => item.id === toAccount.currencyId)[0];
-            const toAccountCurrency = toAccountUserCurrency && currencies
-              .filter(item => item.id === toAccountUserCurrency.currencyId)[0];
-            const category = categories
-              .filter(category => category.id === transaction.categoryId)[0];
+          {transactionIds.map(id => {
+            const transaction = transactions[id];
+            const fromAccount = transaction && accounts[transaction.fromAccountId];
+            const fromAccountUserCurrency = fromAccount && userCurrencies[fromAccount.currencyId];
+            const fromAccountCurrency = fromAccountUserCurrency && currencies[fromAccountUserCurrency.currencyId];
+            const toAccount = transaction && accounts[transaction.toAccountId];
+            const toAccountUserCurrency = toAccount && userCurrencies[toAccount.currencyId];
+            const toAccountCurrency = toAccountUserCurrency && currencies[toAccountUserCurrency.currencyId];
+            const category = transaction && categories[transaction.categoryId];
             return (
               transaction
               && toAccount
@@ -71,11 +66,12 @@ export class Transactions extends Component {
 }
 
 Transactions.propTypes = {
-  transactions: PropTypes.array.isRequired,
-  accounts: PropTypes.array.isRequired,
-  categories: PropTypes.array.isRequired,
-  currencies: PropTypes.array.isRequired,
-  userCurrencies: PropTypes.array.isRequired,
+  transactions: PropTypes.object.isRequired,
+  transactionIds: PropTypes.array.isRequired,
+  accounts: PropTypes.object.isRequired,
+  categories: PropTypes.object.isRequired,
+  currencies: PropTypes.object.isRequired,
+  userCurrencies: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired
 };
 
@@ -83,21 +79,24 @@ function mapStateToProps(state) {
   const {
     isFetching,
     lastUpdated,
-    items: transactions
+    items: transactions,
+    itemIds: transactionIds
   }  = state.transactions || {
     isFetching: true,
-    items: []
+    items: {},
+    itemIds: []
   }
 
-  const { items: accounts } = state.accounts || { items: [] };
-  const { items: categories } = state.categories || { items: [] };
-  const { items: currencies } = state.currencies || { items: [] };
-  const { items: userCurrencies } = state.userCurrencies || { items: [] };
+  const { items: accounts } = state.accounts || { items: {} };
+  const { items: categories } = state.categories || { items: {} };
+  const { items: currencies } = state.currencies || { items: {} };
+  const { items: userCurrencies } = state.userCurrencies || { items: {} };
 
   return {
     isFetching,
     lastUpdated,
     transactions,
+    transactionIds,
     accounts,
     categories,
     userCurrencies,

@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
+import { reducer as formReducer } from 'redux-form'
 import transactions from './transactions';
 import currencies from './currencies';
 import auth from './auth';
@@ -16,5 +17,6 @@ export default combineReducers({
   categories,
   accounts,
   transactions,
-  routing: routerReducer
+  routing: routerReducer,
+  form: formReducer
 });

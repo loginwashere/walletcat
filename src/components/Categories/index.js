@@ -7,7 +7,7 @@ import { fetchCategoriesIfNeeded } from '../../actions';
 
 export class Categories extends Component {
   render() {
-    const { categories } = this.props;
+    const { categories, categoryIds } = this.props;
     return (
       <div>
         <h1>
@@ -17,7 +17,8 @@ export class Categories extends Component {
           </LinkContainer>
         </h1>
         <ListGroup>
-          {categories.map(category => {
+          {categoryIds.map(id => {
+            const category = categories[id];
             return (
               <Category key={category.id}
                         category={category} />
@@ -35,23 +36,27 @@ export class Categories extends Component {
 }
 
 Categories.propTypes = {
-  categories: PropTypes.array.isRequired,
+  categories: PropTypes.object.isRequired,
+  categoryIds: PropTypes.array.isRequired,
 };
 
 function mapStateToProps(state) {
   const {
     isFetching,
     lastUpdated,
-    items: categories
+    items: categories,
+    itemIds: categoryIds
   }  = state.categories || {
     isFetching: true,
-    items: []
+    items: {},
+    itemIds: []
   }
 
   return {
     isFetching,
     lastUpdated,
-    categories
+    categories,
+    categoryIds
   };
 }
 

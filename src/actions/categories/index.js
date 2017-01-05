@@ -51,7 +51,7 @@ function fetchCategories() {
 
 function shouldFetchCategories(state) {
   const categories = state.categories;
-  if (!categories.isFetching) {
+  if (!categories.itemIds.length) {
     return true
   } else if (categories.isFetching) {
     return false
