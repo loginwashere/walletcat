@@ -8,19 +8,17 @@ export class UserCurrencies extends Component {
   render() {
     const {
       currencies,
-      currencyIds,
       userCurrencies,
-      userCurrenciesIdsByCurrencyId,
+      userCurrencyIds,
       dispatch
     } = this.props;
     return (
       <div>
         <h1>User Currencies</h1>
         <ListGroup>
-          {currencyIds.map(id => {
-            const currency = currencies[id];
-            const userCurrencyId = userCurrenciesIdsByCurrencyId[id];
-            const userCurrency = userCurrencyId && userCurrencies[userCurrencyId];
+          {userCurrencyIds.map(id => {
+            const userCurrency = userCurrencies[id];
+            const currency = userCurrency && currencies[userCurrency.currencyId];
             return (
               currency
               && userCurrency
@@ -43,9 +41,8 @@ export class UserCurrencies extends Component {
 
 UserCurrencies.propTypes = {
   currencies: PropTypes.object.isRequired,
-  currencyIds: PropTypes.array.isRequired,
   userCurrencies: PropTypes.object.isRequired,
-  userCurrenciesIdsByCurrencyId: PropTypes.object.isRequired,
+  userCurrencyIds: PropTypes.array.isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
@@ -54,28 +51,25 @@ function mapStateToProps(state) {
     isFetching,
     lastUpdated,
     items: currencies,
-    itemIds: currencyIds
   }  = state.currencies || {
     isFetching: true,
-    items: {},
-    itemIds: []
+    items: {}
   }
 
   const {
     items: userCurrencies,
-    itemsByCurrencyId: userCurrenciesIdsByCurrencyId
+    itemIds: userCurrencyIds,
   } = state.userCurrencies || {
     items: {},
-    itemsByCurrencyId: {}
+    itemIds: []
   };
 
   return {
     isFetching,
     lastUpdated,
     currencies,
-    currencyIds,
-    userCurrenciesIdsByCurrencyId,
-    userCurrencies
+    userCurrencies,
+    userCurrencyIds
   };
 }
 
