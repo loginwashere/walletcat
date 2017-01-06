@@ -40,10 +40,7 @@ function fetchTransactions() {
         }
       })
       .then(json => dispatch(receiveTransactions(json)))
-      .catch(error => dispatch(alertAdd({
-          message: error.response.data.error,
-          description: error.message
-      })));
+      .catch(error => dispatch(alertAdd(error)));
   }
 }
 

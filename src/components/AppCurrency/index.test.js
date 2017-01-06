@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import AppCurrency from '.';
-import store from '../../store';
+import configureStore from '../../configureStore';
 
 it('renders without crashing', () => {
+  const store = configureStore();
   const div = document.createElement('div');
   const currency = {
     id: 1,

@@ -38,10 +38,7 @@ export function addUserCurrency(currency) {
         }
       })
       .then(json => dispatch(receiveAddUserCurrency(json)))
-      .catch(error => dispatch(alertAdd({
-          message: error.response.data.error,
-          description: error.message
-      })));
+      .catch(error => dispatch(alertAdd(error)));
   }
 }
 
@@ -71,10 +68,7 @@ export function removeUserCurrency(userCurrency) {
         }
       })
       .then(json => dispatch(receiveRemoveUserCurrency(userCurrency)))
-      .catch(error => dispatch(alertAdd({
-          message: error.response.data.error,
-          description: error.message
-      })));
+      .catch(error => dispatch(alertAdd(error)));
   }
 }
 
@@ -116,10 +110,7 @@ function fetchUserCurrencies() {
         }
       })
       .then(json => dispatch(receiveUserCurrencies(json)))
-      .catch(error => dispatch(alertAdd({
-          message: error.response.data.error,
-          description: error.message
-      })));
+      .catch(error => dispatch(alertAdd(error)));
   }
 }
 

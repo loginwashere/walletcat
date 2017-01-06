@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import AppAlert from '.';
-import store from '../../store';
+import configureStore from '../../configureStore';
 
 it('renders without crashing', () => {
+  const store = configureStore();
   const alert = {
     message: 'test',
     description: 'trest'

@@ -10,7 +10,8 @@ export default function accounts(state = {
   isFetching: false,
   didInvalidate: false,
   items: {},
-  itemIds: []
+  itemIds: [],
+  lastUpdated: undefined
 }, action) {
   let items, newItems;
   switch (action.type) {

@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Accounts } from '.';
-import store from '../../store';
+import configureStore from '../../configureStore';
 
 it('renders without crashing', () => {
+  const store = configureStore();
   const accounts = {
     '1': {
       id: 1,

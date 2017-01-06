@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { Router, browserHistory } from 'react-router';
-import { syncHistoryWithStore } from 'react-router-redux';
 import axios from 'axios';
-import routes from './routes';
-import store from './store';
+import configureStore from './configureStore';
 import { logoutUser } from './actions';
+import Root from './components/Root';
+
+const store = configureStore();
 
 // Add a response interceptor
 axios.interceptors.response.use(
@@ -23,13 +22,8 @@ if (process.env.NODE_ENV === 'production') {
   require('offline-plugin/runtime').install();
 }
 
-const history = syncHistoryWithStore(browserHistory, store);
 
 ReactDOM.render(
-  <Provider store={store}>
-    <Router history={history}>
-      {routes()}
-    </Router>
-  </Provider>,
+  <Root store={store} />,
   document.getElementById('root')
 );

@@ -42,10 +42,7 @@ function fetchCategories() {
         }
       })
       .then(json => dispatch(receiveCategories(json)))
-      .catch(error => dispatch(alertAdd({
-          message: error.response.data.error,
-          description: error.message
-      })));
+      .catch(error => dispatch(alertAdd(error)));
   }
 }
 
@@ -106,9 +103,6 @@ export function createCategory(params) {
         dispatch(receiveCategoryCreate(json));
         dispatch(push('/categories'));
       })
-      .catch(error => dispatch(alertAdd({
-          message: error.response.data.error,
-          description: error.message
-      })));
+      .catch(error => dispatch(alertAdd(error)));
   }
 }

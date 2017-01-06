@@ -82,7 +82,6 @@ export default function userCurrencies(state = {
       };
     case RECEIVE_REMOVE_USER_CURRENCY:
       let {[`${action.userCurrency.id}`]: omit, ...restItems} = state.items;
-      console.log(restItems, state.items)
       Object.keys(restItems).forEach(key => {
            restItems[key] && (itemsByCurrencyId[restItems[key].currencyId] = restItems[key].id)
         });
