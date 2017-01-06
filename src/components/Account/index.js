@@ -24,13 +24,13 @@ export class Account extends Component {
 
 Account.propTypes = {
   account: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     description: PropTypes.string,
     amount: PropTypes.number.isRequired
   }).isRequired,
   accountCurrency: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired
   }).isRequired
 }

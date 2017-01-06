@@ -1,25 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { v4 } from 'uuid';
 import { AccountCreate } from '.';
 import configureStore from '../../configureStore';
 
 it('renders without crashing', () => {
   const store = configureStore();
   const div = document.createElement('div');
+  const currency = {
+    id: v4(),
+    name: 'USD'
+  };
   const currencies = {
-    '1': {
-      id: 1,
-      name: 'USD'
-    }
+    [currency.id]: currency
+  };
+  const userCurrency = {
+    id: v4(),
+    currencyId: currency.id,
+    userId: v4()
   };
   const userCurrencies = {
-   '1': {
-      id: 1,
-      currencyId: 1,
-      userId: 1
-    }
+   [userCurrency.id]: userCurrency
   };
-  const userCurrencyIds = [1];
+  const userCurrencyIds = [userCurrency.id];
   ReactDOM.render(<AccountCreate currencies={currencies}
                                  userCurrencies={userCurrencies}
                                  userCurrencyIds={userCurrencyIds}

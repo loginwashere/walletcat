@@ -117,7 +117,7 @@ export class CategoryView extends Component {
 
 CategoryView.propTypes = {
   category: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     description: PropTypes.string
   }).isRequired,
@@ -125,7 +125,7 @@ CategoryView.propTypes = {
 }
 
 function mapStateToProps(state, ownProps) {
-  const category = state.categories[ownProps.params.categoryId] || {};
+  const category = state.categories.items[ownProps.params.categoryId] || {};
 
   return {
     category

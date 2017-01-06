@@ -20,7 +20,7 @@ export class HeaderProfile extends Component {
 
 HeaderProfile.propTypes = {
   user: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
     avatar: PropTypes.string
   }).isRequired,

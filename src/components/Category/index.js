@@ -20,7 +20,7 @@ export class Category extends Component {
 
 Category.propTypes = {
   category: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     description: PropTypes.string
   }).isRequired

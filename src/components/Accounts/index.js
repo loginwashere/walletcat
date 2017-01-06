@@ -14,8 +14,7 @@ export class Accounts extends Component {
       accounts,
       accountIds,
       currencies,
-      userCurrencies,
-      userCurrenciesIdsByCurrencyId
+      userCurrencies
     } = this.props;
     return (
       <div>
@@ -28,12 +27,10 @@ export class Accounts extends Component {
         <ListGroup>
           {accountIds.map(id => {
             const account = accounts[id];
-            const accountUserCurrencyId = userCurrenciesIdsByCurrencyId[id];
-            const accountUserCurrency = userCurrencies[accountUserCurrencyId];
+            const accountUserCurrency = userCurrencies[account.currencyId];
             const accountCurrency = accountUserCurrency && currencies[accountUserCurrency.currencyId];
             return (
               account
-              && accountUserCurrencyId
               && accountUserCurrency
               && accountCurrency
               && <Account key={account.id}
@@ -56,7 +53,6 @@ Accounts.propTypes = {
   accounts: PropTypes.object.isRequired,
   accountIds: PropTypes.array.isRequired,
   userCurrencies: PropTypes.object.isRequired,
-  userCurrenciesIdsByCurrencyId: PropTypes.object.isRequired,
   currencies: PropTypes.object.isRequired
 };
 
@@ -74,10 +70,8 @@ function mapStateToProps(state) {
   const { items: currencies } = state.currencies || { items: [] };
   const {
     items: userCurrencies,
-    itemsByCurrencyId: userCurrenciesIdsByCurrencyId
   } = state.userCurrencies || {
-    items: {},
-    itemsByCurrencyId: {}
+    items: {}
   };
 
   return {
@@ -86,8 +80,7 @@ function mapStateToProps(state) {
     accounts,
     accountIds,
     currencies,
-    userCurrencies,
-    userCurrenciesIdsByCurrencyId
+    userCurrencies
   };
 }
 

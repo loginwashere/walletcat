@@ -1,4 +1,5 @@
 import deepFreeze from 'deep-freeze';
+import { v4 } from 'uuid';
 import reducer from './accounts';
 import * as actions from '../actions';
 
@@ -16,12 +17,14 @@ describe('accounts reducer', () => {
   });
 
   it('should handle RECEIVE_ACCOUNT_LIST', () => {
+    const accountId = v4();
+    const secondAccountId = v4();
     const initialState = {};
     const expectedAfterFirstState = {
       items: {
-        '1': {id: 1, name: 'Wallet'}
+        [accountId]: {id: accountId, name: 'Wallet'}
       },
-      itemIds: ['1'],
+      itemIds: [accountId],
       didInvalidate: false,
       isFetching: false,
       lastUpdated: 1317416400000
@@ -33,7 +36,7 @@ describe('accounts reducer', () => {
     expect(
       reducer(initialState, {
         type: actions.RECEIVE_ACCOUNT_LIST,
-        accounts: [{id: 1, name: 'Wallet'}],
+        accounts: [{id: accountId, name: 'Wallet'}],
         receivedAt: 1317416400000,
       })
     ).toEqual(expectedAfterFirstState)
@@ -41,15 +44,15 @@ describe('accounts reducer', () => {
     expect(
       reducer(expectedAfterFirstState, {
         type: actions.RECEIVE_ACCOUNT_LIST,
-        accounts: [{id: 2, name: 'Stash'}],
+        accounts: [{id: secondAccountId, name: 'Stash'}],
         receivedAt: 1317416400001,
       })
     ).toEqual({
       items: {
-        '1': {id: 1, name: 'Wallet'},
-        '2': {id: 2, name: 'Stash'}
+        [accountId]: {id: accountId, name: 'Wallet'},
+        [secondAccountId]: {id: secondAccountId, name: 'Stash'}
       },
-      itemIds: ['1', '2'],
+      itemIds: [accountId, secondAccountId],
       didInvalidate: false,
       isFetching: false,
       lastUpdated: 1317416400001

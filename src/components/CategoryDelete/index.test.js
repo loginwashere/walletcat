@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { v4 } from 'uuid';
 import { CategoryDelete } from '.';
 import configureStore from '../../configureStore';
 
 it('renders without crashing', () => {
   const store = configureStore();
   const category = {
-    id: 1,
+    id: v4(),
     name: 'Category Name',
     description: 'Category Description'
   }

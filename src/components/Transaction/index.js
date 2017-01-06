@@ -41,30 +41,30 @@ export class Transaction extends Component {
 
 Transaction.propTypes = {
   transaction: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     description: PropTypes.string,
     date: PropTypes.string.isRequired,
     fromAmount: PropTypes.number.isRequired,
     toAmount: PropTypes.number.isRequired
   }).isRequired,
   fromAccount: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired
   }).isRequired,
   fromAccountCurrency: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired,
   toAccount: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired
   }).isRequired,
   toAccountCurrency: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired,
   category: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired
   }).isRequired
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { v4 } from 'uuid';
 import { AppAlertList } from '.';
 import configureStore from '../../configureStore';
 
@@ -7,7 +8,7 @@ it('renders without crashing', () => {
   const store = configureStore();
   const items = [
     {
-      id: 1,
+      id: v4(),
       message: 'test'
     }
   ];

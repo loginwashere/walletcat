@@ -39,14 +39,14 @@ export class AppCurrency extends Component {
 
 AppCurrency.propTypes = {
   currency: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     description: PropTypes.string
   }).isRequired,
   userCurrency: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    userId: PropTypes.number.isRequired,
-    currencyId: PropTypes.number.isRequired
+    id: PropTypes.string.isRequired,
+    userId: PropTypes.string.isRequired,
+    currencyId: PropTypes.string.isRequired
   }),
   dispatch: PropTypes.func.isRequired
 };

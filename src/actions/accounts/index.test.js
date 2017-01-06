@@ -2,6 +2,7 @@ import configureMockStore from 'redux-mock-store';
 import moxios from 'moxios';
 import sinon from 'sinon';
 import thunk from 'redux-thunk';
+import { v4 } from 'uuid';
 import * as actions from '.';
 import * as types from '.';
 
@@ -32,16 +33,17 @@ describe('async actions', () => {
   });
 
   it('creates RECEIVE_ACCOUNT_LIST when fetching accounts has been done', () => {
+    const accountId = v4();
     moxios.stubRequest(/.*api\/accounts.*/, {
       status: 200,
-      response: { accounts: [{id: 1, name: 'Wallet'}] }
+      response: { accounts: [{id: accountId, name: 'Wallet'}] }
     })
 
     const expectedActions = [
       { type: types.REQUEST_ACCOUNT_LIST },
       {
         type: types.RECEIVE_ACCOUNT_LIST,
-        accounts: [{id: 1, name: 'Wallet'}],
+        accounts: [{id: accountId, name: 'Wallet'}],
         receivedAt: 1317416400000,
       }
     ];

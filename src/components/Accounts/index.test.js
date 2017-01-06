@@ -1,37 +1,40 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { v4 } from 'uuid';
 import { Accounts } from '.';
 import configureStore from '../../configureStore';
 
 it('renders without crashing', () => {
   const store = configureStore();
-  const accounts = {
-    '1': {
-      id: 1,
-      name: 'Wallet',
-      amount: 0
-    }
+  const currency = {
+    id: v4(),
+    name: 'USD'
   };
-  const accountIds = [1];
   const currencies = {
-    '1': {
-      id: 1,
-      name: 'USD'
-    }
+    [currency.id]: currency
+  };
+  const userCurrency = {
+    id: v4(),
+    currencyId: currency.id,
+    userId: v4()
   };
   const userCurrencies = {
-    '1': {
-      id: 1,
-      currencyId: 1,
-      userId: 1
-    }
+   [userCurrency.id]: userCurrency
   };
-  const userCurrenciesIdsByCurrencyId = {'1': '1'};
+  const account = {
+    id: v4(),
+    name: 'Wallet',
+    currencyId: userCurrency.id,
+    amount: 0
+  };
+  const accounts = {
+    [account.id]: account
+  };
+  const accountIds = [account.id];
   const div = document.createElement('div');
   ReactDOM.render(<Accounts accounts={accounts}
                             accountIds={accountIds}
                             currencies={currencies}
                             userCurrencies={userCurrencies}
-                            userCurrenciesIdsByCurrencyId={userCurrenciesIdsByCurrencyId}
                             dispatch={store.dispatch} />, div);
 });
