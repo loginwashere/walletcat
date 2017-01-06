@@ -41,6 +41,7 @@ http {
 		listen <%= ENV["PORT"] %>;
 		server_name _;
 		keepalive_timeout 5;
+		root /app/build/
 
     location / {
         try_files $uri $uri/ @nodejs;
