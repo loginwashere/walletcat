@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import { Provider } from 'react-redux';
@@ -12,5 +12,9 @@ const Root = ({ store }) => {
     </Router>
   </Provider>
 };
+
+Root.propTypes = {
+  store: PropTypes.object.isRequired
+}
 
 export default Root;
