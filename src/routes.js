@@ -27,48 +27,46 @@ import {
   Logout
 } from './components'
 
-export default () => {
-  return (
-    <Route path="/" component={App}>
-      <IndexRoute component={Home}/>
+export default () => (
+  <Route path="/" component={App}>
+    <IndexRoute component={Home}/>
 
-      <Route path="accounts" component={AccountsConnected}/>
-      <Route path="accounts/create" component={AccountCreateConnected}/>
+    <Route path="accounts" component={AccountsConnected}/>
+    <Route path="accounts/create" component={AccountCreateConnected}/>
 
-      <Route path="transactions" component={TransactionsConnected}/>
-      <Route path="transactions/create" component={TransactionCreateConnected}/>
+    <Route path="transactions" component={TransactionsConnected}/>
+    <Route path="transactions/create" component={TransactionCreateConnected}/>
 
-      <Route path="categories" component={CategoriesConnected}/>
-      <Route path="categories/create" component={CategoryCreateConnected}/>
-      <Route path="categories/:categoryId" component={CategoryViewConnected}/>
-      <Route path="categories/:categoryId/delete"
-             component={CategoryDeleteConnected}/>
+    <Route path="categories" component={CategoriesConnected}/>
+    <Route path="categories/create" component={CategoryCreateConnected}/>
+    <Route path="categories/:categoryId" component={CategoryViewConnected}/>
+    <Route path="categories/:categoryId/delete"
+            component={CategoryDeleteConnected}/>
 
-      <Route path="currencies/">
-        <Route path="app" component={AppCurrenciesConnected}/>
-        <Route path="user" component={UserCurrenciesConnected}/>
-      </Route>
-
-      <Route path="recurring-payments" component={RecurringPayments}/>
-      <Route path="recurring-payments/create"
-             component={RecurringPaymentCreateConnected}/>
-
-      <Route path="reports/">
-        <Route path="by-period" component={ReportByPeriod}/>
-        <Route path="by-category" component={ReportByCategory}/>
-        <Route path="calendar" component={ReportCalendar}/>
-      </Route>
-
-      <Route path="profile" component={ProfileConnected}/>
-
-      <Route path="about" component={About}/>
-      <Route path="contact-us" component={ContactUs}/>
-      <Route path="login" component={LoginConnected}/>
-      <Route path="logout" component={Logout}/>
-      <Route path="register" component={RegisterConnected}/>
-
-      <Route path="*" component={NotFound}/>
-
+    <Route path="currencies/">
+      <Route path="app" component={AppCurrenciesConnected}/>
+      <Route path="user" component={UserCurrenciesConnected}/>
     </Route>
-  );
-}
+
+    <Route path="recurring-payments" component={RecurringPayments}/>
+    <Route path="recurring-payments/create"
+            component={RecurringPaymentCreateConnected}/>
+
+    <Route path="reports/">
+      <Route path="by-period" component={ReportByPeriod}/>
+      <Route path="by-category" component={ReportByCategory}/>
+      <Route path="calendar" component={ReportCalendar}/>
+    </Route>
+
+    <Route path="profile" component={ProfileConnected}/>
+
+    <Route path="about" component={About}/>
+    <Route path="contact-us" component={ContactUs}/>
+    <Route path="login" component={LoginConnected}/>
+    <Route path="logout" component={Logout}/>
+    <Route path="register" component={RegisterConnected}/>
+
+    <Route path="*" component={NotFound}/>
+
+  </Route>
+);
