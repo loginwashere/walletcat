@@ -62,7 +62,7 @@ module.exports = () => {
   app.get('*', (req, res) => {
     res
       .status(200)
-      .sendFile(`${__dirname}/build/index.html`);
+      .sendFile(`${__dirname}/../build/index.html`);
   });
   return app;
 };
