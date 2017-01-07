@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const expressJwt = require('express-jwt');
@@ -59,8 +60,8 @@ module.exports = () => {
   app.use('/api/transactions', transactionsRouter);
   app.use('/api/users', usersRouter);
 
+  const pathToIndex = path.resolve(`${__dirname}/../build/index.html`);
   app.get('*', (req, res) => {
-    const pathToIndex = `${__dirname}/../build/index.html`;
     console.log(pathToIndex);
     res
       .status(200)
