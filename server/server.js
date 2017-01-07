@@ -60,9 +60,11 @@ module.exports = () => {
   app.use('/api/users', usersRouter);
 
   app.get('*', (req, res) => {
+    const pathToIndex = `${__dirname}/../build/index.html`;
+    console.log(pathToIndex);
     res
       .status(200)
-      .sendFile(`${__dirname}/../build/index.html`);
+      .sendFile(pathToIndex);
   });
   return app;
 };
