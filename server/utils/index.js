@@ -7,7 +7,7 @@ const generateToken = userId => ({
   value: jwt.sign(
     { sub: userId },
     config.JWT_SECRET,
-    { expiresIn: '1h' }
+    { expiresIn: config.JWT_EXPIRES }
   )
 });
 module.exports.generateToken = generateToken;
