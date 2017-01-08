@@ -44,8 +44,9 @@ http {
 		root build/;
 		index  index.html;
 
-		location ~* ^.+/sw\.js$ {
-			add_header Cache-Control no-cache;
+		location = /sw.js {
+			expires off;
+			add_header Cache-Control "no-cache";
 		}
 
 		location /api {
