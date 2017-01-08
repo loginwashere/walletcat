@@ -44,6 +44,10 @@ http {
 		root build/;
 		index  index.html;
 
+		location ~* ^.+/sw\.js$ {
+			add_header Cache-Control no-cache;
+		}
+
 		location /api {
 			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 			proxy_set_header Host $http_host;

@@ -242,7 +242,9 @@ module.exports = {
     new ManifestPlugin({
       fileName: 'asset-manifest.json'
     }),
-    new OfflinePlugin()
+    new OfflinePlugin({
+      output: '[name].[contenthash:8].js'
+    })
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.
