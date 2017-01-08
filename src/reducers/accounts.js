@@ -13,7 +13,6 @@ export default function accounts(state = {
   itemIds: [],
   lastUpdated: undefined
 }, action) {
-  let items, newItems;
   switch (action.type) {
     case INVALIDATE_ACCOUNT_LIST:
       return {
@@ -27,18 +26,21 @@ export default function accounts(state = {
         didInvalidate: false
       };
     case RECEIVE_ACCOUNT_LIST:
-      items = {};
-      action.accounts.forEach(item => items[item.id] = item);
-      newItems = {
-        ...state.items,
-        ...items
-      };
       return {
         ...state,
         isFetching: false,
         didInvalidate: false,
-        items: newItems,
-        itemIds: Object.keys(newItems),
+        items: {
+          ...state.items,
+          ...action.accounts
+            .reduce((obj, item) => ({...obj, [item.id]: item}), {})
+        },
+        itemIds: [
+          ...state.itemIds,
+          ...action.accounts
+            .map(item => item.id)
+            .filter(id => state.itemIds.indexOf(id) === -1)
+        ],
         lastUpdated: action.receivedAt
       };
     case ACCOUNT_CREATE_REQUEST:
@@ -48,18 +50,20 @@ export default function accounts(state = {
         didInvalidate: false
       };
     case ACCOUNT_CREATE_RECEIVE:
-      items = {};
-      [action.account].forEach(item => items[item.id] = item);
-      newItems = {
-        ...state.items,
-        ...items
-      };
       return {
         ...state,
         isFetching: false,
         didInvalidate: false,
-        items: newItems,
-        itemIds: Object.keys(newItems)
+        items: {
+          ...state.items,
+          [action.account.id]: action.account
+        },
+        itemIds: [
+          ...state.itemIds,
+          ...[action.account]
+            .map(item => item.id)
+            .filter(id => state.itemIds.indexOf(id) === -1)
+        ]
       }
     default:
       return state
