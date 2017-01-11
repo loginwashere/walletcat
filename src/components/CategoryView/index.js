@@ -10,13 +10,14 @@ class CategoryView extends Component {
   }
 
   render() {
-    const { category } = this.props;
+    const { category, initialValues } = this.props;
     return (
       <div>
         <h1>Category {category.name}</h1>
         <CategoryEditForm onSubmit={this.handleSubmit}
                           category={category}
-                          initialValues={category} />
+                          initialValues={initialValues}
+                          enableReinitialize={true} />
       </div>
     );
   }
@@ -40,7 +41,8 @@ function mapStateToProps(state, ownProps) {
   const category = state.categories.items[ownProps.params.categoryId] || {};
 
   return {
-    category
+    category,
+    initialValues: category
   };
 }
 
