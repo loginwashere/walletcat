@@ -88,3 +88,81 @@ export const createAccount = params => dispatch => {
     })
     .catch(error => dispatch(alertAdd(error)));
 };
+
+export const REQUEST_ACCOUNT_DELETE = 'REQUEST_ACCOUNT_DELETE';
+
+function requestAccountDelete(id) {
+  return {
+    type: REQUEST_ACCOUNT_DELETE,
+    id
+  }
+}
+
+export const RECEIVE_ACCOUNT_DELETE = 'RECEIVE_ACCOUNT_DELETE';
+
+function receiveAccountDelete(id) {
+  return {
+    type: RECEIVE_ACCOUNT_DELETE,
+    id
+  }
+}
+
+export function deleteAccount(id) {
+  return dispatch => {
+    dispatch(requestAccountDelete(id));
+    const token = localStorage.getItem('token');
+    return axios({
+        url: `${API_ACCOUNT_LIST_URL}/${id}`,
+        method: 'delete',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then(json => {
+        dispatch(receiveAccountDelete(id));
+        dispatch(push('/accounts'));
+      })
+      .catch(error => dispatch(alertAdd(error)));
+  }
+}
+
+export const REQUEST_ACCOUNT_UPDATE = 'REQUEST_ACCOUNT_UPDATE';
+
+function requestAccountUpdate(id, params) {
+  return {
+    type: REQUEST_ACCOUNT_UPDATE,
+    id,
+    params
+  }
+}
+
+export const RECEIVE_ACCOUNT_UPDATE = 'RECEIVE_ACCOUNT_UPDATE';
+
+function receiveAccountUpdate(json) {
+  return {
+    type: RECEIVE_ACCOUNT_UPDATE,
+    account: json.data
+  }
+}
+
+export function updateAccount(id, params) {
+  return dispatch => {
+    dispatch(requestAccountUpdate(id, params));
+    const token = localStorage.getItem('token');
+    const { name, description, amount, currencyId } = params;
+    return axios({
+        url: `${API_ACCOUNT_LIST_URL}/${id}`,
+        method: 'put',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        data: { name, description, amount, currencyId }
+      })
+      .then(json => {
+        dispatch(receiveAccountUpdate(json));
+        dispatch(push('/accounts'));
+      })
+      .catch(error => dispatch(alertAdd(error)));
+  }
+}
+

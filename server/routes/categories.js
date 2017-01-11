@@ -11,13 +11,12 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const category = createCategory({
-    userId: req.user.sub,
-    name: req.body.name,
-    description: req.body.description
-  });
   categoriesCollection
-    .add(category)
+    .add(createCategory({
+      userId: req.user.sub,
+      name: req.body.name,
+      description: req.body.description
+    }))
     .then(category => res.json(category));
 });
 
@@ -39,13 +38,14 @@ router.delete('/:id', (req, res) => {
   categoriesCollection
     .filterOne(c => c.userId === req.user.sub && c.id === req.params.id)
     .then(category => {
-      if (category) {
-        categoriesCollection.delete(category.id)
-          .then(result => res.status(204).json());
+      if (!category) {
+        return res.status(404).json({
+          error: 'Category not found'
+        });
       }
-      res
-        .status(204)
-        .json();
+      categoriesCollection.delete(category.id)
+        .then(result => res.status(204).json());
+
     });
 });
 

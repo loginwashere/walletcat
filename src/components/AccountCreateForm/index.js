@@ -5,88 +5,32 @@ import {
   Form,
   FormGroup,
   Col,
-  FormControl,
-  Button,
-  ControlLabel
+  Button
 } from 'react-bootstrap';
+import { RenderField, RenderFieldSelect } from '../Common';
 
 class AccountCreateForm extends Component {
   render() {
     const { currencies, userCurrencies, userCurrencyIds } = this.props;
     const { handleSubmit, pristine, reset, submitting } = this.props
+    const options = userCurrencyIds.map(userCurrencyId => {
+        const userCurrency = userCurrencies[userCurrencyId];
+        const currency = currencies[userCurrency.currencyId];
+        return {id: userCurrencyId, name: currency.name};
+    });
     return (
       <Form horizontal
             onSubmit={handleSubmit}>
-        <FormGroup controlId="formHorizontalName">
-          <Col componentClass={ControlLabel} sm={2}>
-            Name
-          </Col>
-          <Col sm={10}>
-            <Field required
-                   component="input"
-                   type="text"
-                   className="form-control"
-                   placeholder="Name"
-                   name="name" />
-            <FormControl.Feedback />
-          </Col>
-        </FormGroup>
 
-        <FormGroup controlId="formControlsSelect">
-          <Col componentClass={ControlLabel} sm={2}>
-            Currency
-          </Col>
-          <Col sm={10}>
-            <Field required
-                   component="select"
-                   type="text"
-                   className="form-control"
-                   placeholder="Currency"
-                   name="currencyId">
-              <option value="0" key={0}>Select Currency</option>
-              {userCurrencyIds.map(userCurrencyId => {
-                  const userCurrency = userCurrencies[userCurrencyId];
-                  const currency = currencies[userCurrency.currencyId];
-                  return (
-                    <option value={userCurrency.id}
-                            key={userCurrency.id}>{currency.name}</option>
-                  )
-              })}
-            </Field>
-          </Col>
-        </FormGroup>
-
-        <FormGroup controlId="formHorizontalDescription">
-          <Col componentClass={ControlLabel} sm={2}>
-            Description
-          </Col>
-          <Col sm={10}>
-            <Field component="input"
-                   type="text"
-                   className="form-control"
-                   placeholder="Description"
-                   name="description" />
-          </Col>
-        </FormGroup>
-
-        <FormGroup controlId="formHorizontalDescription">
-          <Col componentClass={ControlLabel} sm={2}>
-            Amount
-          </Col>
-          <Col sm={10}>
-            <Field required
-                   component="input"
-                   type="number"
-                   className="form-control"
-                   placeholder="Amount"
-                   name="amount" />
-          </Col>
-        </FormGroup>
+        <Field name="name" component={RenderField} label="Name" type="text" />
+        <Field name="currencyId" component={RenderFieldSelect} label="Currency" type="select" options={options} />
+        <Field name="amount" component={RenderField} label="Amount" type="number" />
+        <Field name="description" component={RenderField} label="Description" type="text" />
 
         <FormGroup>
           <Col smOffset={2} sm={2} xs={4}>
             <LinkContainer to="/accounts">
-              <Button type="submit" disabled={submitting}>
+              <Button disabled={submitting}>
                 Cancel
               </Button>
             </LinkContainer>
@@ -97,8 +41,7 @@ class AccountCreateForm extends Component {
             </Button>
           </Col>
           <Col sm={2} xs={4}>
-            <Button type="submit"
-                    disabled={pristine || submitting}
+            <Button disabled={pristine || submitting}
                     onClick={reset}>
               Clear
             </Button>

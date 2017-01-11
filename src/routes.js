@@ -26,6 +26,8 @@ import {
   Logout
 } from './components';
 import CategoryView from './components/CategoryView';
+import AccountView from './components/AccountView';
+import AccountDelete from './components/AccountDelete';
 
 export default () => (
   <Route path="/" component={App}>
@@ -33,6 +35,8 @@ export default () => (
 
     <Route path="accounts" component={AccountsConnected}/>
     <Route path="accounts/create" component={AccountCreateConnected}/>
+    <Route path="accounts/:accountId" component={AccountView}/>
+    <Route path="accounts/:accountId/delete" component={AccountDelete}/>
 
     <Route path="transactions" component={TransactionsConnected}/>
     <Route path="transactions/create" component={TransactionCreateConnected}/>
