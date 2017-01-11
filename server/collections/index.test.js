@@ -124,4 +124,40 @@ describe('collection', () => {
     });
   });
 
+  describe('update empty collection', () => {
+    it('should return empty array without items', function() {
+      return collection
+        .update(1, {value: 2}).should.eventually.become(undefined);
+    });
+  });
+
+  describe('update collection with item', () => {
+    it('should return empty array without items', () => {
+      return collection
+        .add({id: 1, value: 1})
+        .then(item => collection
+          .update(1, {value: 2}).should.eventually.become({id: 1, value: 2}))
+        .then(result => collection
+          .findOne(1).should.eventually.become({id: 1, value: 2}));
+    });
+  });
+
+  describe('filterUpdate empty collection', () => {
+    it('should return empty array without items', function() {
+      return collection
+        .filterUpdate(i => i.id === 1, {value: 2}).should.eventually.become(undefined);
+    });
+  });
+
+  describe('filterUpdate collection with item', () => {
+    it('should return empty array without items', () => {
+      return collection
+        .add({id: 1, value: 1})
+        .then(item => collection
+          .filterUpdate(i => i.id === 1, {value: 2}).should.eventually.become({id: 1, value: 2}))
+        .then(result => collection
+          .findOne(1).should.eventually.become({id: 1, value: 2}));
+    });
+  });
+
 });

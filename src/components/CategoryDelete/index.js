@@ -8,43 +8,13 @@ import {
   Button,
   Alert
 } from 'react-bootstrap';
-import { createCategory, fetchCategoriesIfNeeded } from '../../actions';
+import { deleteCategory, fetchCategoriesIfNeeded } from '../../actions';
 
 export class CategoryDelete extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      name: '',
-      description: ''
-    }
-  }
-
   handleSubmit = (e) => {
     e.preventDefault();
-
-    const { dispatch } = this.props;
-    const params = {
-      name: this.state.name,
-      description: this.state.description
-    };
-
-    dispatch(createCategory(params));
-  }
-
-  getValidationState = () => {
-    const length = this.state.value.length;
-    if (length > 10) return 'success';
-    else if (length > 5) return 'warning';
-    else if (length > 0) return 'error';
-  }
-
-  handleNameChange = (e) => {
-    this.setState({ name: e.target.value });
-  }
-
-  handleDescriptionChange = (e) => {
-    this.setState({ description: e.target.value });
+    const { dispatch, category: { id } } = this.props;
+    dispatch(deleteCategory(id));
   }
 
   render() {
@@ -57,6 +27,7 @@ export class CategoryDelete extends Component {
           <Col sm={12}>
             <Alert bsStyle="warning">
               Are you  sure you want to delete category
+              {' '}
               <strong>{category.name}</strong>?
             </Alert>
           </Col>
@@ -91,13 +62,12 @@ CategoryDelete.propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     description: PropTypes.string
-  }).isRequired,
+  }),
   dispatch: PropTypes.func.isRequired
 }
 
 function mapStateToProps(state, ownProps) {
-  const category = state.categories[ownProps.params.categoryId] || {};
-
+  const category = state.categories.items[ownProps.params.categoryId] || {};
   return {
     category
   };

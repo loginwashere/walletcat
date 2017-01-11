@@ -107,3 +107,80 @@ export function createCategory(params) {
       .catch(error => dispatch(alertAdd(error)));
   }
 }
+
+export const REQUEST_CATEGORY_DELETE = 'REQUEST_CATEGORY_DELETE';
+
+function requestCategoryDelete(id) {
+  return {
+    type: REQUEST_CATEGORY_DELETE,
+    id
+  }
+}
+
+export const RECEIVE_CATEGORY_DELETE = 'RECEIVE_CATEGORY_DELETE';
+
+function receiveCategoryDelete(id) {
+  return {
+    type: RECEIVE_CATEGORY_DELETE,
+    id
+  }
+}
+
+export function deleteCategory(id) {
+  return dispatch => {
+    dispatch(requestCategoryDelete(id));
+    const token = localStorage.getItem('token');
+    return axios({
+        url: `${API_CATEGORY_LIST_URL}/${id}`,
+        method: 'delete',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then(json => {
+        dispatch(receiveCategoryDelete(id));
+        dispatch(push('/categories'));
+      })
+      .catch(error => dispatch(alertAdd(error)));
+  }
+}
+
+export const REQUEST_CATEGORY_UPDATE = 'REQUEST_CATEGORY_UPDATE';
+
+function requestCategoryUpdate(id, params) {
+  return {
+    type: REQUEST_CATEGORY_UPDATE,
+    id,
+    params
+  }
+}
+
+export const RECEIVE_CATEGORY_UPDATE = 'RECEIVE_CATEGORY_UPDATE';
+
+function receiveCategoryUpdate(json) {
+  return {
+    type: RECEIVE_CATEGORY_UPDATE,
+    category: json.data
+  }
+}
+
+export function updateCategory(id, params) {
+  return dispatch => {
+    dispatch(requestCategoryUpdate(id, params));
+    const token = localStorage.getItem('token');
+    const { name, description } = params;
+    return axios({
+        url: `${API_CATEGORY_LIST_URL}/${id}`,
+        method: 'put',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        data: { name, description }
+      })
+      .then(json => {
+        dispatch(receiveCategoryUpdate(json));
+        dispatch(push('/categories'));
+      })
+      .catch(error => dispatch(alertAdd(error)));
+  }
+}

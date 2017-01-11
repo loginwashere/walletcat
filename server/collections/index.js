@@ -17,6 +17,16 @@ module.exports = () => {
       ];
       return Promise.resolve(item);
     },
+    filterUpdate: (cb, params) => collection.filterOne(cb)
+      .then(item => {
+        if (!item) {
+          return item;
+        }
+        const updatedItem = Object.assign({}, item, params);
+        items[items.indexOf(item)] = updatedItem;
+        return updatedItem;
+      }),
+    update: (id, params) => collection.filterUpdate(id => id, params),
     delete: id => {
       items = items.filter(i => i.id !== id);
       return Promise.resolve();

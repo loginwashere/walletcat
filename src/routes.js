@@ -10,7 +10,6 @@ import {
   TransactionCreateConnected,
   CategoriesConnected,
   CategoryCreateConnected,
-  CategoryViewConnected,
   CategoryDeleteConnected,
   RecurringPayments,
   RecurringPaymentCreateConnected,
@@ -25,7 +24,8 @@ import {
   ReportByCategory,
   ReportCalendar,
   Logout
-} from './components'
+} from './components';
+import CategoryView from './components/CategoryView';
 
 export default () => (
   <Route path="/" component={App}>
@@ -39,7 +39,7 @@ export default () => (
 
     <Route path="categories" component={CategoriesConnected}/>
     <Route path="categories/create" component={CategoryCreateConnected}/>
-    <Route path="categories/:categoryId" component={CategoryViewConnected}/>
+    <Route path="categories/:categoryId" component={CategoryView}/>
     <Route path="categories/:categoryId/delete"
             component={CategoryDeleteConnected}/>
 

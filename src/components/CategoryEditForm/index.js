@@ -22,9 +22,9 @@ const validate = values => {
   return errors;
 };
 
-export class CategoryCreateForm extends Component {
+class CategoryEditForm extends Component {
   render() {
-    const { handleSubmit, pristine, reset, submitting } = this.props;
+    const { handleSubmit, category } = this.props;
     return (
       <Form horizontal
             onSubmit={handleSubmit}>
@@ -36,20 +36,21 @@ export class CategoryCreateForm extends Component {
         <FormGroup>
           <Col smOffset={2} sm={2} xs={4}>
             <LinkContainer to="/categories">
-              <Button disabled={submitting}>
+              <Button>
                 Cancel
               </Button>
             </LinkContainer>
           </Col>
           <Col sm={2} xs={4}>
-            <Button type="submit" disabled={submitting}>
-              Create
-            </Button>
+            <LinkContainer to={`/categories/${category.id}/delete`}>
+              <Button>
+                Delete
+              </Button>
+            </LinkContainer>
           </Col>
           <Col sm={2} xs={4}>
-            <Button disabled={pristine || submitting}
-                    onClick={reset}>
-              Clear
+            <Button type="submit">
+              Edit
             </Button>
           </Col>
         </FormGroup>
@@ -58,13 +59,16 @@ export class CategoryCreateForm extends Component {
   }
 }
 
-CategoryCreateForm.PropTypes = {
+CategoryEditForm.PropTypes = {
+  category: PropTypes.shape({
+    id: PropTypes.string.isRequired
+  }).isRequired,
   handleSubmit: PropTypes.func.isRequired
 }
 
-CategoryCreateForm = reduxForm({
-  form: 'categoryCreate',
+CategoryEditForm = reduxForm({
+  form: 'categoryEdit',
   validate
-})(CategoryCreateForm);
+})(CategoryEditForm);
 
-export default CategoryCreateForm;
+export default CategoryEditForm;
