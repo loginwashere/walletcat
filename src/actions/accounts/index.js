@@ -37,14 +37,15 @@ const fetchAccounts = () => dispatch => {
     .catch(error => dispatch(alertAdd(error)));
 };
 
-const shouldFetchAccounts = (state) => {
-  const accounts = state.accounts;
-  if (!accounts.itemIds.length) {
+const shouldFetchAccounts = ({
+  accounts: { itemIds, lastUpdated, isFetching, didInvalidate }
+}) => {
+  if (!itemIds.length || !lastUpdated) {
     return true
-  } else if (accounts.isFetching) {
+  } else if (isFetching) {
     return false
   } else {
-    return accounts.didInvalidate
+    return didInvalidate
   }
 }
 

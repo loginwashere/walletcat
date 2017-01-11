@@ -5,17 +5,19 @@ import {
   REQUEST_ADD_USER_CURRENCY,
   RECEIVE_ADD_USER_CURRENCY,
   REQUEST_REMOVE_USER_CURRENCY,
-  RECEIVE_REMOVE_USER_CURRENCY
+  RECEIVE_REMOVE_USER_CURRENCY,
+  LOGOUT_SUCCESS
 } from '../actions';
 
-export default function userCurrencies(state = {
+export const initialState = {
   isFetching: false,
   didInvalidate: false,
   items: {},
   itemIds: [],
   itemsByCurrencyId: {}
-}, action) {
-  let items = {}, itemsByCurrencyId = {}, newItems = {};
+};
+
+export default function userCurrencies(state = initialState, action) {
   switch (action.type) {
     case INVALIDATE_USER_CURRENCY_LIST:
       return {
@@ -29,23 +31,26 @@ export default function userCurrencies(state = {
         didInvalidate: false
       };
     case RECEIVE_USER_CURRENCY_LIST:
-      items = {};
-      action.userCurrencies.forEach(item => items[item.id] = item);
-      newItems = {
-        ...state.items,
-        ...items
-      };
-      Object.keys(newItems)
-        .forEach(key => {
-           newItems[key] && (itemsByCurrencyId[newItems[key].currencyId] = newItems[key].id)
-        });
       return {
         ...state,
         isFetching: false,
         didInvalidate: false,
-        items: newItems,
-        itemIds: Object.keys(newItems),
-        itemsByCurrencyId: itemsByCurrencyId,
+        items: {
+          ...state.items,
+          ...action.userCurrencies
+            .reduce((obj, item) => ({...obj, [item.id]: item}), {})
+        },
+        itemIds: [
+          ...state.itemIds,
+          ...action.userCurrencies
+            .map(item => item.id)
+            .filter(id => state.itemIds.indexOf(id) === -1)
+        ],
+        itemsByCurrencyId: {
+          ...state.itemsByCurrencyId,
+          ...action.userCurrencies
+            .reduce((obj, item) => ({...obj, [item.currencyId]: item.id}), {})
+        },
         lastUpdated: action.receivedAt
       };
     case REQUEST_ADD_USER_CURRENCY:
@@ -55,24 +60,24 @@ export default function userCurrencies(state = {
         didInvalidate: false
       };
     case RECEIVE_ADD_USER_CURRENCY:
-      items = {};
-      [action.userCurrency].forEach(item => items[item.id] = item);
-      newItems = {
-        ...state.items,
-        ...items
-      };
-      Object.keys(newItems)
-        .forEach(key => {
-           newItems[key] && (itemsByCurrencyId[newItems[key].currencyId] = newItems[key].id)
-        });
       return {
         ...state,
         isFetching: false,
         didInvalidate: false,
-        items: newItems,
-        itemIds: Object.keys(newItems),
-        itemsByCurrencyId: itemsByCurrencyId,
-        lastUpdated: action.receivedAt
+        items: {
+          ...state.items,
+          [action.userCurrency.id]: action.userCurrency
+        },
+        itemIds: [
+          ...state.itemIds,
+          ...[action.userCurrency]
+            .map(item => item.id)
+            .filter(id => state.itemIds.indexOf(id) === -1)
+        ],
+        itemsByCurrencyId: {
+          ...state.itemsByCurrencyId,
+          [action.userCurrency.currencyId]: action.userCurrency.id
+        }
       };
     case REQUEST_REMOVE_USER_CURRENCY:
       return {
@@ -81,19 +86,29 @@ export default function userCurrencies(state = {
         didInvalidate: false
       };
     case RECEIVE_REMOVE_USER_CURRENCY:
-      let {[`${action.userCurrency.id}`]: omit, ...restItems} = state.items;
-      Object.keys(restItems).forEach(key => {
-           restItems[key] && (itemsByCurrencyId[restItems[key].currencyId] = restItems[key].id)
-        });
       return {
         ...state,
         isFetching: false,
         didInvalidate: false,
-        items: restItems,
-        itemIds: Object.keys(restItems),
-        itemsByCurrencyId: itemsByCurrencyId,
-        lastUpdated: action.receivedAt
+        items: Object.keys(state.items)
+          .filter(key => key !== action.userCurrency.id)
+          .reduce((result, current) => {
+            result[current] = state.items[current];
+            return result;
+          }, {}),
+        itemIds: [
+          ...state.itemIds.slice(0, state.itemIds.indexOf(action.userCurrency.id)),
+          ...state.itemIds.slice(state.itemIds.indexOf(action.userCurrency.id) + 1)
+        ],
+        itemsByCurrencyId: Object.keys(state.itemsByCurrencyId)
+          .filter(key => key !== action.userCurrency.currencyId)
+          .reduce((result, current) => {
+            result[current] = state.itemsByCurrencyId[current];
+            return result;
+          }, {}),
       };
+    case LOGOUT_SUCCESS:
+      return initialState;
     default:
       return state
   }

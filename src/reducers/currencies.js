@@ -4,12 +4,15 @@ import {
   RECEIVE_APP_CURRENCY_LIST
 } from '../actions';
 
-export default function currencies(state = {
+export const initialState = {
   isFetching: false,
   didInvalidate: false,
   items: {},
-  itemIds: []
-}, action) {
+  itemIds: [],
+  lastUpdated: undefined
+};
+
+export default function currencies(state = initialState, action) {
   let items, newItems;
   switch (action.type) {
     case INVALIDATE_APP_CURRENCY_LIST:

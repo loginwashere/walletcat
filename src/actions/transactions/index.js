@@ -66,3 +66,6 @@ export function fetchTransactionsIfNeeded() {
     }
   };
 }
+
+export const REQUEST_TRANSACTION_CREATE = 'REQUEST_TRANSACTION_CREATE';
+export const RECEIVE_TRANSACTION_CREATE = 'RECEIVE_TRANSACTION_CREATE';

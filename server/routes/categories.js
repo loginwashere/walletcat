@@ -17,7 +17,7 @@ router.post('/', (req, res) => {
   });
   categoriesCollection
     .add(category)
-    .then(res.json);
+    .then(category => res.json(category));
 });
 
 router.delete('/:id', (req, res) => {

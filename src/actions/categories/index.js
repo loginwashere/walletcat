@@ -46,14 +46,15 @@ function fetchCategories() {
   }
 }
 
-function shouldFetchCategories(state) {
-  const categories = state.categories;
-  if (!categories.itemIds.length) {
+const shouldFetchCategories = ({
+  categories: { itemIds, lastUpdated, isFetching, didInvalidate }
+}) => {
+  if (!itemIds.length || !lastUpdated) {
     return true
-  } else if (categories.isFetching) {
+  } else if (isFetching) {
     return false
   } else {
-    return categories.didInvalidate
+    return didInvalidate
   }
 }
 

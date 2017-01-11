@@ -10,9 +10,8 @@ import {
   ControlLabel
 } from 'react-bootstrap';
 
-class AccountCreateForm extends Component {
+export class CategoryCreateForm extends Component {
   render() {
-    const { currencies, userCurrencies, userCurrencyIds } = this.props;
     const { handleSubmit, pristine, reset, submitting } = this.props
     return (
       <Form horizontal
@@ -32,30 +31,6 @@ class AccountCreateForm extends Component {
           </Col>
         </FormGroup>
 
-        <FormGroup controlId="formControlsSelect">
-          <Col componentClass={ControlLabel} sm={2}>
-            Currency
-          </Col>
-          <Col sm={10}>
-            <Field required
-                   component="select"
-                   type="text"
-                   className="form-control"
-                   placeholder="Currency"
-                   name="currencyId">
-              <option value="0" key={0}>Select Currency</option>
-              {userCurrencyIds.map(userCurrencyId => {
-                  const userCurrency = userCurrencies[userCurrencyId];
-                  const currency = currencies[userCurrency.currencyId];
-                  return (
-                    <option value={userCurrency.id}
-                            key={userCurrency.id}>{currency.name}</option>
-                  )
-              })}
-            </Field>
-          </Col>
-        </FormGroup>
-
         <FormGroup controlId="formHorizontalDescription">
           <Col componentClass={ControlLabel} sm={2}>
             Description
@@ -66,20 +41,6 @@ class AccountCreateForm extends Component {
                    className="form-control"
                    placeholder="Description"
                    name="description" />
-          </Col>
-        </FormGroup>
-
-        <FormGroup controlId="formHorizontalDescription">
-          <Col componentClass={ControlLabel} sm={2}>
-            Amount
-          </Col>
-          <Col sm={10}>
-            <Field required
-                   component="input"
-                   type="number"
-                   className="form-control"
-                   placeholder="Amount"
-                   name="amount" />
           </Col>
         </FormGroup>
 
@@ -109,15 +70,12 @@ class AccountCreateForm extends Component {
   }
 }
 
-AccountCreateForm.PropTypes = {
-  userCurrencies: PropTypes.object.isRequired,
-  userCurrencyIds: PropTypes.array.isRequired,
-  currencies: PropTypes.object.isRequired,
+CategoryCreateForm.PropTypes = {
   handleSubmit: PropTypes.func.isRequired
 }
 
-AccountCreateForm = reduxForm({
-  form: 'accountCreate'
-})(AccountCreateForm);
+CategoryCreateForm = reduxForm({
+  form: 'categoryCreate'
+})(CategoryCreateForm);
 
-export default AccountCreateForm;
+export default CategoryCreateForm;

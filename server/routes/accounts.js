@@ -19,7 +19,7 @@ router.post('/', (req, res) => {
   });
   return accountsCollection
     .add(account)
-    .then(res.json);
+    .then(account => res.json(account));
 });
 
 router.delete('/:id', (req, res) => {

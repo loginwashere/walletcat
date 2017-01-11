@@ -3,16 +3,19 @@ import {
   REQUEST_ACCOUNT_LIST,
   RECEIVE_ACCOUNT_LIST,
   ACCOUNT_CREATE_REQUEST,
-  ACCOUNT_CREATE_RECEIVE
+  ACCOUNT_CREATE_RECEIVE,
+  LOGOUT_SUCCESS
 } from '../actions';
 
-export default function accounts(state = {
+export const initialState = {
   isFetching: false,
   didInvalidate: false,
   items: {},
   itemIds: [],
   lastUpdated: undefined
-}, action) {
+};
+
+export default function accounts(state = initialState, action) {
   switch (action.type) {
     case INVALIDATE_ACCOUNT_LIST:
       return {
@@ -65,6 +68,8 @@ export default function accounts(state = {
             .filter(id => state.itemIds.indexOf(id) === -1)
         ]
       }
+    case LOGOUT_SUCCESS:
+      return initialState;
     default:
       return state
   }

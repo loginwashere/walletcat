@@ -15,21 +15,22 @@ router.post('/', (req, res) => {
     currencyId: req.body.currencyId
   });
   return userCurrenciesCollection.add(newUserCurrency)
-    .then(res.json);
+    .then(newUserCurrency => res.json(newUserCurrency));
 });
 
 router.delete('/:id', (req, res) => {
-  const userCurrency = userCurrenciesCollection
-    .filter((userCurrency) => userCurrency.userId === req.user.sub)
-    .filter((userCurrency) => userCurrency.id === req.params.id)
-    [0];
-  if (userCurrency) {
-    // const index = userCurrencies.indexOf(userCurrency);
-    // userCurrencies.splice(index, 1);
-  }
-  res
-    .status(204)
-    .json();
+  userCurrenciesCollection
+    .filterOne(c => c.userId === req.user.sub && c.id === req.params.id)
+    .then(userCurrency => {
+      if (userCurrency) {
+        userCurrenciesCollection.delete(userCurrency.id)
+          .then(result => res.status(204).json());
+      } else {
+        res
+        .status(404)
+        .json();
+      }
+    });
 });
 
 module.exports = router;

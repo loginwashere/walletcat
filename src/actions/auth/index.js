@@ -73,8 +73,7 @@ export const loginUser = creds => dispatch => {
 
 export const logoutUser = () => dispatch => {
   dispatch(requestLogout());
-  localStorage.removeItem('token');
-  localStorage.removeItem('user');
+  ['token', 'user'].map(item => localStorage.removeItem(item));
   dispatch(receiveLogout());
   dispatch(push('/login'));
 };
