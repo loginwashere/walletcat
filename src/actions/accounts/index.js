@@ -57,16 +57,16 @@ export const fetchAccountsIfNeeded = () => (dispatch, getState) => {
   }
 };
 
-export const ACCOUNT_CREATE_REQUEST = 'ACCOUNT_CREATE_REQUEST';
-export const ACCOUNT_CREATE_RECEIVE = 'ACCOUNT_CREATE_RECEIVE';
+export const REQUEST_ACCOUNT_CREATE = 'REQUEST_ACCOUNT_CREATE';
+export const RECEIVE_ACCOUNT_CREATE = 'RECEIVE_ACCOUNT_CREATE';
 export const ACCOUNT_CREATE_FAILURE = 'ACCOUNT_CREATE_FAILURE';
 
 const accountCreateRequest = (params) => ({
-  type: ACCOUNT_CREATE_REQUEST
+  type: REQUEST_ACCOUNT_CREATE
 });
 
 const accountCreateReceive = (json) => ({
-  type: ACCOUNT_CREATE_RECEIVE,
+  type: RECEIVE_ACCOUNT_CREATE,
   account: json.data,
   receivedAt: Date.now()
 });

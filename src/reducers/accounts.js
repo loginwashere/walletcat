@@ -2,8 +2,8 @@ import {
   INVALIDATE_ACCOUNT_LIST,
   REQUEST_ACCOUNT_LIST,
   RECEIVE_ACCOUNT_LIST,
-  ACCOUNT_CREATE_REQUEST,
-  ACCOUNT_CREATE_RECEIVE,
+  REQUEST_ACCOUNT_CREATE,
+  RECEIVE_ACCOUNT_CREATE,
   LOGOUT_SUCCESS
 } from '../actions';
 
@@ -46,13 +46,13 @@ export default function accounts(state = initialState, action) {
         ],
         lastUpdated: action.receivedAt
       };
-    case ACCOUNT_CREATE_REQUEST:
+    case REQUEST_ACCOUNT_CREATE:
       return {
         ...state,
         isFetching: true,
         didInvalidate: false
       };
-    case ACCOUNT_CREATE_RECEIVE:
+    case RECEIVE_ACCOUNT_CREATE:
       return {
         ...state,
         isFetching: false,

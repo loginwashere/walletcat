@@ -68,10 +68,10 @@ describe('accounts reducer', () => {
     ).toEqual(expectedAfterFirstListReceive)
   });
 
-  it('should handle ACCOUNT_CREATE_RECEIVE', () => {
+  it('should handle RECEIVE_ACCOUNT_CREATE', () => {
     expect(
       reducer(initialState, {
-        type: actions.ACCOUNT_CREATE_RECEIVE,
+        type: actions.RECEIVE_ACCOUNT_CREATE,
         account: firstAccount,
         receivedAt: 1317416400000,
       })
@@ -79,7 +79,7 @@ describe('accounts reducer', () => {
 
     expect(
       reducer(expectedAfterFirstItemCreate, {
-        type: actions.ACCOUNT_CREATE_RECEIVE,
+        type: actions.RECEIVE_ACCOUNT_CREATE,
         account: secondAccount,
         receivedAt: 1317416400001,
       })
@@ -95,10 +95,10 @@ describe('accounts reducer', () => {
     })
   });
 
-  it('should handle ACCOUNT_CREATE_RECEIVE with duplicates', () => {
+  it('should handle RECEIVE_ACCOUNT_CREATE with duplicates', () => {
     expect(
       reducer(expectedAfterFirstItemCreate, {
-        type: actions.ACCOUNT_CREATE_RECEIVE,
+        type: actions.RECEIVE_ACCOUNT_CREATE,
         account: firstAccount,
         receivedAt: 1317416400000,
       })
