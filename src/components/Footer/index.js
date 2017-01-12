@@ -10,6 +10,7 @@ export class Footer extends Component {
   render() {
     return (
       <Navbar collapseOnSelect fixedBottom>
+        <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav>
             <LinkContainer to="/about">
