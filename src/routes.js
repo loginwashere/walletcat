@@ -30,6 +30,8 @@ import AccountView from './components/AccountView';
 import AccountDelete from './components/AccountDelete';
 import TransactionView from './components/TransactionView';
 import TransactionDelete from './components/TransactionDelete';
+import PrivacyPolicy from './components/PrivacyPolicy';
+import TermsAndConditions from './components/TermsAndConditions';
 
 export default () => (
   <Route path="/" component={App}>
@@ -68,11 +70,14 @@ export default () => (
 
     <Route path="profile" component={ProfileConnected}/>
 
-    <Route path="about" component={About}/>
-    <Route path="contact-us" component={ContactUs}/>
     <Route path="sign-in" component={LoginConnected}/>
     <Route path="logout" component={Logout}/>
     <Route path="register" component={RegisterConnected}/>
+
+    <Route path="about" component={About}/>
+    <Route path="contact-us" component={ContactUs}/>
+    <Route path="privacy-policy" component={PrivacyPolicy}/>
+    <Route path="terms-and-conditions" component={TermsAndConditions}/>
 
     <Route path="*" component={NotFound}/>
 

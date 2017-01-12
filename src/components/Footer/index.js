@@ -19,6 +19,12 @@ export class Footer extends Component {
             <LinkContainer to="/contact-us">
               <NavItem eventKey={8} href="#">Contact Us</NavItem>
             </LinkContainer>
+            <LinkContainer to="/privacy-policy">
+              <NavItem eventKey={20} href="#">Privacy Policy</NavItem>
+            </LinkContainer>
+            <LinkContainer to="/terms-and-conditions">
+              <NavItem eventKey={21} href="#">Terms and conditions</NavItem>
+            </LinkContainer>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
