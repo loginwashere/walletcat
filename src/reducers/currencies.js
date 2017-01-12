@@ -1,7 +1,8 @@
 import {
   INVALIDATE_APP_CURRENCY_LIST,
   REQUEST_APP_CURRENCY_LIST,
-  RECEIVE_APP_CURRENCY_LIST
+  RECEIVE_APP_CURRENCY_LIST,
+  LOGOUT_SUCCESS
 } from '../actions';
 
 export const initialState = {
@@ -41,6 +42,8 @@ export default function currencies(state = initialState, action) {
         itemIds: Object.keys(newItems),
         lastUpdated: action.receivedAt
       };
+    case LOGOUT_SUCCESS:
+      return initialState;
     default:
       return state
   }

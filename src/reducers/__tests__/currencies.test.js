@@ -68,6 +68,6 @@ describe('currecnes reducer', () => {
       reducer(expectedAfterFirstListReceive, {
         type: actions.LOGOUT_SUCCESS
       })
-    ).toEqual(expectedAfterFirstListReceive)
+    ).toEqual(expectedDefaultInitialState)
   });
 });

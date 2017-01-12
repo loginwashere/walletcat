@@ -10,3 +10,6 @@ module.exports.create = params => Object.assign({}, params, {
 module.exports.update = params => Object.assign({}, params, {
   updated: format(new Date())
 });
+
+module.exports.createUniqueRule = (userId, name) => i =>
+  i.userId === userId && i.name === name;

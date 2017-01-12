@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const userCurrenciesCollection = require('../collections/userCurrencies');
-const createUserCurrency = require('../models/userCurrency');
+const createUserCurrency = require('../models/userCurrency').create;
+const createUniqueRule = require('../models/userCurrency').createUniqueRule;
 
 router.get('/', (req, res) => {
   userCurrenciesCollection
@@ -10,11 +11,13 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const newUserCurrency = createUserCurrency({
-    userId: req.user.sub,
-    currencyId: req.body.currencyId
-  });
-  return userCurrenciesCollection.add(newUserCurrency)
+  return userCurrenciesCollection.addUnique(
+      createUserCurrency({
+        userId: req.user.sub,
+        currencyId: req.body.currencyId
+      }),
+      createUniqueRule(req.user.sub, req.body.currencyId)
+    )
     .then(newUserCurrency => res.json(newUserCurrency));
 });
 
@@ -23,7 +26,7 @@ router.delete('/:id', (req, res) => {
     .filterOne(c => c.userId === req.user.sub && c.id === req.params.id)
     .then(userCurrency => {
       if (userCurrency) {
-        userCurrenciesCollection.delete(userCurrency.id)
+        userCurrenciesCollection.softDelete(userCurrency.id)
           .then(result => res.status(204).json());
       } else {
         res

@@ -15,6 +15,7 @@ describe('routes : accounts', () => {
     return Promise.all([
       usersCollection.filterOne(u => u.username === 'admin')
         .then(user => {
+          console.log('user', user);
           token = generateToken(user.id);
         }),
       applySeeds()

@@ -23,7 +23,7 @@ describe('collection', () => {
   });
 
   describe('get all items from collection with item', () => {
-    it('should return empty array without items', function() {
+    it('should return not empty array with one item', function() {
       return collection
         .add({id: 1, value: 1})
         .then(item => collection.all().should.eventually.have.length(1));
@@ -37,7 +37,7 @@ describe('collection', () => {
   });
 
   describe('find item in collection with item', () => {
-    it('should return empty array without items', function() {
+    it('should return not empty array with one item', function() {
       return collection
         .add({id: 1, value: 1})
         .then(item => collection.find(1).should.eventually.have.length(1));
@@ -133,9 +133,11 @@ describe('collection', () => {
 
   describe('update collection with item', () => {
     it('should return empty array without items', () => {
-      return collection
-        .add({id: 1, value: 1})
-        .then(item => collection
+      return Promise.all([
+        collection.add({id: 3, value: 4}),
+        collection.add({id: 2, value: 3}),
+        collection.add({id: 1, value: 1})
+      ]).then(result => collection
           .update(1, {value: 2}).should.eventually.become({id: 1, value: 2}))
         .then(result => collection
           .findOne(1).should.eventually.become({id: 1, value: 2}));

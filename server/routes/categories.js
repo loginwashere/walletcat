@@ -3,6 +3,7 @@ const router = express.Router();
 const categoriesCollection = require('../collections/categories');
 const createCategory = require('../models/category').create;
 const updateCategory = require('../models/category').update;
+const createUniqueRule = require('../models/category').createUniqueRule;
 
 router.get('/', (req, res) => {
   categoriesCollection
@@ -12,11 +13,14 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
   categoriesCollection
-    .add(createCategory({
-      userId: req.user.sub,
-      name: req.body.name,
-      description: req.body.description
-    }))
+    .addUnique(
+        createCategory({
+          userId: req.user.sub,
+          name: req.body.name,
+          description: req.body.description
+        }),
+        createUniqueRule(req.user.sub, req.body.name)
+    )
     .then(category => res.json(category));
 });
 
@@ -43,7 +47,7 @@ router.delete('/:id', (req, res) => {
           error: 'Category not found'
         });
       }
-      categoriesCollection.delete(category.id)
+      categoriesCollection.softDelete(category.id)
         .then(result => res.status(204).json());
 
     });

@@ -3,6 +3,7 @@ const router = express.Router();
 const accountsCollection = require('../collections/accounts');
 const createAccount = require('../models/account').create;
 const updateAccount = require('../models/account').update;
+const createUniqueRule = require('../models/account').createUniqueRule;
 
 router.get('/', (req, res) => {
   accountsCollection
@@ -12,13 +13,16 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
   return accountsCollection
-    .add(createAccount({
-      userId: req.user.sub,
-      name: req.body.name,
-      description: req.body.description,
-      currencyId: req.body.currencyId,
-      amount: req.body.amount
-    }))
+    .addUnique(
+        createAccount({
+          userId: req.user.sub,
+          name: req.body.name,
+          description: req.body.description,
+          currencyId: req.body.currencyId,
+          amount: req.body.amount
+        }),
+        createUniqueRule(req.user.sub, req.body.name)
+    )
     .then(account => res.json(account));
 });
 
@@ -47,7 +51,7 @@ router.delete('/:id', (req, res) => {
           error: 'Account not found'
         });
       }
-      accountsCollection.delete(account.id)
+      accountsCollection.softDelete(account.id)
         .then(result => res.status(204).json());
 
     });
