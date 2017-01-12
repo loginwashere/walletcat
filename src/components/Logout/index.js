@@ -11,7 +11,9 @@ export class Logout extends Component {
   render() {
     const { eventKey } = this.props;
     return (
-      <NavItem eventKey={eventKey} onClick={this.handleClick}>Logout</NavItem>
+      <NavItem {...this.props}
+               eventKey={eventKey}
+               onClick={this.handleClick} >Logout</NavItem>
     );
   }
 }

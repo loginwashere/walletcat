@@ -9,7 +9,7 @@ export class HeaderProfile extends Component {
     const { user } = this.props;
     return (
       <LinkContainer to="/profile">
-        <NavItem className={'profile'} eventKey={9}>
+        <NavItem  {...this.props} className={'profile'} eventKey={9} >
           <Image src={user.avatar} circle />
           <span className={'profile-username'}>{user.username}</span>
         </NavItem>

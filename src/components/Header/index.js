@@ -96,7 +96,7 @@ export class Header extends Component {
               <NavItem eventKey={10} href="#">Login</NavItem>
             </LinkContainer>}
             {isAuthenticated && <LinkContainer to="/logout">
-              <Logout eventKey={9} dispatch={dispatch} />
+              <Logout eventKey={11} dispatch={dispatch} />
             </LinkContainer>}
             {!isAuthenticated && <LinkContainer to="/register">
               <NavItem eventKey={12} href="#">Register</NavItem>
