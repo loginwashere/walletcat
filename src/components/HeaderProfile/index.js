@@ -6,10 +6,10 @@ import './style.less';
 
 export class HeaderProfile extends Component {
   render() {
-    const { user } = this.props;
+    const { user, onSelect } = this.props;
     return (
       <LinkContainer to="/profile">
-        <NavItem  {...this.props} className={'profile'} eventKey={9} >
+        <NavItem  onSelect={onSelect} className={'profile'} eventKey={9} >
           <Image src={user.avatar} circle />
           <span className={'profile-username'}>{user.username}</span>
         </NavItem>

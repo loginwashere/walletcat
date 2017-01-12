@@ -9,9 +9,9 @@ export class Logout extends Component {
   }
 
   render() {
-    const { eventKey } = this.props;
+    const { eventKey, onSelect } = this.props;
     return (
-      <NavItem {...this.props}
+      <NavItem onSelect={onSelect}
                eventKey={eventKey}
                onClick={this.handleClick} >Logout</NavItem>
     );
