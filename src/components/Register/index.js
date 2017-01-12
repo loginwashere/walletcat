@@ -10,6 +10,8 @@ import {
 } from 'react-bootstrap';
 import { registerUser } from '../../actions';
 
+import './style.less';
+
 export class Register extends Component {
   constructor(props) {
     super(props);
@@ -50,51 +52,40 @@ export class Register extends Component {
     const { email, username, password } = this.state;
     return (
       <div>
-        <h1>Register</h1>
-        <Form horizontal onSubmit={this.handleSubmit}>
-          <FormGroup controlId="formHorizontalEmail">
-            <Col componentClass={ControlLabel} sm={2}>
-              Email
-            </Col>
-            <Col sm={10}>
-              <FormControl type="email"
-                           placeholder="Email"
-                           onChange={this.handleEmailChange}
-                           value={email} />
-            </Col>
-          </FormGroup>
+        <Form horizontal
+              onSubmit={this.handleSubmit}
+              className="register__form">
+          <h1 className="form-signin-heading">Please</h1>
+          <h2 className="form-signin-heading">Create an account</h2>
+          <ControlLabel className="sr-only">
+            Email
+          </ControlLabel>
+          <FormControl required
+                       autoFocus
+                       type="email"
+                       placeholder="Email"
+                       onChange={this.handleEmailChange}
+                       value={email} />
 
-          <FormGroup controlId="formHorizontalUsername">
-            <Col componentClass={ControlLabel} sm={2}>
-              Username
-            </Col>
-            <Col sm={10}>
-              <FormControl type="text"
-                           placeholder="Username"
-                           onChange={this.handleUsernameChange}
-                           value={username} />
-            </Col>
-          </FormGroup>
-
-          <FormGroup controlId="formHorizontalPassword">
-            <Col componentClass={ControlLabel} sm={2}>
-              Password
-            </Col>
-            <Col sm={10}>
-              <FormControl type="password"
-                           placeholder="Password"
-                           onChange={this.handlePasswordChange}
-                           value={password} />
-            </Col>
-          </FormGroup>
-
-          <FormGroup>
-            <Col smOffset={2} sm={10}>
-              <Button type="submit">
-                Register
-              </Button>
-            </Col>
-          </FormGroup>
+          <ControlLabel className="sr-only">
+            Username
+          </ControlLabel>
+          <FormControl required
+                       type="text"
+                       placeholder="Username"
+                       onChange={this.handleUsernameChange}
+                       value={username} />
+          <ControlLabel className="sr-only">
+            Password
+          </ControlLabel>
+          <FormControl required
+                       type="password"
+                       placeholder="Password"
+                       onChange={this.handlePasswordChange}
+                       value={password} />
+          <Button type="submit" className="btn btn-lg btn-primary btn-block">
+            Create an account
+          </Button>
         </Form>
       </div>
     );

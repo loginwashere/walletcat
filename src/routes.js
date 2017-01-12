@@ -70,7 +70,7 @@ export default () => (
 
     <Route path="about" component={About}/>
     <Route path="contact-us" component={ContactUs}/>
-    <Route path="login" component={LoginConnected}/>
+    <Route path="sign-in" component={LoginConnected}/>
     <Route path="logout" component={Logout}/>
     <Route path="register" component={RegisterConnected}/>
 

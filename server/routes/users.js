@@ -5,19 +5,18 @@ const hashPassword = require('../utils').hashPassword;
 const generateAvatarUrl = require('../utils').generateAvatarUrl;
 const createUser = require('../models/user');
 
-router.post('/api/users', (req, res) => {
+router.post('/', (req, res) => {
   if (!req.body.email || !req.body.password || !req.body.username) {
     res.status(400).json({
       error: 'Validation error'
     })
   }
-  const user = createUser({
-    email: req.body.email,
-    username: req.body.username,
-    avatar: generateAvatarUrl(req.body.email),
-    password: hashPassword(req.body.password)
-  });
-  usersCollection.add(user)
+  usersCollection.add(createUser({
+      email: req.body.email,
+      username: req.body.username,
+      avatar: generateAvatarUrl(req.body.email),
+      password: hashPassword(req.body.password)
+    }))
     .then(user => res.json(user));
 });
 

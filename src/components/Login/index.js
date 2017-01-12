@@ -10,6 +10,8 @@ import {
 } from 'react-bootstrap';
 import { loginUser } from '../../actions';
 
+import './style.less';
+
 export class Login extends Component {
   constructor(props) {
     super(props);
@@ -43,43 +45,34 @@ export class Login extends Component {
   render() {
     return (
       <div>
-        <h1>Login</h1>
         <Form horizontal
-              onSubmit={this.handleSubmit}>
-          <FormGroup controlId="formHorizontalEmail">
-            <Col componentClass={ControlLabel} sm={2}>
-              Email
-            </Col>
-            <Col sm={10}>
-              <FormControl required
-                           type="email"
-                           placeholder="Email"
-                           onChange={this.handleEmailChange}
-                           value={this.state.email} />
-              <FormControl.Feedback />
-            </Col>
-          </FormGroup>
+              onSubmit={this.handleSubmit}
+              className="login__form">
 
-          <FormGroup controlId="formHorizontalPassword">
-            <Col componentClass={ControlLabel} sm={2}>
-              Password
-            </Col>
-            <Col sm={10}>
-              <FormControl required
-                           type="password"
-                           placeholder="Password"
-                           onChange={this.handlePasswordChange}
-                           value={this.state.password} />
-            </Col>
-          </FormGroup>
+          <h1 className="form-signin-heading">Please sign in</h1>
+          <ControlLabel className="sr-only">
+            Email
+          </ControlLabel>
+          <FormControl required
+                       autoFocus
+                       type="email"
+                       placeholder="Email"
+                       onChange={this.handleEmailChange}
+                       value={this.state.email} />
+          <FormControl.Feedback />
 
-          <FormGroup>
-            <Col smOffset={2} sm={10}>
-              <Button type="submit">
-                Login
-              </Button>
-            </Col>
-          </FormGroup>
+          <ControlLabel className="sr-only">
+            Password
+          </ControlLabel>
+          <FormControl required
+                       type="password"
+                       placeholder="Password"
+                       onChange={this.handlePasswordChange}
+                       value={this.state.password} />
+
+          <Button type="submit" className="btn btn-lg btn-primary btn-block">
+            Sign in
+          </Button>
         </Form>
       </div>
     );

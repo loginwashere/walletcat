@@ -18,15 +18,17 @@ module.exports = () => {
     findOne: id => collection
       .find(id)
       .then(items => Promise.resolve(items[0])),
-    add: (item) => collection.addUnique(item, i => i),
+    add: (item) => {
+      items = [
+        ...items,
+        item
+      ];
+      return Promise.resolve(item);
+    },
     addUnique: (item, cb) => collection.filterAll(cb)
       .then(foundItem => {
         if (!foundItem.length) {
-          items = [
-            ...items,
-            item
-          ];
-          return item;
+          return collection.add(item);
         }
         if (typeof foundItem[0].deleted === 'undefined') {
           return foundItem[0];

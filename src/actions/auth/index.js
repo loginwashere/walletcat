@@ -75,7 +75,7 @@ export const logoutUser = () => dispatch => {
   dispatch(requestLogout());
   ['token', 'user'].map(item => localStorage.removeItem(item));
   dispatch(receiveLogout());
-  dispatch(push('/login'));
+  dispatch(push('/sign-in'));
 };
 
 export const REGISTER_REQUEST = 'REGISTER_REQUEST';
@@ -112,14 +112,14 @@ export const registerUser = params => dispatch => {
     })
     .then((json) =>  {
       if (json.status === 401) {
-        dispatch(push('/login'));
+        dispatch(push('/sign-in'));
         return Promise.reject(json.data);
       } else if (!json.status === 200) {
         dispatch(registerError(json.data.message));
         return Promise.reject(json.data);
       } else {
         dispatch(receiveRegister(json.data));
-        dispatch(push('/login'));
+        dispatch(push('/sign-in'));
       }
     })
     .catch(error => dispatch(alertAdd(error)));
