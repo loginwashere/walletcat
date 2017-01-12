@@ -15,8 +15,12 @@ export class Profile extends Component {
     return (
       <div>
         <h1>Profile</h1>
-        { user && <Image src={`${user.avatar}&s=250`} circle /> }
-        { user && <Form horizontal>
+        <Form horizontal>
+
+          <FormGroup controlId="formHorizontalAvatar">
+            <Image src={`${user.avatar}&s=250`} circle />
+          </FormGroup>
+
           <FormGroup controlId="formHorizontalEmail">
             <Col componentClass={ControlLabel} sm={2}>
               Email
@@ -40,7 +44,7 @@ export class Profile extends Component {
                            disabled />
             </Col>
           </FormGroup>
-        </Form>}
+        </Form>
       </div>
     );
   }
