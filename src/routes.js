@@ -28,6 +28,8 @@ import {
 import CategoryView from './components/CategoryView';
 import AccountView from './components/AccountView';
 import AccountDelete from './components/AccountDelete';
+import TransactionView from './components/TransactionView';
+import TransactionDelete from './components/TransactionDelete';
 
 export default () => (
   <Route path="/" component={App}>
@@ -40,6 +42,8 @@ export default () => (
 
     <Route path="transactions" component={TransactionsConnected}/>
     <Route path="transactions/create" component={TransactionCreateConnected}/>
+    <Route path="transactions/:transactionId" component={TransactionView}/>
+    <Route path="transactions/:transactionId/delete" component={TransactionDelete}/>
 
     <Route path="categories" component={CategoriesConnected}/>
     <Route path="categories/create" component={CategoryCreateConnected}/>

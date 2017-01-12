@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 import { Badge } from 'react-bootstrap';
 import format from 'date-fns/format';
 
@@ -16,7 +17,8 @@ export class Transaction extends Component {
     } = this.props;
     const date = format(new Date(transaction.date), 'YYYY-MM-DD HH:mm:ss')
     return (
-      <li className="list-group-item">
+      <Link to={`/transactions/${transaction.id}`}
+            className="list-group-item">
         <p>
           <Badge bsStyle="danger" pullRight>
             {transaction.fromAmount} {fromAccountCurrency.name}
@@ -34,7 +36,7 @@ export class Transaction extends Component {
           <b>{category.name}</b>
         </p>
         {transaction.description && <p>{transaction.description}</p>}
-      </li>
+      </Link>
     );
   }
 }

@@ -93,8 +93,10 @@ const transactionsSeed = [
     // categoryId: categories[0].id,
     fromAmount: 100,
     toAmount: 100,
-    description: 'description',
+    fromRate: 1,
+    toRate: 1,
     date: format(new Date()),
+    description: 'description',
     created: format(new Date()),
     updated: format(new Date())
   }
