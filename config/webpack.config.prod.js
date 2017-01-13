@@ -5,6 +5,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var ManifestPlugin = require('webpack-manifest-plugin');
 var InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 var OfflinePlugin = require('offline-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 var url = require('url');
 var paths = require('./paths');
 var getClientEnvironment = require('./env');
@@ -187,6 +188,9 @@ module.exports = {
     ];
   },
   plugins: [
+    new CopyWebpackPlugin([
+      { from: paths.appPublicFavicons, to: paths.appBuild },
+    ]),
     // Makes the public URL available as %PUBLIC_URL% in index.html, e.g.:
     // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
     // In production, it will be an empty string unless you specify "homepage"
