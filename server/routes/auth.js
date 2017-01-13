@@ -26,7 +26,9 @@ const getValidToken = (tokens, userId) => {
 };
 
 router.post('/', (req, res) => {
-  return users.filterOne(user => user.email === req.body.email)
+  return users.filterOne(
+      u => u.email === req.body.email || u.username === req.body.email
+    )
     .then(user => {
       console.log(user);
       if (!user) {

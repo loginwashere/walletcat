@@ -49,12 +49,12 @@ export class Login extends Component {
 
           <h1 className="form-signin-heading">Please sign in</h1>
           <ControlLabel className="sr-only">
-            Email
+            Email or Username
           </ControlLabel>
           <FormControl required
                        autoFocus
-                       type="email"
-                       placeholder="Email"
+                       type="text"
+                       placeholder="Email or Username"
                        onChange={this.handleEmailChange}
                        value={this.state.email} />
           <FormControl.Feedback />
