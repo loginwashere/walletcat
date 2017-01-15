@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
 const config = require('../config')
-const tokens = require('../collections/tokens')
 const models = require('../models')
 const hashPassword = require('../utils').hashPassword
 const generateToken = require('../utils').generateToken
@@ -46,28 +45,21 @@ router.post('/', (req, res) => {
           error: 'Credentials do not match'
         });
       }
-      return getValidToken(tokens, user.id)
-        .then(token => {
-          if (!token) {
-            token = generateToken(user.id);
-            return tokens.add(token);
-          }
-          return Promise.resolve(token);
-        })
-        .then(token => {
-          return res.json({
-            token: token.value,
-            user
-          })
-        })
+      const token = generateToken(user.id);
+      return Promise.resolve({token, user});
+    })
+    .then(result => {
+      return res.json({
+        token: result.token.value,
+        user: result.user
+      })
     })
 })
 
 router.delete('/', (req, res) => {
-  return tokens.delete(req.user.sub)
-    .then(res.json({
-      result: true
-    }))
+  res.json({
+    result: true
+  })
 })
 
 module.exports = router
