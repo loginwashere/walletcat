@@ -54,8 +54,10 @@
     "recursive-readdir": "2.1.0",
     "redux-mock-store": "^1.2.1",
     "sinon": "^1.17.7",
+    "sqlite3": "^3.1.8",
     "strip-ansi": "3.0.1",
     "style-loader": "0.13.1",
+    "umzug": "^1.11.0",
     "url-loader": "0.5.7",
     "webpack": "1.14.0",
     "webpack-dev-server": "1.16.2",
@@ -72,6 +74,8 @@
     "express-unless": "^0.3.0",
     "jsonwebtoken": "^7.2.1",
     "jwt-decode": "^2.1.0",
+    "pg": "^6.1.2",
+    "pg-hstore": "^2.3.2",
     "react": "^15.4.1",
     "react-bootstrap": "^0.30.7",
     "react-dom": "^15.4.1",
@@ -85,15 +89,18 @@
     "redux-form": "^6.4.3",
     "redux-logger": "^2.7.4",
     "redux-thunk": "^2.1.0",
+    "sequelize": "^3.29.0",
+    "sequelize-cli": "^2.5.1",
     "uuid": "^3.0.1"
   },
   "scripts": {
     "start": "concurrently 'npm run server' 'npm run client'",
     "client": "node scripts/start.js",
     "server": "node server",
+    "db:migrate": "node_modules/.bit/sequelize db:migrate",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "test:server": "node_modules/.bin/mocha  './server/*/*.test.js'"
+    "test:server": "node_modules/.bin/mocha  './server' --recursive"
   },
   "eslintConfig": {
     "extends": "react-app"

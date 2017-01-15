@@ -1,10 +1,10 @@
-const express = require('express');
-const router = express.Router();
-const currenciesCollection = require('../collections/currencies');
+const express = require('express')
+const router = express.Router()
+const models = require('../models')
 
 router.get('/', (req, res) => {
-  currenciesCollection.all()
-    .then(currencies => res.json({currencies}));
+  models.currency.findAll()
+    .then(currencies => res.json({currencies}))
 });
 
-module.exports = router;
+module.exports = router

@@ -1,6 +1,6 @@
-const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
-const config = require('../config');
+const jwt = require('jsonwebtoken')
+const crypto = require('crypto')
+const config = require('../config')
 
 const generateToken = userId => ({
   id: userId,
@@ -9,8 +9,8 @@ const generateToken = userId => ({
     config.JWT_SECRET,
     { expiresIn: config.JWT_EXPIRES }
   )
-});
-module.exports.generateToken = generateToken;
+})
+module.exports.generateToken = generateToken
 
 const hashPassword = password => {
   return crypto
@@ -18,7 +18,7 @@ const hashPassword = password => {
     .update(password)
     .digest('hex')
 };
-module.exports.hashPassword = hashPassword;
+module.exports.hashPassword = hashPassword
 
 const md5 = string => {
   return crypto
@@ -29,5 +29,6 @@ const md5 = string => {
 
 const generateAvatarUrl = email => (
   `https://www.gravatar.com/avatar/${md5('admin@mail.com')}?s=50`
-);
-module.exports.generateAvatarUrl = generateAvatarUrl;
+)
+
+module.exports.generateAvatarUrl = generateAvatarUrl

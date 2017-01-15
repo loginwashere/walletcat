@@ -1,11 +1,11 @@
-const express = require('express');
-const router = express.Router();
-const jwt = require('jsonwebtoken');
-const config = require('../config');
-const users = require('../collections/users');
-const tokens = require('../collections/tokens');
-const hashPassword = require('../utils').hashPassword;
-const generateToken = require('../utils').generateToken;
+const express = require('express')
+const router = express.Router()
+const jwt = require('jsonwebtoken')
+const config = require('../config')
+const tokens = require('../collections/tokens')
+const models = require('../models')
+const hashPassword = require('../utils').hashPassword
+const generateToken = require('../utils').generateToken
 
 const getValidToken = (tokens, userId) => {
   return tokens.findOne(userId)
@@ -13,24 +13,29 @@ const getValidToken = (tokens, userId) => {
       if (token && token.value) {
         try {
           jwt.verify(token.value, config.JWT_SECRET);
-          return Promise.resolve(token);
+          return Promise.resolve(token)
         } catch (err) {
           if (err && err.name === 'TokenExpiredError') {
-            return Promise.resolve(null);
+            return Promise.resolve(null)
           }
           throw(err);
         }
       }
-      return Promise.resolve(null);
-    });
-};
+      return Promise.resolve(null)
+    })
+}
 
 router.post('/', (req, res) => {
-  return users.filterOne(
-      u => u.email === req.body.email || u.username === req.body.email
-    )
+  return models.user
+    .findOne({
+      where: {
+        $or: [
+          { email: req.body.email },
+          { username: req.body.email },
+        ]
+      }
+    })
     .then(user => {
-      console.log(user);
       if (!user) {
         return res.status(404).json({
           error: 'User not found'
@@ -53,16 +58,16 @@ router.post('/', (req, res) => {
           return res.json({
             token: token.value,
             user
-          });
-        });
-    });
-});
+          })
+        })
+    })
+})
 
 router.delete('/', (req, res) => {
   return tokens.delete(req.user.sub)
     .then(res.json({
       result: true
-    }));
-});
+    }))
+})
 
-module.exports = router;
+module.exports = router

@@ -1,1 +1,1 @@
-web: bin/start-nginx node server
+web: npm run db:migrate && bin/start-nginx node server

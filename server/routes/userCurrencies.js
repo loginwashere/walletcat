@@ -1,39 +1,66 @@
-const express = require('express');
-const router = express.Router();
-const userCurrenciesCollection = require('../collections/userCurrencies');
-const createUserCurrency = require('../models/userCurrency').create;
-const createUniqueRule = require('../models/userCurrency').createUniqueRule;
+const express = require('express')
+const router = express.Router()
+const models = require('../models')
+const format = require('date-fns/format')
+const v4 = require('uuid/v4')
 
 router.get('/', (req, res) => {
-  userCurrenciesCollection
-    .filter(c => c.userId === req.user.sub)
-    .then(userCurrencies => res.json({userCurrencies}));
-});
+  models.userCurrency
+    .findAll({
+      where: {
+        userId: req.user.sub
+      }
+    })
+    .then(userCurrencies => res.json({userCurrencies}))
+})
 
 router.post('/', (req, res) => {
-  return userCurrenciesCollection.addUnique(
-      createUserCurrency({
+  models.userCurrency
+    .findOne({
+      where: {
         userId: req.user.sub,
-        currencyId: req.body.currencyId
-      }),
-      createUniqueRule(req.user.sub, req.body.currencyId)
-    )
-    .then(newUserCurrency => res.json(newUserCurrency));
-});
-
-router.delete('/:id', (req, res) => {
-  userCurrenciesCollection
-    .filterOne(c => c.userId === req.user.sub && c.id === req.params.id)
+        currencyId: req.body.currencyId,
+      },
+      paranoid: false
+    })
     .then(userCurrency => {
       if (userCurrency) {
-        userCurrenciesCollection.softDelete(userCurrency.id)
-          .then(result => res.status(204).json());
+        return userCurrency.restore()
+      }
+      return models.userCurrency.create({
+        id: v4(),
+        userId: req.user.sub,
+        currencyId: req.body.currencyId,
+        createdAt: format(new Date()),
+        updatedAt: format(new Date()),
+      })
+    })
+    .then(res.json.bind(res))
+})
+
+router.delete('/:id', (req, res) => {
+  models.userCurrency
+    .findOne({
+      where: {
+        $and: [
+          { id: req.params.id },
+          { userId: req.user.sub }
+        ]
+      }
+    })
+    .then(userCurrency => {
+      if (userCurrency) {
+        models.userCurrency
+          .destroy({
+            where: { id: userCurrency.id }
+          })
+          .then(result => res.status(204).json())
       } else {
         res
-        .status(404)
-        .json();
+          .status(404)
+          .json()
       }
-    });
-});
+    })
+})
 
-module.exports = router;
+module.exports = router

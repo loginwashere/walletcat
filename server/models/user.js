@@ -1,8 +1,12 @@
-const v4 = require('uuid/v4');
-const format = require('date-fns/format');
-
-module.exports = params => Object.assign({}, params, {
-  id: v4(),
-  created: format(new Date()),
-  updated: format(new Date())
-});
+module.exports = (sequelize, Sequelize) => {
+  return sequelize.define('user', {
+    id: { type: Sequelize.UUID, primaryKey: true },
+    username: { type: Sequelize.STRING, unique: true },
+    email: { type: Sequelize.STRING, unique: true },
+    avatar: { type: Sequelize.STRING },
+    password: { type: Sequelize.STRING },
+  }, {
+    tableName: 'users',
+    paranoid: true
+  })
+}

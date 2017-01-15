@@ -1,15 +1,18 @@
-const v4 = require('uuid/v4');
-const format = require('date-fns/format');
-
-module.exports.create = params => Object.assign({}, params, {
-  id: v4(),
-  created: format(new Date()),
-  updated: format(new Date())
-});
-
-module.exports.update = params => Object.assign({}, params, {
-  updated: format(new Date())
-});
-
-module.exports.createUniqueRule = (userId, name) => i =>
-  i.userId === userId && i.name === name;
+module.exports = (sequelize, Sequelize) => {
+  const account = sequelize.define('account', {
+    id: { type: Sequelize.UUID,  primaryKey: true },
+    name: { type: Sequelize.STRING, unique: true },
+    description: { type: Sequelize.STRING },
+    amount: { type: Sequelize.DECIMAL(19, 6) },
+  }, {
+    classMethods: {
+      associate: models => {
+        account.belongsTo(models.user)
+        account.belongsTo(models.userCurrency, { as: 'currency' })
+      }
+    },
+    tableName: 'accounts',
+    paranoid: true
+  })
+  return account
+}

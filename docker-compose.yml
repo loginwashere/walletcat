@@ -1,0 +1,14 @@
+version: '2'
+services:
+  db:
+    image: postgres:9.6
+    ports:
+      - "5432:5432"
+  pgadmin:
+    image: thajeztah/pgadmin4:1.1
+    ports:
+      - "5050:5050"
+    depends_on:
+      - db
+    links:
+      - db
