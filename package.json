@@ -93,6 +93,7 @@
     "uuid": "^3.0.1"
   },
   "scripts": {
+    "postinstall": "npm run db:migrate",
     "start": "concurrently 'npm run server' 'npm run client'",
     "client": "node scripts/start.js",
     "server": "node server",
