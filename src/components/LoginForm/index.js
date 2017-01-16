@@ -10,7 +10,7 @@ import {
 } from 'react-bootstrap'
 import Joi from 'joi'
 import { loginSchema } from '../../../server/validation'
-import { errorMessages } from '../../../server/utils/errorMessages'
+import errorMessages from '../../../server/utils/errorMessages'
 
 import './style.less'
 
