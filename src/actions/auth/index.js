@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { push } from 'react-router-redux';
 import { alertAdd } from '..';
+import { convertError } from '..';
 import { API_URL } from '../../apiUrl';
+import { SubmissionError } from 'redux-form'
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
@@ -22,13 +24,6 @@ const receiveLogin = data => ({
   user: data.user
 });
 
-const loginError = message => ({
-  type: LOGIN_FAILURE,
-  isFetching: false,
-  isAuthenticated: false,
-  message
-});
-
 export const LOGOUT_REQUEST = 'LOGOUT_REQUEST'
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS'
 export const LOGOUT_FAILURE = 'LOGOUT_FAILURE'
@@ -46,29 +41,23 @@ const receiveLogout = () => ({
 })
 
 export const loginUser = creds => dispatch => {
-  const { email, password } = creds;
+  const { login, password } = creds;
   dispatch(requestLogin(creds));
   return axios
     .post(`${API_URL}auth`, {
-      email,
+      login,
       password
     })
     .then((json) =>  {
-      if (json.status === 401) {
-        dispatch(push('/login'));
-        return Promise.reject(json.data);
-      } else if (!json.status === 200) {
-        dispatch(loginError(json.data.message));
-        return Promise.reject(json.data);
-      } else {
-        localStorage.setItem('token', json.data.token);
-        localStorage.setItem('user', JSON.stringify(json.data.user));
+      localStorage.setItem('token', json.data.token);
+      localStorage.setItem('user', JSON.stringify(json.data.user));
 
-        dispatch(receiveLogin(json.data));
-        dispatch(push('/'));
-      }
+      dispatch(receiveLogin(json.data));
+      return dispatch(push('/'));
     })
-    .catch(error => dispatch(alertAdd(error)));
+    .catch(error => {
+      throw new SubmissionError(convertError(error))
+    });
 }
 
 export const logoutUser = () => dispatch => {

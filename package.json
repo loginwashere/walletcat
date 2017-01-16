@@ -61,6 +61,7 @@
     "webpack": "1.14.0",
     "webpack-dev-server": "1.16.2",
     "webpack-manifest-plugin": "1.1.0",
+    "webpack-visualizer-plugin": "^0.1.10",
     "whatwg-fetch": "1.0.0"
   },
   "dependencies": {
@@ -71,6 +72,7 @@
     "express": "^4.14.0",
     "express-jwt": "^5.1.0",
     "express-unless": "^0.3.0",
+    "joi-browser": "^10.0.6",
     "jsonwebtoken": "^7.2.1",
     "jwt-decode": "^2.1.0",
     "pg": "^6.1.2",
@@ -144,6 +146,7 @@
         "lodash",
         {
           "id": [
+            "redux-form",
             "react-router",
             "react-bootstrap",
             "react-router-bootstrap"

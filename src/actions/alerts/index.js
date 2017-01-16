@@ -1,23 +1,34 @@
-export const ALERT_ADD = 'ALERT_ADD';
-export const ALERT_REMOVE = 'ALERT_REMOVE';
+export const ALERT_ADD = 'ALERT_ADD'
+export const ALERT_REMOVE = 'ALERT_REMOVE'
 
 function rand() {
-    const n = Math.random() * 1e17;
-    return (n + "").substr(1, 16);
+  const n = Math.random() * 1e17
+  return (n + "").substr(1, 16)
 }
 
-const createAlert = (error) => ({
-    id: rand(),
-    message: error.response.data.error,
-    description: error.message
-});
+const createAlert = error => ({
+  id: rand(),
+  message: error.response.data.error,
+  description: error.message
+})
 
-export const alertAdd = (error) => ({
+
+export const convertError = error => {
+  console.log(JSON.stringify(error))
+  const convertedError = {
+    _error: error.response.data.error,
+    ...error.response.data.errors
+  }
+  console.log(convertedError)
+  return convertedError
+}
+
+export const alertAdd = error => ({
   type: ALERT_ADD,
   alert: createAlert(error)
-});
+})
 
-export const removeAlert = (alert) => ({
+export const removeAlert = alert => ({
   type: ALERT_REMOVE,
   alert
-});
+})

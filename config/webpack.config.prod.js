@@ -6,6 +6,7 @@ var ManifestPlugin = require('webpack-manifest-plugin');
 var InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 var OfflinePlugin = require('offline-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
+var Visualizer = require('webpack-visualizer-plugin');
 var url = require('url');
 var paths = require('./paths');
 var getClientEnvironment = require('./env');
@@ -86,7 +87,8 @@ module.exports = {
     alias: {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
-      'react-native': 'react-native-web'
+      'react-native': 'react-native-web',
+      'joi': 'joi-browser',
     }
   },
 
@@ -97,7 +99,10 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         loader: 'eslint',
-        include: paths.appSrc
+        include: [
+          paths.appSrc,
+          paths.appServer
+        ],
       }
     ],
     loaders: [
@@ -131,7 +136,10 @@ module.exports = {
       // Process JS with Babel.
       {
         test: /\.(js|jsx)$/,
-        include: paths.appSrc,
+        include: [
+          paths.appSrc,
+          paths.appServer
+        ],
         loader: 'babel',
 
       },
@@ -188,6 +196,7 @@ module.exports = {
     ];
   },
   plugins: [
+    new Visualizer(),
     new CopyWebpackPlugin([
       { from: paths.appPublicFavicons, to: paths.appBuild },
     ]),

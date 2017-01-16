@@ -1,8 +1,9 @@
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
 const config = require('../config')
+const errorMessages = require('./errorMessages')
 
-const generateToken = userId => ({
+module.exports.generateToken = userId => ({
   id: userId,
   value: jwt.sign(
     { sub: userId },
@@ -10,15 +11,13 @@ const generateToken = userId => ({
     { expiresIn: config.JWT_EXPIRES }
   )
 })
-module.exports.generateToken = generateToken
 
-const hashPassword = password => {
+module.exports.hashPassword = password => {
   return crypto
     .createHmac('sha256', config.HASH_SECRET)
     .update(password)
     .digest('hex')
-};
-module.exports.hashPassword = hashPassword
+}
 
 const md5 = string => {
   return crypto
@@ -27,8 +26,8 @@ const md5 = string => {
     .digest("hex");
 }
 
-const generateAvatarUrl = email => (
+module.exports.generateAvatarUrl = email => (
   `https://www.gravatar.com/avatar/${md5('admin@mail.com')}?s=50`
 )
 
-module.exports.generateAvatarUrl = generateAvatarUrl
+module.exports.errorMessages = errorMessages

@@ -1,77 +1,18 @@
-import React, { Component,PropTypes } from 'react';
-import { connect } from 'react-redux';
-import {
-  Form,
-  FormControl,
-  Button,
-  ControlLabel
-} from 'react-bootstrap';
-import { loginUser } from '../../actions';
-
-import './style.less';
+import React, { Component,PropTypes } from 'react'
+import { connect } from 'react-redux'
+import LoginForm from '../LoginForm'
+import { loginUser } from '../../actions'
 
 export class Login extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      email: '',
-      password: ''
-    }
-  }
-
-  handleSubmit = (e) => {
-    e.preventDefault();
-
-    const { dispatch } = this.props;
-    const params = {
-      email: this.state.email,
-      password: this.state.password
-    };
-
-    dispatch(loginUser(params));
-  }
-
-  handleEmailChange = (e) => {
-    this.setState({ email: e.target.value });
-  }
-
-  handlePasswordChange = (e) => {
-    this.setState({ password: e.target.value });
+  handleSubmit = values => {
+    const { dispatch } = this.props
+    return dispatch(loginUser(values))
   }
 
   render() {
     return (
       <div>
-        <Form horizontal
-              onSubmit={this.handleSubmit}
-              className="login__form">
-
-          <h1 className="form-signin-heading">Please sign in</h1>
-          <ControlLabel className="sr-only">
-            Email or Username
-          </ControlLabel>
-          <FormControl required
-                       autoFocus
-                       type="text"
-                       placeholder="Email or Username"
-                       onChange={this.handleEmailChange}
-                       value={this.state.email} />
-          <FormControl.Feedback />
-
-          <ControlLabel className="sr-only">
-            Password
-          </ControlLabel>
-          <FormControl required
-                       type="password"
-                       placeholder="Password"
-                       onChange={this.handlePasswordChange}
-                       value={this.state.password} />
-
-          <Button type="submit" className="btn btn-lg btn-primary btn-block">
-            Sign in
-          </Button>
-        </Form>
+        <LoginForm onSubmit={this.handleSubmit} />
       </div>
     );
   }
