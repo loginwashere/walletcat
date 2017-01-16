@@ -14,12 +14,10 @@ const createAlert = error => ({
 
 
 export const convertError = error => {
-  console.log(JSON.stringify(error))
   const convertedError = {
     _error: error.response.data.error,
     ...error.response.data.errors
   }
-  console.log(convertedError)
   return convertedError
 }
 
