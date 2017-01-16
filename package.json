@@ -146,7 +146,6 @@
         "lodash",
         {
           "id": [
-            "redux-form",
             "react-router",
             "react-bootstrap",
             "react-router-bootstrap"
