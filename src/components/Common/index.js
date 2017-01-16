@@ -132,3 +132,36 @@ RenderFieldSelect.PropTypes = {
     warning: PropTypes.string
   })
 };
+
+export const RenderError = ({error}) => (
+  <div>
+    {error
+      ? ((Array.isArray(error) ? error : [error])
+          .map((i, index) => <HelpBlock key={index}>{i}</HelpBlock>))
+      : null}
+  </div>
+)
+
+export const RenderFieldWithoutCol = ({
+  input, label, type, meta: { touched, error, warning, valid }, required, autoFocus
+}) => {
+  const validationState = (touched, error, warning) => (touched && (
+      (error && 'error') ||
+      (warning && 'warning') ||
+      (!warning && valid && 'success'))) ||
+    null
+  return (
+    <FormGroup validationState={validationState(touched, error, warning)}>
+      <ControlLabel className="sr-only">{label}</ControlLabel>
+      <FormControl {...input}
+                  required={required}
+                  autoFocus={autoFocus}
+                  type={type}
+                  placeholder={label} />
+      <FormControl.Feedback />
+      {touched && (
+        (error && <RenderError error={error} />) ||
+        (warning && <RenderError error={warning} />))}
+    </FormGroup>
+  )
+}

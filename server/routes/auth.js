@@ -1,16 +1,17 @@
 const express = require('express')
 const router = express.Router()
-const jwt = require('jsonwebtoken')
 const Joi = require('joi')
-const config = require('../config')
 const models = require('../models')
 const hashPassword = require('../utils').hashPassword
 const generateToken = require('../utils').generateToken
 const errorMessages = require('../utils').errorMessages
-const validation = require('../validation');
+const validation = require('../validation')
 
 router.post('/', (req, res) => {
-  const validationErrors = errorMessages(Joi.validate(req.body, validation.loginSchema));
+  const validationErrors = Joi.validate(req.body, validation.loginSchema)
+  if (validationErrors.error) {
+    return res.status(400).json({ errors:errorMessages(validationErrors) })
+  }
 
   return models.user
     .findOne({
@@ -43,6 +44,9 @@ router.post('/', (req, res) => {
         errors: validationErrors
       })
     })
+    .catch(error => res.status(500).json({
+      error: error.message
+    }))
 })
 
 router.delete('/', (req, res) => {

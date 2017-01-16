@@ -1,64 +1,72 @@
 import React, { Component, PropTypes } from 'react'
 import { Field, reduxForm } from 'redux-form'
 import {
-  Form,
   FormGroup,
+  Form,
   FormControl,
   Button
 } from 'react-bootstrap'
 import Joi from 'joi'
-import { loginSchema } from '../../../server/validation'
+import { registerSchema } from '../../../server/validation'
 import errorMessages from '../../../server/utils/errorMessages'
 import { RenderFieldWithoutCol, RenderError } from '../Common'
 
-import './style.less'
+import './style.less';
 
-const validate = values => errorMessages(Joi.validate(values, loginSchema))
+const validate = values => {}//errorMessages(Joi.validate(values, registerSchema))
 
-export class LoginForm extends Component {
+export class RegisterForm extends Component {
   render() {
     const { error, handleSubmit, pristine, submitting, invalid } = this.props
     const validationState = error => (error && 'error') || null
     return (
       <Form horizontal
             onSubmit={handleSubmit}
-            className="login__form">
+            className="register__form">
 
         <FormGroup validationState={validationState(error)}>
-          <h1 className="form-signin-heading">Please sign in</h1>
+          <h1 className="form-signin-heading">Please</h1>
+          <h2 className="form-signin-heading">Create an account</h2>
           <FormControl.Feedback />
           <RenderError error={error} />
         </FormGroup>
 
         <Field required={true}
                autoFocus={true}
-               name="login"
+               name="email"
+               type="email"
+               component={RenderFieldWithoutCol}
+               label="Email"/>
+
+        <Field required={true}
+               name="username"
                type="text"
                component={RenderFieldWithoutCol}
-               label="Username or Email"/>
+               label="Username"/>
 
         <Field required={true}
                name="password"
                type="password"
                component={RenderFieldWithoutCol}
                label="Password"/>
+
         <Button type="submit"
                 disabled={pristine || submitting || invalid }
                 className="btn btn-lg btn-primary btn-block">
-          Sign in
+          Create an account
         </Button>
       </Form>
-    )
+    );
   }
 }
 
-LoginForm.PropTypes = {
+RegisterForm.PropTypes = {
   handleSubmit: PropTypes.func.isRequired
 }
 
-LoginForm = reduxForm({
-  form: 'login',
+RegisterForm = reduxForm({
+  form: 'register',
   validate
-})(LoginForm)
+})(RegisterForm)
 
-export default LoginForm
+export default RegisterForm
