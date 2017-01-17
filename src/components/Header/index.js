@@ -5,14 +5,11 @@ import {
   Navbar,
   NavItem,
   NavDropdown,
-  MenuItem,
-  Image
+  MenuItem
 } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { IndexLink } from 'react-router';
 import { Logout, HeaderProfile } from '..';
-
-import './style.less';
+import HeaderBrandLink from '../HeaderBrandLink'
 
 export class Header extends Component {
   render() {
@@ -20,15 +17,7 @@ export class Header extends Component {
     return (
       <Navbar collapseOnSelect fixedTop>
         <Navbar.Header>
-            <Navbar.Brand>
-              <IndexLink to="/" className='header__brand__link'>
-                <Image src="/safari-pinned-tab.svg"
-                       width={50}
-                       height={50}
-                       className='header__brand__image' />
-                <span className="header__brand__name">Wallet Cat</span>
-              </IndexLink>
-            </Navbar.Brand>
+            <HeaderBrandLink to="/" />
           <Navbar.Toggle />
         </Navbar.Header>
         <Navbar.Collapse>

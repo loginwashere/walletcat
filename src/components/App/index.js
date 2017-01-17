@@ -1,21 +1,24 @@
-import React, { Component } from 'react';
-import { HeaderConnected, AppAlertListConnected, Footer } from '..';
+import React, { Component } from 'react'
+import { withRouter } from 'react-router'
+import { HeaderConnected, AppAlertListConnected, Footer, Home } from '..'
 
-import './style.less';
+import './style.less'
 
 export class App extends Component {
   render() {
-    return (
-      <div>
-        <HeaderConnected />
-        <div className="appContent container">
-          <AppAlertListConnected />
-          {this.props.children}
+    return this.props.location.pathname !== '/'
+      ? <div>
+          <HeaderConnected />
+          <div className="appContent container">
+            <AppAlertListConnected />
+            {this.props.children}
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
-    );
+      : <Home />
   }
 }
 
-export default App;
+App = withRouter(App)
+
+export default App
