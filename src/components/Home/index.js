@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import Waypoint from 'react-waypoint'
 import Scroll from 'react-scroll'
@@ -8,6 +9,8 @@ import {
   NavItem
 } from 'react-bootstrap'
 import HeaderBrandLink from '../HeaderBrandLink'
+import { LinkContainer } from 'react-router-bootstrap'
+import { Logout, HeaderProfile } from '..'
 
 import image from './img/demo-screen1.png'
 
@@ -39,6 +42,8 @@ export class Home extends Component {
   render() {
     const { fixNav } = this.state
     const scrollTo = (name) => Scroll.scroller.scrollTo(name, { duration: 1500, delay: 100, smooth: true })
+
+    const { user, isAuthenticated, dispatch } = this.props
     return (
       <div id="page-top" className="landing">
 
@@ -57,6 +62,16 @@ export class Home extends Component {
               <NavItem onClick={() => scrollTo('contact')}>
                 Contact
               </NavItem>
+              {isAuthenticated && <HeaderProfile eventKey={9} user={user} />}
+              {!isAuthenticated && <LinkContainer to="/sign-in">
+                <NavItem eventKey={10} href="#">Sign in</NavItem>
+              </LinkContainer>}
+              {isAuthenticated && <LinkContainer to="/logout">
+                <Logout eventKey={11} dispatch={dispatch} />
+              </LinkContainer>}
+              {!isAuthenticated && <LinkContainer to="/register">
+                <NavItem eventKey={12} href="#">Create an account</NavItem>
+              </LinkContainer>}
             </Nav>
           </Navbar.Collapse>
         </Navbar>
@@ -215,5 +230,21 @@ export class Home extends Component {
     )
   }
 }
+
+Home.propTypes = {
+  user: PropTypes.object,
+  isAuthenticated: PropTypes.bool.isRequired,
+  dispatch: PropTypes.func.isRequired
+}
+
+function mapStateToProps(state) {
+  const { auth } = state;
+  const { user, isAuthenticated } = auth;
+  return { user, isAuthenticated };
+}
+
+Home = connect(mapStateToProps, null, null, {
+  pure: false
+})(Home);
 
 export default Home
