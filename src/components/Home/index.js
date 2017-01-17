@@ -38,6 +38,7 @@ export class Home extends Component {
 
   render() {
     const { fixNav } = this.state
+    const scrollTo = (name) => Scroll.scroller.scrollTo(name, { duration: 1500, delay: 100, smooth: true })
     return (
       <div id="page-top" className="landing">
 
@@ -50,12 +51,12 @@ export class Home extends Component {
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav pullRight>
-                <li>
-                  <Scroll.Link to="features" duration={1500} delay={100} smooth={true}>Features</Scroll.Link>
-                </li>
-                <li>
-                  <Scroll.Link to="contact" duration={1500} delay={100} smooth={true}>Contact</Scroll.Link>
-                </li>
+              <NavItem onClick={() => scrollTo('features')}>
+                Features
+              </NavItem>
+              <NavItem onClick={() => scrollTo('contact')}>
+                Contact
+              </NavItem>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
@@ -96,6 +97,8 @@ export class Home extends Component {
           </div>
         </header>
 
+
+        <Scroll.Element name="features"></Scroll.Element>
         <section id="features" className="features">
           <div className="container">
             <div className="row">
@@ -173,6 +176,8 @@ export class Home extends Component {
           <div className="overlay"></div>
         </section>
 
+
+        <Scroll.Element name="contact"></Scroll.Element>
         <section id="contact" className="contact bg-primary">
           <div className="container">
             <h2>We <i className="icon-heart"></i> new friends!</h2>
