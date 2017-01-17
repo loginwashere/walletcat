@@ -2,6 +2,11 @@ import React, { Component } from 'react'
 import { Link } from 'react-router'
 import Waypoint from 'react-waypoint'
 import Scroll from 'react-scroll'
+import {
+  Navbar,
+  Nav,
+  NavItem
+} from 'react-bootstrap'
 import HeaderBrandLink from '../HeaderBrandLink'
 
 import image from './img/demo-screen1.png'
@@ -36,37 +41,24 @@ export class Home extends Component {
     return (
       <div id="page-top" className="landing">
 
-        <nav id="mainNav" className={`navbar navbar-default navbar-fixed-top ${fixNav ? 'affix' : 'affix-top'}`}>
-          <div className="container">
-            {/*<!-- Brand and toggle get grouped for better mobile display -->*/}
-            <div className="navbar-header">
-              <button type="button"
-                      className="navbar-toggle collapsed"
-                      data-toggle="collapse"
-                      data-target="#bs-example-navbar-collapse-1">
-                <span className="sr-only">Toggle navigation</span> Menu <i className="fa fa-bars"></i>
-              </button>
+        <Navbar collapseOnSelect
+                id="mainNav"
+                className={`navbar navbar-default navbar-fixed-top ${fixNav ? 'affix' : 'affix-top'}`}>
+          <Navbar.Header>
               <HeaderBrandLink to="page-top" scroll={true} duration={1500} delay={100} smooth={true} />
-            </div>
-
-            {/*<!-- Collect the nav links, forms, and other content for toggling -->*/}
-            <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-              <ul className="nav navbar-nav navbar-right">
-                {/*<li>
-                  <a className="page-scroll" href="#download">Download</a>
-                </li>*/}
+            <Navbar.Toggle />
+          </Navbar.Header>
+          <Navbar.Collapse>
+            <Nav pullRight>
                 <li>
-                  <Scroll.Link className="page-scroll" to="features" duration={1500} delay={100} smooth={true}>Features</Scroll.Link>
+                  <Scroll.Link to="features" duration={1500} delay={100} smooth={true}>Features</Scroll.Link>
                 </li>
                 <li>
-                  <Scroll.Link className="page-scroll" to="contact" duration={1500} delay={100} smooth={true}>Contact</Scroll.Link>
+                  <Scroll.Link to="contact" duration={1500} delay={100} smooth={true}>Contact</Scroll.Link>
                 </li>
-              </ul>
-            </div>
-            {/*<!-- /.navbar-collapse -->*/}
-          </div>
-          {/*<!-- /.container-fluid -->*/}
-        </nav>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
 
         <Waypoint
           onEnter={this.handleNavEnter}
@@ -103,22 +95,7 @@ export class Home extends Component {
             </div>
           </div>
         </header>
-{/*
-        <section id="download" className="download bg-primary text-center">
-          <div className="container">
-            <div className="row">
-              <div className="col-md-8 col-md-offset-2">
-                <h2 className="section-heading">Discover what all the buzz is about!</h2>
-                <p>Our app is available on any mobile device! Download now to get started!</p>
-                <div className="badges">
-                  <a className="badge-link" href="#"><img src="img/google-play-badge.svg" alt="" /></a>
-                  <a className="badge-link" href="#"><img src="img/app-store-badge.svg" alt="" /></a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-*/}
+
         <section id="features" className="features">
           <div className="container">
             <div className="row">
