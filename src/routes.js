@@ -32,10 +32,13 @@ import TransactionView from './components/TransactionView';
 import TransactionDelete from './components/TransactionDelete';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsAndConditions from './components/TermsAndConditions';
+import Landing from './components/Landing';
 
 export default () => (
   <Route path="/" component={App}>
-    <IndexRoute component={Home}/>
+    <IndexRoute component={Landing}/>
+
+    <Route path="home" component={Home}/>
 
     <Route path="accounts" component={AccountsConnected}/>
     <Route path="accounts/create" component={AccountCreateConnected}/>

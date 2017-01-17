@@ -52,7 +52,7 @@ export const loginUser = creds => dispatch => {
       localStorage.setItem('user', JSON.stringify(json.data.user))
 
       dispatch(receiveLogin(json.data))
-      return dispatch(push('/'))
+      return dispatch(push('/home'))
     })
     .catch(error => {
       throw new SubmissionError(convertError(error))

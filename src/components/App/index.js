@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router'
-import { HeaderConnected, AppAlertListConnected, Footer, Home } from '..'
+import { HeaderConnected, AppAlertListConnected, Footer } from '..'
+import Landing from '../Landing'
 
 import './style.less'
 
@@ -15,7 +16,7 @@ export class App extends Component {
           </div>
           <Footer />
         </div>
-      : <Home />
+      : <Landing />
   }
 }
 
