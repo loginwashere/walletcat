@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { IndexLink, Link } from 'react-router'
-import { Image } from 'react-bootstrap'
+import { Link } from 'react-router'
 import Waypoint from 'react-waypoint'
+import Scroll from 'react-scroll'
 import HeaderBrandLink from '../HeaderBrandLink'
 
 import image from './img/demo-screen1.png'
@@ -46,7 +46,7 @@ export class Home extends Component {
                       data-target="#bs-example-navbar-collapse-1">
                 <span className="sr-only">Toggle navigation</span> Menu <i className="fa fa-bars"></i>
               </button>
-              <HeaderBrandLink to={{ pathname: '/', hash: '#page-top' }} />
+              <HeaderBrandLink to="page-top" scroll={true} />
             </div>
 
             {/*<!-- Collect the nav links, forms, and other content for toggling -->*/}
@@ -56,10 +56,10 @@ export class Home extends Component {
                   <a className="page-scroll" href="#download">Download</a>
                 </li>*/}
                 <li>
-                  <a className="page-scroll" href="#features">Features</a>
+                  <Scroll.Link className="page-scroll" to="features">Features</Scroll.Link>
                 </li>
                 <li>
-                  <a className="page-scroll" href="#contact">Contact</a>
+                  <Scroll.Link className="page-scroll" to="contact">Contact</Scroll.Link>
                 </li>
               </ul>
             </div>
