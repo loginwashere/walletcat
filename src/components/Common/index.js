@@ -1,14 +1,16 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes } from 'react'
 import {
   FormGroup,
   Col,
   ControlLabel,
   FormControl,
   HelpBlock
-} from 'react-bootstrap';
-import Flatpickr from 'react-flatpickr';
+} from 'react-bootstrap'
+import Flatpickr from 'react-flatpickr'
+import Joi from 'joi'
+import errorMessages from '../../../server/utils/errorMessages'
 
-import '../../../node_modules/flatpickr/dist/flatpickr.min.css';
+import '../../../node_modules/flatpickr/dist/flatpickr.min.css'
 
 export const RenderField = ({
   input, label, type, meta: { touched, error, warning, valid }
@@ -17,7 +19,7 @@ export const RenderField = ({
       (error && 'error') ||
       (warning && 'warning') ||
       (!warning && valid && 'success'))) ||
-    null;
+    null
   return (
     <FormGroup controlId="formHorizontalName"
                validationState={validationState(touched, error, warning)}>
@@ -33,7 +35,7 @@ export const RenderField = ({
       </Col>
     </FormGroup>
   )
-};
+}
 
 RenderField.PropTypes = {
   input: PropTypes.object,
@@ -45,7 +47,7 @@ RenderField.PropTypes = {
     error: PropTypes.string,
     warning: PropTypes.string
   })
-};
+}
 
 export const RenderFieldSelect = ({
   input, label, type, meta: { touched, error, warning, valid }, options
@@ -54,7 +56,7 @@ export const RenderFieldSelect = ({
       (error && 'error') ||
       (warning && 'warning') ||
       (!warning && valid && 'success'))) ||
-    null;
+    null
   return (
     <FormGroup controlId="formHorizontalName"
                validationState={validationState(touched, error, warning)}>
@@ -76,7 +78,7 @@ export const RenderFieldSelect = ({
       </Col>
     </FormGroup>
   )
-};
+}
 
 RenderFieldSelect.PropTypes = {
   input: PropTypes.object,
@@ -88,7 +90,7 @@ RenderFieldSelect.PropTypes = {
     error: PropTypes.string,
     warning: PropTypes.string
   })
-};
+}
 
 export const RenderFieldDatetime = ({
   input: { onChange, value },
@@ -119,7 +121,7 @@ export const RenderFieldDatetime = ({
       </Col>
     </FormGroup>
   )
-};
+}
 
 RenderFieldSelect.PropTypes = {
   input: PropTypes.object,
@@ -131,7 +133,7 @@ RenderFieldSelect.PropTypes = {
     error: PropTypes.string,
     warning: PropTypes.string
   })
-};
+}
 
 export const RenderError = ({error}) => (
   <div>
@@ -165,3 +167,6 @@ export const RenderFieldWithoutCol = ({
     </FormGroup>
   )
 }
+
+export const getValidate = (values, schema) =>
+  errorMessages(Joi.validate(values, schema, {abortEarly:false}))

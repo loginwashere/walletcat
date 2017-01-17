@@ -6,14 +6,12 @@ import {
   FormControl,
   Button
 } from 'react-bootstrap'
-import Joi from 'joi'
 import { registerSchema } from '../../../server/validation'
-import errorMessages from '../../../server/utils/errorMessages'
-import { RenderFieldWithoutCol, RenderError } from '../Common'
+import { RenderFieldWithoutCol, RenderError, getValidate } from '../Common'
 
 import './style.less';
 
-const validate = values => {}//errorMessages(Joi.validate(values, registerSchema))
+const validate = values => getValidate(values, registerSchema)
 
 export class RegisterForm extends Component {
   render() {
