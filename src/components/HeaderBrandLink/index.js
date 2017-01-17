@@ -9,7 +9,7 @@ const HeaderBrandLink = ({to, scroll = false, ...rest}) => {
   const LinkComponent = scroll ? Scroll.Link : IndexLink
   return (
     <Navbar.Brand>
-      <LinkComponent to={to} className='header__brand__link'>
+      <LinkComponent {...rest} to={to} className='header__brand__link'>
         <Image src="/safari-pinned-tab.svg"
                 width={50}
                 height={50}

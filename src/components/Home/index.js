@@ -46,7 +46,7 @@ export class Home extends Component {
                       data-target="#bs-example-navbar-collapse-1">
                 <span className="sr-only">Toggle navigation</span> Menu <i className="fa fa-bars"></i>
               </button>
-              <HeaderBrandLink to="page-top" scroll={true} />
+              <HeaderBrandLink to="page-top" scroll={true} duration={1500} delay={100} smooth={true} />
             </div>
 
             {/*<!-- Collect the nav links, forms, and other content for toggling -->*/}
@@ -56,10 +56,10 @@ export class Home extends Component {
                   <a className="page-scroll" href="#download">Download</a>
                 </li>*/}
                 <li>
-                  <Scroll.Link className="page-scroll" to="features">Features</Scroll.Link>
+                  <Scroll.Link className="page-scroll" to="features" duration={1500} delay={100} smooth={true}>Features</Scroll.Link>
                 </li>
                 <li>
-                  <Scroll.Link className="page-scroll" to="contact">Contact</Scroll.Link>
+                  <Scroll.Link className="page-scroll" to="contact" duration={1500} delay={100} smooth={true}>Contact</Scroll.Link>
                 </li>
               </ul>
             </div>
