@@ -17,6 +17,7 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
   models.transaction.create({
     id: v4(),
+    userId: req.user.sub,
     fromAccountId: req.body.fromAccountId,
     toAccountId: req.body.toAccountId,
     fromRate: req.body.fromRate,

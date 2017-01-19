@@ -3,6 +3,7 @@ const should = chai.should()
 const chaiHttp = require('chai-http')
 const models = require('../../models')
 const helpers = require('./helpers')
+const format = require('date-fns/format')
 const userSeeder = require('../../seeds/20170114212746-user')
 const currencySeeder = require('../../seeds/20170114214434-currency')
 const userCurrencySeeder = require('../../seeds/20170114214446-user-currency')
@@ -18,6 +19,7 @@ describe('routes : transactions', () => {
   let token
 
   beforeEach('get token', function() {
+
     return helpers.all([
       () => models.sequelize.authenticate(),
       () => helpers.umzug.down({ to: 0 }),
@@ -59,6 +61,44 @@ describe('routes : transactions', () => {
           'createdAt',
           'updatedAt'
         )
+        done()
+      })
+    })
+  })
+
+  describe('POST /api/transactions', () => {
+    it('should create transaction if valid data sent', (done) => {
+      chai.request(server)
+      .post('/api/transactions')
+      .set('Authorization', `Bearer ${token.value}`)
+      .send({
+        categoryId: categorySeeder.items[0].id,
+        fromAccountId: accountSeeder.items[0].id,
+        fromAmount: 1000,
+        toAccountId: accountSeeder.items[1].id,
+        toAmount: 1000,
+        description: 'test',
+        date: format(new Date()),
+      })
+      .end((err, res) => {
+        should.not.exist(err)
+        res.status.should.equal(200)
+        res.type.should.equal('application/json')
+        res.body.should.be.a('object')
+        res.body.should.include.keys(
+          'id',
+          'userId',
+          'categoryId',
+          'fromAccountId',
+          'fromAmount',
+          'toAccountId',
+          'toAmount',
+          'description',
+          'date',
+          'createdAt',
+          'updatedAt'
+        )
+        res.body.userId.should.equal(userSeeder.items[0].id)
         done()
       })
     })
