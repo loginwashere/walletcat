@@ -27,7 +27,7 @@ const md5 = string => {
 }
 
 module.exports.generateAvatarUrl = email => (
-  `https://www.gravatar.com/avatar/${md5('admin@mail.com')}?s=50`
+  `https://www.gravatar.com/avatar/${md5(email)}?s=50`
 )
 
 module.exports.errorMessages = errorMessages
