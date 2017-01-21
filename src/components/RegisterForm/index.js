@@ -49,7 +49,7 @@ export class RegisterForm extends Component {
                label="Password"/>
 
         <Button type="submit"
-                disabled={pristine || submitting || invalid }
+                disabled={pristine || submitting || (!error && invalid) }
                 className="btn btn-lg btn-primary btn-block">
           Create an account
         </Button>

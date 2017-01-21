@@ -41,7 +41,7 @@ export class LoginForm extends Component {
                component={RenderFieldWithoutCol}
                label="Password"/>
         <Button type="submit"
-                disabled={pristine || submitting || invalid }
+                disabled={pristine || submitting || (!error && invalid) }
                 className="btn btn-lg btn-primary btn-block">
           Sign in
         </Button>
