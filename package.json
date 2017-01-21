@@ -43,6 +43,7 @@
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
     "mocha": "^3.2.0",
+    "mockery": "^2.0.0",
     "moxios": "^0.3.0",
     "object-assign": "4.1.0",
     "offline-plugin": "^4.5.3",
@@ -69,12 +70,14 @@
     "body-parser": "^1.15.2",
     "bootstrap": "^3.3.7",
     "date-fns": "^1.21.1",
+    "dotenv": "^2.0.0",
     "express": "^4.14.0",
     "express-jwt": "^5.1.0",
     "express-unless": "^0.3.0",
     "joi-browser": "^10.0.6",
     "jsonwebtoken": "^7.2.1",
     "jwt-decode": "^2.1.0",
+    "mailgun-js": "^0.8.0",
     "pg": "^6.1.2",
     "pg-hstore": "^2.3.2",
     "react": "^15.4.1",
@@ -106,7 +109,7 @@
     "db:seed": "node_modules/.bin/sequelize db:seed:all",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "test:server": "node_modules/.bin/mocha  './server' --recursive"
+    "test:server": "NODE_ENV=test node_modules/.bin/mocha  './server' --recursive"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -13,13 +13,15 @@ const transactionSeeder = require('../../seeds/20170114214507-transaction')
 
 chai.use(chaiHttp)
 
-const server = require('../..')
-
 describe('routes : transactions', () => {
   let token
+  let server
+
+  before('before', () => {
+    server = require('../..')
+  })
 
   beforeEach('get token', function() {
-
     return helpers.all([
       () => models.sequelize.authenticate(),
       () => helpers.umzug.down({ to: 0 }),
@@ -38,9 +40,13 @@ describe('routes : transactions', () => {
     return helpers.umzug.down({ to: 0 })
   })
 
+  after('after', () => {
+    server.httpServer.close()
+  })
+
   describe('GET /api/transactions', () => {
     it('should respond with all transactions', (done) => {
-      chai.request(server)
+      chai.request(server.app)
       .get('/api/transactions')
       .set('Authorization', `Bearer ${token.value}`)
       .end((err, res) => {
@@ -68,7 +74,7 @@ describe('routes : transactions', () => {
 
   describe('POST /api/transactions', () => {
     it('should create transaction if valid data sent', (done) => {
-      chai.request(server)
+      chai.request(server.app)
       .post('/api/transactions')
       .set('Authorization', `Bearer ${token.value}`)
       .send({

@@ -9,10 +9,13 @@ const userCurrencySeeder = require('../../seeds/20170114214446-user-currency')
 
 chai.use(chaiHttp)
 
-const server = require('../..')
-
 describe('routes : userCurrencies', () => {
   let token
+  let server
+
+  before('before', () => {
+    server = require('../..')
+  })
 
   beforeEach('get token', function() {
     return helpers.all([
@@ -30,9 +33,13 @@ describe('routes : userCurrencies', () => {
     return helpers.umzug.down({ to: 0 })
   })
 
+  after('after', () => {
+    server.httpServer.close()
+  })
+
   describe('GET /api/user-currencies', () => {
     it('should respond with all userCurrencies', (done) => {
-      chai.request(server)
+      chai.request(server.app)
         .get('/api/user-currencies')
         .set('Authorization', `Bearer ${token.value}`)
         .end((err, res) => {

@@ -3,6 +3,7 @@ module.exports = (sequelize, Sequelize) => {
     id: { type: Sequelize.UUID, primaryKey: true },
     username: { type: Sequelize.STRING, unique: true },
     email: { type: Sequelize.STRING, unique: true },
+    emailConfirm: { type: Sequelize.TEXT, unique: true },
     avatar: { type: Sequelize.STRING },
     password: { type: Sequelize.STRING },
   }, {

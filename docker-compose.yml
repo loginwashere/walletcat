@@ -1,7 +1,7 @@
 version: '2'
 services:
   db:
-    image: postgres:9.6
+    build: ./.docker/postgres
     ports:
       - "5432:5432"
   pgadmin:

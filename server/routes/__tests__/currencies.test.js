@@ -9,10 +9,14 @@ const helpers = require('./helpers')
 
 chai.use(chaiHttp)
 
-const server = require('../..')
-
 describe('routes : curencies', () => {
   let token
+  let server
+
+  before('before', () => {
+    server = require('../..')
+  })
+
   beforeEach('get token', function() {
     return helpers.all([
       () => models.sequelize.authenticate(),
@@ -28,9 +32,13 @@ describe('routes : curencies', () => {
     return helpers.umzug.down({ to: 0 })
   })
 
+  after('after', () => {
+    server.httpServer.close()
+  })
+
   describe('GET /api/currencies', () => {
     it('should respond with all currencies', (done) => {
-      chai.request(server)
+      chai.request(server.app)
         .get('/api/currencies')
         .set('Authorization', `Bearer ${token.value}`)
         .end((err, res) => {

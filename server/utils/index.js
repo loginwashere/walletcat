@@ -3,12 +3,12 @@ const crypto = require('crypto')
 const config = require('../config')
 const errorMessages = require('./errorMessages')
 
-module.exports.generateToken = userId => ({
+module.exports.generateToken = (userId, expires) => ({
   id: userId,
   value: jwt.sign(
     { sub: userId },
     config.JWT_SECRET,
-    { expiresIn: config.JWT_EXPIRES }
+    { expiresIn: expires || config.JWT_EXPIRES }
   )
 })
 

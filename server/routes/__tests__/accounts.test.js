@@ -10,10 +10,13 @@ const accountSeeder = require('../../seeds/20170114214459-account')
 
 chai.use(chaiHttp)
 
-const server = require('../..')
-
 describe('routes : accounts', () => {
   let token
+  let server
+
+  before('before', () => {
+    server = require('../..')
+  })
 
   beforeEach('get token', function() {
     return helpers.all([
@@ -32,9 +35,13 @@ describe('routes : accounts', () => {
     return helpers.umzug.down({ to: 0 })
   })
 
+  after('after', () => {
+    server.httpServer.close()
+  })
+
   describe('GET /api/accounts', () => {
     it('should respond with all accounts', (done) => {
-      chai.request(server)
+      chai.request(server.app)
       .get('/api/accounts')
       .set('Authorization', `Bearer ${token.value}`)
       .end((err, res) => {

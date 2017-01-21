@@ -9,10 +9,13 @@ const categorySeeder = require('../../seeds/20170114214453-category')
 
 chai.use(chaiHttp)
 
-const server = require('../..')
-
 describe('routes : categories', () => {
   let token
+  let server
+
+  before('before', () => {
+    server = require('../..')
+  })
 
   beforeEach('get token', function() {
     return helpers.all([
@@ -30,9 +33,13 @@ describe('routes : categories', () => {
     return helpers.umzug.down({ to: 0 })
   })
 
+  after('after', () => {
+    server.httpServer.close()
+  })
+
   describe('GET /api/categories', () => {
     it('should respond with all categories', (done) => {
-      chai.request(server)
+      chai.request(server.app)
         .get('/api/categories')
         .set('Authorization', `Bearer ${token.value}`)
         .end((err, res) => {
