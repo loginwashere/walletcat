@@ -3,26 +3,22 @@ const router = express.Router()
 const models = require('../models')
 const format = require('date-fns/format')
 const v4 = require('uuid/v4')
-const Joi = require('joi')
-const Mailgun = require('mailgun-js')
 const hashPassword = require('../utils').hashPassword
 const generateAvatarUrl = require('../utils').generateAvatarUrl
-const generateToken = require('../utils').generateToken
 const verifyToken = require('../utils').verifyToken
-const errorMessages = require('../utils').errorMessages
 const validation = require('../validation')
-const config = require('../config')
+const mailSend = require('../services/mail').send
+const emailTypes = require('../services/emailData').types
+const generateEmailData = require('../services/emailData').generate
+const NotFoundError = require('../errors/not-found')
+const BadRequestError = require('../errors/bad-request')
+const validate = require('../middleware/validate')
 
-router.post('/', (req, res) => {
-  const validationErrors = Joi.validate(req.body, validation.registerSchema)
-  if (validationErrors.error) {
-    return res.status(400).json({ errors:errorMessages(validationErrors) })
-  }
-  return models.user
+router.post('/', validate(validation.registerSchema), (req, res, next) => {
+  models.user
     .create({
       id: v4(),
       email: req.body.email,
-      emailConfirm: generateToken(req.body.email, '1d').value,
       username: req.body.username,
       avatar: generateAvatarUrl(req.body.email),
       password: hashPassword(req.body.password),
@@ -30,56 +26,21 @@ router.post('/', (req, res) => {
       updatedAt: format(new Date()),
     })
     .then(user => {
-      const mailgun = new Mailgun({
-        apiKey: config.mail.mailgun.apiKey,
-        domain: config.mail.mailgun.domain
-      });
-
-      const emailConfirmLink = `${config.publicUrl}email-confirm/${user.emailConfirm}`
-      const data = {
-        from: config.mail.defaultFrom,
-        to: req.body.email,
-        subject: '[Wallet Cat] Please confirm your email',
-        html: `
-<h1>Hello</h1>
-<p>Thank you for registering on wallet.pp.ua.</p>
-<p>To continue please confirm your email by visiting this link:</p>
-<p><a href="${emailConfirmLink}">${emailConfirmLink}</a></p>
-`
-      }
-
-      return mailgun
-        .messages()
-        .send(data, (error, body) => {
-          if (error) {
-            return res.status(500).json({
-              error: error.message
-            })
-          }
-          return res.json(Object.assign({}, user.get({ plain: true}), {
-            password: null,
-            emailConfirm: null
-          }))
-        })
+      return mailSend(generateEmailData(emailTypes.REGISTER, { user }))
+        .then(body => res.json(user))
     })
-    .catch(error => {
-      return res.status(500).json({
-        error: error.message
-      })
-    })
+    .catch(next)
 })
 
-router.post('/email-confirm', (req, res) => {
+router.post('/email-confirm', (req, res, next) => {
   let decodedToken
   try {
     decodedToken = verifyToken(req.body.emailConfirm)
   } catch (e) {
-    return res.status(400).json({
-      error: 'Invalid email confirm token'
-    })
+    return next(new BadRequestError('Invalid email confirm token'))
   }
 
-  return models.user
+  models.user
     .findOne({
       where: {
         email: decodedToken.sub
@@ -87,25 +48,18 @@ router.post('/email-confirm', (req, res) => {
     })
     .then(user => {
       if (!user) {
-        return res.status(404).json({
-          error: 'User not found'
-        })
+        return next(new NotFoundError('User not found'))
       }
       if (user.emailConfirmed) {
-        return res.json({ emailConfirmed: true })
+        return res.json({ emailConfirmed: user.emailConfirmed })
       }
       return user
         .update({
-          emailConfirm: null,
           emailConfirmed: true,
         })
-        .then(user => user
-          ? res.json({ emailConfirmed: true })
-          : res.status(400).json({
-            error: 'Email not confirmed'
-          })
-        )
+        .then(user => res.json({ emailConfirmed: user.emailConfirmed }))
     })
+    .catch(next)
 })
 
 module.exports = router

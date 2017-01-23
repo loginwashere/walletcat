@@ -10,6 +10,13 @@ const userCurrencies = [
     currencyId: currencySeederItems[0].id,
     createdAt: format(new Date()),
     updatedAt: format(new Date())
+  },
+  {
+    id: v4(),
+    userId: userSeederItems[0].id,
+    currencyId: currencySeederItems[1].id,
+    createdAt: format(new Date()),
+    updatedAt: format(new Date())
   }
 ]
 

@@ -10,6 +10,14 @@ const categories = [
     description: 'Some fast food',
     createdAt: format(new Date()),
     updatedAt: format(new Date())
+  },
+  {
+    id: v4(),
+    userId: userSeederItems[0].id,
+    name: 'Payment',
+    description: 'Receive funds for work',
+    createdAt: format(new Date()),
+    updatedAt: format(new Date())
   }
 ]
 

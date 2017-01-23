@@ -9,7 +9,14 @@ module.exports = (sequelize, Sequelize) => {
       }
     },
     tableName: 'userCurrencies',
-    paranoid: true
+    paranoid: true,
+    instanceMethods: {
+      toJSON: function () {
+        const values = Object.assign({}, this.get())
+        delete values.deletedAt
+        return values
+      }
+    }
   })
   return userCurrency
 }

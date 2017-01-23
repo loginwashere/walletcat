@@ -8,14 +8,14 @@ function rand() {
 
 const createAlert = error => ({
   id: rand(),
-  message: error.response.data.error,
+  message: error.response.data.message,
   description: error.message
 })
 
 
 export const convertError = error => {
   const convertedError = {
-    _error: error.response.data.error,
+    _error: error.response.data.message,
     ...error.response.data.errors
   }
   return convertedError

@@ -3,8 +3,9 @@ const router = express.Router()
 const models = require('../models')
 const format = require('date-fns/format')
 const v4 = require('uuid/v4')
+const NotFoundError = require('../errors/not-found')
 
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
   models.category
     .findAll({
       where: {
@@ -12,9 +13,10 @@ router.get('/', (req, res) => {
       }
     })
     .then(categories => res.json({categories}))
+    .catch(next)
 })
 
-router.post('/', (req, res) => {
+router.post('/', (req, res, next) => {
   models.category
     .findOne({
       where: {
@@ -37,9 +39,10 @@ router.post('/', (req, res) => {
       })
     })
     .then(res.json.bind(res))
+    .catch(next)
 })
 
-router.put('/:id', (req, res) => {
+router.put('/:id', (req, res, next) => {
   models.category
     .findOne({
       where: {
@@ -51,24 +54,20 @@ router.put('/:id', (req, res) => {
     })
     .then(category => {
       if (!category) {
-        return res.status(404).json({
-          error: 'Category not found'
-        })
+        return next(new NotFoundError('Category not found'))
       }
-      return category.update({
-        name: req.body.name,
-        description: req.body.description,
-      })
-      .then(category => category
-        ? res.json(category)
-        : res.status(404).json({
-          error: 'Category not updated'
+      return category
+        .update({
+          name: req.body.name,
+          description: req.body.description,
+          updatedAt: format(new Date())
         })
-      )
+        .then(category => res.json(category))
     })
+    .catch(next)
 })
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', (req, res, next) => {
   models.category
     .findOne({
       where: {
@@ -79,18 +78,16 @@ router.delete('/:id', (req, res) => {
       }
     })
     .then(category => {
-      if (category) {
-        models.category
-          .destroy({
-            where: { id: category.id }
-          })
-          .then(result => res.status(204).json())
-      } else {
-        res
-          .status(404)
-          .json()
+      if (!category) {
+        return next(new NotFoundError('Category not found'))
       }
+      return models.category
+        .destroy({
+          where: { id: category.id }
+        })
+        .then(result => res.status(204).json())
     })
+    .catch(next)
 })
 
 module.exports = router

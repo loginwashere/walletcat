@@ -4,6 +4,7 @@ const env = process.env.NODE_ENV || 'development'
 const sequelizeConfig = require('./sequelize')[env]
 
 module.exports = {
+  projectName: process.env.PROJECT_NAME,
   publicUrl: process.env.PUBLIC_URL,
   PORT: process.env.NODE_APP_PORT || process.env.PORT || 3001,
   HASH_SECRET: process.env.HASH_SECRET || 'abcdefg',

@@ -3,7 +3,10 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const expressJwt = require('express-jwt')
 const unless = require('express-unless')
+const debug = require('debug')('app')
 const config = require('./config')
+const ExtandableError = require('./errors/extendable')
+const ServerError = require('./errors/server-error')
 
 module.exports = () => {
   const app = express()
@@ -27,20 +30,9 @@ module.exports = () => {
       ]
     })
 
-  function errorHandler(err, req, res, next) {
-    if (err) {
-      console.log(err)
-    }
-    if (err.name === 'UnauthorizedError') {
-      res.status(401).json({
-        error: 'invalid token...'
-      })
-    }
-  }
-
   app.use(bodyParser.json())
   app.use('/api/*', jwtMiddleware)
-  app.use(errorHandler)
+
   // Express only serves static assets in production
   if (process.env.NODE_ENV === 'production') {
     const staticMiddleware = express.static('build')
@@ -63,6 +55,25 @@ module.exports = () => {
   app.use('/api/categories', categoriesRouter)
   app.use('/api/transactions', transactionsRouter)
   app.use('/api/users', usersRouter)
+
+  function removeStack(err) {
+    const error = Object.assign({}, err)
+    delete error.stack
+    return error
+  }
+
+  app.use((err, req, res, next) => {
+    debug(err)
+    res.status(err.status || 500)
+    const error = (app.get('env') === 'production')
+      ? removeStack(err)
+      : err
+    if (error instanceof ExtandableError) {
+      res.json(error)
+    } else {
+      res.json(new ServerError(error))
+    }
+  })
 
   const pathToIndex = path.resolve(`${__dirname}/../build/index.html`)
   app.get('*', (req, res) => {

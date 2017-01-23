@@ -3,8 +3,9 @@ const router = express.Router()
 const models = require('../models')
 const format = require('date-fns/format')
 const v4 = require('uuid/v4')
+const NotFoundError = require('../errors/not-found')
 
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
   models.account
     .findAll({
       where: {
@@ -12,9 +13,10 @@ router.get('/', (req, res) => {
       }
     })
     .then(accounts => res.json({accounts}))
+    .catch(next)
 })
 
-router.post('/', (req, res) => {
+router.post('/', (req, res, next) => {
   models.account
     .findOne({
       where: {
@@ -27,20 +29,22 @@ router.post('/', (req, res) => {
       if (account) {
         return account.restore()
       }
-      return models.account.create({
-        id: v4(),
-        userId: req.user.sub,
-        name: req.body.name,
-        currencyId: req.body.currencyId,
-        description: req.body.description,
-        createdAt: format(new Date()),
-        updatedAt: format(new Date())
-      })
+      return models.account
+        .create({
+          id: v4(),
+          userId: req.user.sub,
+          name: req.body.name,
+          currencyId: req.body.currencyId,
+          description: req.body.description,
+          createdAt: format(new Date()),
+          updatedAt: format(new Date())
+        })
     })
     .then(res.json.bind(res))
+    .catch(next)
 })
 
-router.put('/:id', (req, res) => {
+router.put('/:id', (req, res, next) => {
   models.account
     .findOne({
       where: {
@@ -52,26 +56,22 @@ router.put('/:id', (req, res) => {
     })
     .then(account => {
       if (!account) {
-        return res.status(404).json({
-          error: 'Account not found'
-        })
+        return next(new NotFoundError('Account not found'))
       }
-      return account.update({
-        name: req.body.name,
-        description: req.body.description,
-        amount: req.body.amount,
-        currencyId: req.body.currencyId
-      })
-      .then(account => account
-        ? res.json(account)
-        : res.status(404).json({
-          error: 'Account not updated'
+      return account
+        .update({
+          name: req.body.name,
+          description: req.body.description,
+          amount: req.body.amount,
+          currencyId: req.body.currencyId,
+          updatedAt: format(new Date())
         })
-      )
+        .then(account => res.json(account))
     })
+    .catch(next)
 })
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', (req, res, next) => {
   models.account
     .findOne({
       where: {
@@ -82,20 +82,16 @@ router.delete('/:id', (req, res) => {
       }
     })
     .then(account => {
-      if (account) {
-        models.account
-          .destroy({
-            where: { id: account.id }
-          })
-          .then(result => res.status(204).json())
-      } else {
-        res
-          .status(404)
-          .json({
-            error: 'Account not found'
-          })
+      if (!account) {
+        return next(new NotFoundError('Account not found'))
       }
+      return models.account
+        .destroy({
+          where: { id: account.id }
+        })
+        .then(result => res.status(204).json())
     })
+    .catch(next)
 })
 
 module.exports = router

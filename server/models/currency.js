@@ -5,6 +5,13 @@ module.exports = (sequelize, Sequelize) => {
     description: { type: Sequelize.STRING },
   }, {
     tableName: 'currencies',
-    paranoid: true
+    paranoid: true,
+    instanceMethods: {
+      toJSON: function () {
+        const values = Object.assign({}, this.get())
+        delete values.deletedAt
+        return values
+      }
+    }
   })
 }

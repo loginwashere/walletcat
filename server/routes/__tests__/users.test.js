@@ -6,11 +6,14 @@ const helpers = require('./helpers')
 const models = require('../../models')
 const generateToken = require('../../utils').generateToken
 const userSeeder = require('../../seeds/20170114212746-user')
+const BadRequestError = require('../../errors/bad-request')
+const NotFoundError = require('../../errors/not-found')
+const ServerError = require('../../errors/server-error')
 
 chai.use(chaiHttp)
 
 describe('routes : users',  () => {
-  let server
+  let server = {}
 
   beforeEach('before', () => {
     return helpers.all([
@@ -24,18 +27,20 @@ describe('routes : users',  () => {
     return helpers.umzug.down({ to: 0 })
   })
 
-  after('after', () => {
-    server.httpServer.close()
-  })
-
   describe('POST /api/users', () => {
     before('before', () => {
       function messages() {
         return {
-          send: (data, cb) => {
-            const error = null
+          send: (data) => {
+            if (data.to === 'should-reject@mail.com') {
+              try {
+                throw new Error('test')
+              } catch (error) {
+                return Promise.reject(error)
+              }
+            }
             const body = {}
-            return cb(error, body)
+            return Promise.resolve(body)
           }
         }
       }
@@ -53,7 +58,7 @@ describe('routes : users',  () => {
         warnOnUnregistered: false
       })
 
-      server = require('../..')
+      server.app = require('../../server')()
     })
 
     after('after', () => {
@@ -78,7 +83,7 @@ describe('routes : users',  () => {
             'id',
             'email',
             'username',
-            'password',
+            'emailConfirmed',
             'avatar',
             'createdAt',
             'updatedAt'
@@ -87,9 +92,29 @@ describe('routes : users',  () => {
           done()
         })
     })
+
+    it('should return error if fail to send email', (done) => {
+      chai.request(server.app)
+        .post('/api/users')
+        .send({
+          email: 'should-reject@mail.com',
+          username: 'admin_create',
+          password: 'qwerty'
+        })
+        .end((err, res) => {
+          err.response.status.should.equal(500)
+          err.response.type.should.equal('application/json')
+          err.response.body.should.eql(new ServerError(new Error('test')))
+          done()
+        })
+    })
   })
 
   describe('POST /api/users/email-confirm', () => {
+    before('before', () => {
+      server.app = require('../../server')()
+    })
+
     beforeEach('before', () => {
       return helpers.all([
         () => userSeeder.up(models.sequelize.getQueryInterface(), models.Sequelize),
@@ -105,11 +130,7 @@ describe('routes : users',  () => {
         .end((err, res) => {
           err.response.status.should.equal(400)
           err.response.type.should.equal('application/json')
-          err.response.body.should.be.a('object')
-          err.response.body.should.include.keys(
-            'error'
-          )
-          err.response.body.error.should.equal('Invalid email confirm token')
+          err.response.body.should.eql(new BadRequestError('Invalid email confirm token'))
           done()
         })
     })
@@ -124,11 +145,7 @@ describe('routes : users',  () => {
         .end((err, res) => {
           err.response.status.should.equal(404)
           err.response.type.should.equal('application/json')
-          err.response.body.should.be.a('object')
-          err.response.body.should.include.keys(
-            'error'
-          )
-          err.response.body.error.should.equal('User not found')
+          err.response.body.should.eql(new NotFoundError('User not found'))
           done()
         })
     })
@@ -145,9 +162,9 @@ describe('routes : users',  () => {
           res.status.should.equal(200)
           res.type.should.equal('application/json')
           res.body.should.be.a('object')
-          res.body.should.include.keys(
+          Object.keys(res.body).should.eql([
             'emailConfirmed'
-          )
+          ])
           res.body.emailConfirmed.should.equal(true)
           done()
         })

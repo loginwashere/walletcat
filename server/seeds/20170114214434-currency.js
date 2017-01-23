@@ -15,6 +15,13 @@ const currencies = [
     description: 'Ukrainian Hryvna',
     createdAt: format(new Date()),
     updatedAt: format(new Date())
+  },
+  {
+    id: v4(),
+    name: 'EUR',
+    description: 'Euro',
+    createdAt: format(new Date()),
+    updatedAt: format(new Date())
   }
 ]
 

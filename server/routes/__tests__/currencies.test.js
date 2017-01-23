@@ -11,10 +11,10 @@ chai.use(chaiHttp)
 
 describe('routes : curencies', () => {
   let token
-  let server
+  let server = {}
 
   before('before', () => {
-    server = require('../..')
+    server.app = require('../../server')()
   })
 
   beforeEach('get token', function() {
@@ -32,10 +32,6 @@ describe('routes : curencies', () => {
     return helpers.umzug.down({ to: 0 })
   })
 
-  after('after', () => {
-    server.httpServer.close()
-  })
-
   describe('GET /api/currencies', () => {
     it('should respond with all currencies', (done) => {
       chai.request(server.app)
@@ -45,14 +41,14 @@ describe('routes : curencies', () => {
           should.not.exist(err)
           res.status.should.equal(200)
           res.type.should.equal('application/json')
-          res.body.currencies.length.should.eql(2)
-          res.body.currencies[0].should.include.keys(
+          res.body.currencies.length.should.eql(3)
+          Object.keys(res.body.currencies[0]).should.eql([
             'id',
             'name',
             'description',
             'createdAt',
             'updatedAt'
-          )
+          ])
         done()
       })
     })

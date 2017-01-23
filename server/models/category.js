@@ -10,7 +10,14 @@ module.exports = (sequelize, Sequelize) => {
       }
     },
     tableName: 'categories',
-    paranoid: true
+    paranoid: true,
+    instanceMethods: {
+      toJSON: function () {
+        const values = Object.assign({}, this.get())
+        delete values.deletedAt
+        return values
+      }
+    }
   })
   return category
 }

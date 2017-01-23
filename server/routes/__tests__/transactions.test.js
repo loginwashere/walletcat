@@ -1,3 +1,4 @@
+const v4 = require('uuid/v4')
 const chai = require('chai')
 const should = chai.should()
 const chaiHttp = require('chai-http')
@@ -10,15 +11,16 @@ const userCurrencySeeder = require('../../seeds/20170114214446-user-currency')
 const accountSeeder = require('../../seeds/20170114214459-account')
 const categorySeeder = require('../../seeds/20170114214453-category')
 const transactionSeeder = require('../../seeds/20170114214507-transaction')
+const NotFoundError = require('../../errors/not-found')
 
 chai.use(chaiHttp)
 
 describe('routes : transactions', () => {
   let token
-  let server
+  let server = {}
 
   before('before', () => {
-    server = require('../..')
+    server.app = require('../../server')()
   })
 
   beforeEach('get token', function() {
@@ -40,10 +42,6 @@ describe('routes : transactions', () => {
     return helpers.umzug.down({ to: 0 })
   })
 
-  after('after', () => {
-    server.httpServer.close()
-  })
-
   describe('GET /api/transactions', () => {
     it('should respond with all transactions', (done) => {
       chai.request(server.app)
@@ -54,19 +52,21 @@ describe('routes : transactions', () => {
         res.status.should.equal(200)
         res.type.should.equal('application/json')
         res.body.transactions.length.should.eql(1)
-        res.body.transactions[0].should.include.keys(
+        Object.keys(res.body.transactions[0]).sort().should.eql([
           'id',
-          'userId',
-          'categoryId',
-          'fromAccountId',
-          'fromAmount',
-          'toAccountId',
-          'toAmount',
           'description',
+          'fromAmount',
+          'toAmount',
+          'fromRate',
+          'toRate',
           'date',
           'createdAt',
-          'updatedAt'
-        )
+          'updatedAt',
+          'categoryId',
+          'userId',
+          'fromAccountId',
+          'toAccountId'
+        ].sort())
         done()
       })
     })
@@ -83,6 +83,8 @@ describe('routes : transactions', () => {
         fromAmount: 1000,
         toAccountId: accountSeeder.items[1].id,
         toAmount: 1000,
+        fromRate: 1,
+        toRate: 1,
         description: 'test',
         date: format(new Date()),
       })
@@ -91,20 +93,119 @@ describe('routes : transactions', () => {
         res.status.should.equal(200)
         res.type.should.equal('application/json')
         res.body.should.be.a('object')
-        res.body.should.include.keys(
+        Object.keys(res.body).sort().should.eql([
           'id',
-          'userId',
-          'categoryId',
-          'fromAccountId',
-          'fromAmount',
-          'toAccountId',
-          'toAmount',
           'description',
+          'fromAmount',
+          'toAmount',
+          'fromRate',
+          'toRate',
           'date',
           'createdAt',
-          'updatedAt'
-        )
+          'updatedAt',
+          'categoryId',
+          'userId',
+          'fromAccountId',
+          'toAccountId'
+        ].sort())
         res.body.userId.should.equal(userSeeder.items[0].id)
+        done()
+      })
+    })
+  })
+
+  describe('PUT /api/transactions/:transactionId', () => {
+    it('should update transaction if valid data sent', (done) => {
+      const transacionId = transactionSeeder.items[0].id
+      chai.request(server.app)
+      .put(`/api/transactions/${transacionId}`)
+      .set('Authorization', `Bearer ${token.value}`)
+      .send({
+        categoryId: categorySeeder.items[0].id,
+        fromAccountId: accountSeeder.items[1].id,
+        fromAmount: 100,
+        toAccountId: accountSeeder.items[0].id,
+        toAmount: 100,
+        fromRate: 2,
+        toRate: 2,
+        description: 'new test',
+        date: format(new Date()),
+      })
+      .end((err, res) => {
+        should.not.exist(err)
+        res.status.should.equal(200)
+        res.type.should.equal('application/json')
+        res.body.should.be.a('object')
+        Object.keys(res.body).sort().should.eql([
+          'id',
+          'description',
+          'fromAmount',
+          'toAmount',
+          'fromRate',
+          'toRate',
+          'date',
+          'createdAt',
+          'updatedAt',
+          'categoryId',
+          'userId',
+          'fromAccountId',
+          'toAccountId'
+        ].sort())
+        res.body.userId.should.equal(userSeeder.items[0].id)
+        done()
+      })
+    })
+
+    it('should return error when try to update not existing transation', (done) => {
+      const notExistingTransacionId = v4()
+      chai.request(server.app)
+      .put(`/api/transactions/${notExistingTransacionId}`)
+      .set('Authorization', `Bearer ${token.value}`)
+      .send({
+        categoryId: categorySeeder.items[0].id,
+        fromAccountId: accountSeeder.items[1].id,
+        fromAmount: 100,
+        toAccountId: accountSeeder.items[0].id,
+        toAmount: 100,
+        fromRate: 2,
+        toRate: 2,
+        description: 'new test',
+        date: format(new Date()),
+      })
+      .end((err, res) => {
+        err.response.status.should.equal(404)
+        err.response.type.should.equal('application/json')
+        err.response.body.should.eql(new NotFoundError('Transaction not found'))
+        done()
+      })
+    })
+  })
+
+  describe('DELETE /api/transactions/:transactionId', () => {
+    it('should delete transaction if valid data sent', (done) => {
+      const transacionId = transactionSeeder.items[0].id
+      chai.request(server.app)
+      .delete(`/api/transactions/${transacionId}`)
+      .set('Authorization', `Bearer ${token.value}`)
+      .end((err, res) => {
+        should.not.exist(err)
+        res.status.should.equal(204)
+        res.type.should.equal('')
+        res.body.should.be.a('object')
+        res.body.should.eql({})
+        done()
+      })
+    })
+
+    it('should return error when try to delete not existing transation', (done) => {
+      const notExistingTransacionId = v4()
+      chai.request(server.app)
+      .delete(`/api/transactions/${notExistingTransacionId}`)
+      .set('Authorization', `Bearer ${token.value}`)
+      .end((err, res) => {
+        err.response.status.should.equal(404)
+        err.response.type.should.equal('application/json')
+        err.response.body.should.eql(new NotFoundError('Transaction not found'))
         done()
       })
     })
