@@ -8,6 +8,7 @@ const Mailgun = require('mailgun-js')
 const hashPassword = require('../utils').hashPassword
 const generateAvatarUrl = require('../utils').generateAvatarUrl
 const generateToken = require('../utils').generateToken
+const verifyToken = require('../utils').verifyToken
 const errorMessages = require('../utils').errorMessages
 const validation = require('../validation')
 const config = require('../config')
@@ -65,6 +66,45 @@ router.post('/', (req, res) => {
       return res.status(500).json({
         error: error.message
       })
+    })
+})
+
+router.post('/email-confirm', (req, res) => {
+  let decodedToken
+  try {
+    decodedToken = verifyToken(req.body.emailConfirm)
+  } catch (e) {
+    return res.status(400).json({
+      error: 'Invalid email confirm token'
+    })
+  }
+
+  return models.user
+    .findOne({
+      where: {
+        email: decodedToken.sub
+      }
+    })
+    .then(user => {
+      if (!user) {
+        return res.status(404).json({
+          error: 'User not found'
+        })
+      }
+      if (user.emailConfirmed) {
+        return res.json({ emailConfirmed: true })
+      }
+      return user
+        .update({
+          emailConfirm: null,
+          emailConfirmed: true,
+        })
+        .then(user => user
+          ? res.json({ emailConfirmed: true })
+          : res.status(400).json({
+            error: 'Email not confirmed'
+          })
+        )
     })
 })
 

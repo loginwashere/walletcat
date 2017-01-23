@@ -12,6 +12,10 @@ module.exports.generateToken = (userId, expires) => ({
   )
 })
 
+module.exports.verifyToken = (token) => {
+  return jwt.verify(token, config.JWT_SECRET)
+}
+
 module.exports.hashPassword = password => {
   return crypto
     .createHmac('sha256', config.HASH_SECRET)

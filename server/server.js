@@ -19,6 +19,10 @@ module.exports = () => {
         {
           url: '/api/users',
           methods: ['POST']
+        },
+        {
+          url: '/api/users/email-confirm',
+          methods: ['POST']
         }
       ]
     })

@@ -20,9 +20,9 @@ export class AppAlert extends Component {
   }
 
   render() {
-    const { message, description } = this.props.alert;
+    const { message, description, type } = this.props.alert;
     return (
-      <Alert bsStyle="danger"
+      <Alert bsStyle={ type || 'danger' }
              onDismiss={this.handleAlertDismiss}>
         <h4>{message}</h4>
         {description && <p>{description}</p>}
@@ -39,6 +39,7 @@ AppAlert.propTypes = {
   alert: PropTypes.shape({
     message: PropTypes.string.isRequired,
     description: PropTypes.string,
+    type: PropTypes.string,
     timeout: PropTypes.number
   }).isRequired,
   dispatch: PropTypes.func.isRequired
