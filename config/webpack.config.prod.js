@@ -101,7 +101,8 @@ module.exports = {
         loader: 'eslint',
         include: [
           paths.appSrc,
-          paths.appServer
+          paths.appServer,
+          paths.appCommon
         ],
       }
     ],
@@ -138,7 +139,8 @@ module.exports = {
         test: /\.(js|jsx)$/,
         include: [
           paths.appSrc,
-          paths.appServer
+          paths.appServer,
+          paths.appCommon
         ],
         loader: 'babel',
 
