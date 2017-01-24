@@ -1,30 +1,27 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { updateCategory, fetchCategoriesIfNeeded } from '../../actions';
-import CategoryEditForm from '../CategoryEditForm';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { updateCategory, fetchCategoriesIfNeeded } from '../../actions'
+import CategoryEditForm from '../CategoryEditForm'
 
 class CategoryView extends Component {
   handleSubmit = (values) => {
-    const { dispatch, category: { id } } = this.props;
-    dispatch(updateCategory(id, values));
+    const { dispatch, category: { id } } = this.props
+    dispatch(updateCategory(id, values))
   }
 
   render() {
-    const { category, initialValues } = this.props;
+    const { category, initialValues } = this.props
     return (
-      <div>
-        <h1>Category {category.name}</h1>
-        <CategoryEditForm onSubmit={this.handleSubmit}
+      <CategoryEditForm onSubmit={this.handleSubmit}
                           category={category}
                           initialValues={initialValues}
                           enableReinitialize={true} />
-      </div>
-    );
+    )
   }
 
   componentDidMount() {
     const { dispatch } = this.props;
-    dispatch(fetchCategoriesIfNeeded());
+    dispatch(fetchCategoriesIfNeeded())
   }
 }
 
@@ -38,14 +35,14 @@ CategoryView.propTypes = {
 }
 
 function mapStateToProps(state, ownProps) {
-  const category = state.categories.items[ownProps.params.categoryId] || {};
+  const category = state.categories.items[ownProps.params.categoryId] || {}
 
   return {
     category,
     initialValues: category
-  };
+  }
 }
 
-CategoryView = connect(mapStateToProps)(CategoryView);
+CategoryView = connect(mapStateToProps)(CategoryView)
 
-export default CategoryView;
+export default CategoryView

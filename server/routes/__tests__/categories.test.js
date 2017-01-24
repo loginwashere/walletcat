@@ -12,10 +12,10 @@ chai.use(chaiHttp)
 
 describe('routes : categories', () => {
   let token
-  let server = {}
+  let server
 
   before('before', () => {
-    server.app = require('../../server')()
+    server = require('../../server')()
   })
 
   beforeEach('get token', function() {
@@ -35,7 +35,7 @@ describe('routes : categories', () => {
 
   describe('GET /api/categories', () => {
     it('should respond with all categories', (done) => {
-      chai.request(server.app)
+      chai.request(server)
         .get('/api/categories')
         .set('Authorization', `Bearer ${token.value}`)
         .end((err, res) => {
@@ -58,29 +58,29 @@ describe('routes : categories', () => {
 
   describe('POST /api/categories', () => {
     it('should create category if valid data sent', (done) => {
-      chai.request(server.app)
-      .post('/api/categories')
-      .set('Authorization', `Bearer ${token.value}`)
-      .send({
-        name: 'Transport',
-        description: 'All kinds of transport'
-      })
-      .end((err, res) => {
-        should.not.exist(err)
-        res.status.should.equal(200)
-        res.type.should.equal('application/json')
-        res.body.should.be.a('object')
-        Object.keys(res.body).sort().should.eql([
-          'id',
-          'name',
-          'description',
-          'createdAt',
-          'updatedAt',
-          'userId'
-        ].sort())
-        res.body.userId.should.equal(userSeeder.items[0].id)
-        done()
-      })
+      chai.request(server)
+        .post('/api/categories')
+        .set('Authorization', `Bearer ${token.value}`)
+        .send({
+          name: 'Transport',
+          description: 'All kinds of transport'
+        })
+        .end((err, res) => {
+          should.not.exist(err)
+          res.status.should.equal(200)
+          res.type.should.equal('application/json')
+          res.body.should.be.a('object')
+          Object.keys(res.body).sort().should.eql([
+            'id',
+            'name',
+            'description',
+            'createdAt',
+            'updatedAt',
+            'userId'
+          ].sort())
+          res.body.userId.should.equal(userSeeder.items[0].id)
+          done()
+        })
     })
   })
 
@@ -89,58 +89,58 @@ describe('routes : categories', () => {
       const categoryId = categorySeeder.items[0].id
       const newName = `${categorySeeder.items[0].name} ${categorySeeder.items[0].name}`
       const newDescription = newName
-      chai.request(server.app)
-      .put(`/api/categories/${categoryId}`)
-      .set('Authorization', `Bearer ${token.value}`)
-      .send({
-        name: newName,
-        description: newDescription
-      })
-      .end((err, res) => {
-        should.not.exist(err)
-        res.status.should.equal(200)
-        res.type.should.equal('application/json')
-        res.body.should.be.a('object')
-        Object.keys(res.body).sort().should.eql([
-          'id',
-          'name',
-          'description',
-          'createdAt',
-          'updatedAt',
-          'userId'
-        ].sort())
-        res.body.userId.should.equal(userSeeder.items[0].id)
-        res.body.id.should.equal(categoryId)
-        res.body.name.should.equal(newName)
-        res.body.description.should.equal(newDescription)
-        done()
-      })
+      chai.request(server)
+        .put(`/api/categories/${categoryId}`)
+        .set('Authorization', `Bearer ${token.value}`)
+        .send({
+          name: newName,
+          description: newDescription
+        })
+        .end((err, res) => {
+          should.not.exist(err)
+          res.status.should.equal(200)
+          res.type.should.equal('application/json')
+          res.body.should.be.a('object')
+          Object.keys(res.body).sort().should.eql([
+            'id',
+            'name',
+            'description',
+            'createdAt',
+            'updatedAt',
+            'userId'
+          ].sort())
+          res.body.userId.should.equal(userSeeder.items[0].id)
+          res.body.id.should.equal(categoryId)
+          res.body.name.should.equal(newName)
+          res.body.description.should.equal(newDescription)
+          done()
+        })
     })
 
     it('should return not found error when update category which is not exist', (done) => {
       const notExistingCategoryId = v4()
       const newName = `${categorySeeder.items[0].name} ${categorySeeder.items[0].name}`
       const newDescription = newName
-      chai.request(server.app)
-      .put(`/api/categories/${notExistingCategoryId}`)
-      .set('Authorization', `Bearer ${token.value}`)
-      .send({
-        name: newName,
-        description: newDescription
-      })
-      .end((err, res) => {
-        err.response.status.should.equal(404)
-        err.response.type.should.equal('application/json')
-        err.response.body.should.eql(new NotFoundError('Category not found'))
-        done()
-      })
+      chai.request(server)
+        .put(`/api/categories/${notExistingCategoryId}`)
+        .set('Authorization', `Bearer ${token.value}`)
+        .send({
+          name: newName,
+          description: newDescription
+        })
+        .end((err, res) => {
+          err.response.status.should.equal(404)
+          err.response.type.should.equal('application/json')
+          err.response.body.should.eql(new NotFoundError('Category not found'))
+          done()
+        })
     })
   })
 
   describe('DELETE /api/categories/:categoryId', () => {
     it('should delete category if valid data sent', (done) => {
       const categoryId = categorySeeder.items[0].id
-      chai.request(server.app)
+      chai.request(server)
       .delete(`/api/categories/${categoryId}`)
       .set('Authorization', `Bearer ${token.value}`)
       .end((err, res) => {
@@ -155,15 +155,15 @@ describe('routes : categories', () => {
 
     it('should return not found error when delete category which is not exist', (done) => {
       const notExistingCategoryId = v4()
-      chai.request(server.app)
-      .delete(`/api/categories/${notExistingCategoryId}`)
-      .set('Authorization', `Bearer ${token.value}`)
-      .end((err, res) => {
-        err.response.status.should.equal(404)
-        err.response.type.should.equal('application/json')
-        err.response.body.should.eql(new NotFoundError('Category not found'))
-        done()
-      })
+      chai.request(server)
+        .delete(`/api/categories/${notExistingCategoryId}`)
+        .set('Authorization', `Bearer ${token.value}`)
+        .end((err, res) => {
+          err.response.status.should.equal(404)
+          err.response.type.should.equal('application/json')
+          err.response.body.should.eql(new NotFoundError('Category not found'))
+          done()
+        })
     })
   })
 })

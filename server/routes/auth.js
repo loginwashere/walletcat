@@ -3,12 +3,12 @@ const router = express.Router()
 const models = require('../models')
 const hashPassword = require('../utils').hashPassword
 const generateToken = require('../utils').generateToken
-const validation = require('../../common/validation')
+const loginSchema = require('../../common/validation').loginSchema
 const NotFoundError = require('../errors/not-found')
 const ForbiddenError = require('../errors/forbidden')
 const validate = require('../middleware/validate')
 
-router.post('/', validate(validation.loginSchema), (req, res, next) => {
+router.post('/', validate(loginSchema), (req, res, next) => {
   models.user
     .findOne({
       where: {

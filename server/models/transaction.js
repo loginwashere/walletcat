@@ -1,12 +1,32 @@
 module.exports = (sequelize, Sequelize) => {
   const transaction = sequelize.define('transaction', {
-    id: { type: Sequelize.UUID,  primaryKey: true },
-    description: { type: Sequelize.STRING },
-    fromAmount: { type: Sequelize.DECIMAL(19, 6) },
-    toAmount: { type: Sequelize.DECIMAL(19, 6) },
-    fromRate: { type: Sequelize.DECIMAL(10, 6) },
-    toRate: { type: Sequelize.DECIMAL(10, 6) },
-    date: { type: Sequelize.DATE },
+    id: {
+      type: Sequelize.UUID,
+      primaryKey: true
+    },
+    description: {
+      type: Sequelize.TEXT
+    },
+    fromAmount: {
+      type: Sequelize.DECIMAL(19, 8),
+      allowNull: false
+    },
+    toAmount: {
+      type: Sequelize.DECIMAL(19, 8),
+      allowNull: false
+    },
+    fromRate: {
+      type: Sequelize.DECIMAL(19, 8),
+      allowNull: false
+    },
+    toRate: {
+      type: Sequelize.DECIMAL(19, 8),
+      allowNull: false
+    },
+    date: {
+      type: Sequelize.DATE,
+      allowNull: false
+    },
   }, {
     classMethods: {
       associate: function(models) {

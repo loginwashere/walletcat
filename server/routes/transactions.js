@@ -4,6 +4,8 @@ const models = require('../models')
 const format = require('date-fns/format')
 const v4 = require('uuid/v4')
 const NotFoundError = require('../errors/not-found')
+const validate = require('../middleware/validate')
+const transactionSchema = require('../../common/validation').transactionSchema
 
 router.get('/', (req, res, next) => {
   models.transaction
@@ -16,7 +18,7 @@ router.get('/', (req, res, next) => {
     .catch(next)
 })
 
-router.post('/', (req, res, next) => {
+router.post('/', validate(transactionSchema), (req, res, next) => {
   models.transaction
     .create({
       id: v4(),
@@ -37,7 +39,7 @@ router.post('/', (req, res, next) => {
     .catch(next)
 })
 
-router.put('/:id', (req, res, next) => {
+router.put('/:id', validate(transactionSchema), (req, res, next) => {
   models.transaction
     .findOne({
       where: {

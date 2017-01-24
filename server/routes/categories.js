@@ -4,6 +4,8 @@ const models = require('../models')
 const format = require('date-fns/format')
 const v4 = require('uuid/v4')
 const NotFoundError = require('../errors/not-found')
+const validate = require('../middleware/validate')
+const categorySchema = require('../../common/validation').categorySchema
 
 router.get('/', (req, res, next) => {
   models.category
@@ -16,7 +18,7 @@ router.get('/', (req, res, next) => {
     .catch(next)
 })
 
-router.post('/', (req, res, next) => {
+router.post('/', validate(categorySchema), (req, res, next) => {
   models.category
     .findOne({
       where: {
@@ -42,7 +44,7 @@ router.post('/', (req, res, next) => {
     .catch(next)
 })
 
-router.put('/:id', (req, res, next) => {
+router.put('/:id', validate(categorySchema), (req, res, next) => {
   models.category
     .findOne({
       where: {

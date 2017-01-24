@@ -13,7 +13,7 @@ import errorMessages from '../../../server/utils/errorMessages'
 import '../../../node_modules/flatpickr/dist/flatpickr.min.css'
 
 export const RenderField = ({
-  input, label, type, meta: { touched, error, warning, valid }
+  input, label, type, meta: { touched, error, warning, valid }, required, autoFocus
 }) => {
   const validationState = (touched, error, warning) => (touched && (
       (error && 'error') ||
@@ -26,12 +26,14 @@ export const RenderField = ({
       <Col componentClass={ControlLabel} sm={2}>{label}</Col>
       <Col sm={10}>
         <FormControl {...input}
+                     required={required}
+                     autoFocus={autoFocus}
                      type={type}
                      placeholder={label} />
         <FormControl.Feedback />
         {touched && (
-          (error && <HelpBlock>{error}</HelpBlock>) ||
-          (warning && <HelpBlock>{warning}</HelpBlock>))}
+          (error && <RenderError error={error} />) ||
+          (warning && <RenderError error={warning} />))}
       </Col>
     </FormGroup>
   )
@@ -50,7 +52,7 @@ RenderField.PropTypes = {
 }
 
 export const RenderFieldSelect = ({
-  input, label, type, meta: { touched, error, warning, valid }, options
+  input, label, type, meta: { touched, error, warning, valid }, options, required, autoFocus
 }) => {
   const validationState = (touched, error, warning) => (touched && (
       (error && 'error') ||
@@ -64,6 +66,8 @@ export const RenderFieldSelect = ({
       <Col sm={10}>
 
         <FormControl {...input}
+                     required={required}
+                     autoFocus={autoFocus}
                      componentClass="select"
                      type={type}
                      placeholder={label} >
@@ -156,10 +160,10 @@ export const RenderFieldWithoutCol = ({
     <FormGroup validationState={validationState(touched, error, warning)}>
       <ControlLabel className="sr-only">{label}</ControlLabel>
       <FormControl {...input}
-                  required={required}
-                  autoFocus={autoFocus}
-                  type={type}
-                  placeholder={label} />
+                   required={required}
+                   autoFocus={autoFocus}
+                   type={type}
+                   placeholder={label} />
       <FormControl.Feedback />
       {touched && (
         (error && <RenderError error={error} />) ||
@@ -169,4 +173,4 @@ export const RenderFieldWithoutCol = ({
 }
 
 export const getValidate = (values, schema) =>
-  errorMessages(Joi.validate(values, schema, {abortEarly:false}))
+  errorMessages(Joi.validate(values, schema, { abortEarly:false }))

@@ -3,7 +3,10 @@ module.exports = {
     return queryInterface.createTable(
       'categories',
       {
-        id: { type: Sequelize.UUID, primaryKey: true },
+        id: {
+          type: Sequelize.UUID,
+          primaryKey: true
+        },
         userId: {
           type: Sequelize.UUID,
           references: {
@@ -13,8 +16,13 @@ module.exports = {
           onUpdate: 'cascade',
           onDelete: 'cascade'
         },
-        name: { type: Sequelize.STRING, unique: true },
-        description: { type: Sequelize.TEXT },
+        name: {
+          type: Sequelize.STRING(255),
+          unique: true
+        },
+        description: {
+          type: Sequelize.TEXT
+        },
         createdAt: {
           type: Sequelize.DATE
         },

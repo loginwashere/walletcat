@@ -3,7 +3,10 @@ module.exports = {
     return queryInterface.createTable(
       'accounts',
       {
-        id: { type: Sequelize.UUID, primaryKey: true },
+        id: {
+          type: Sequelize.UUID,
+          primaryKey: true
+        },
         userId: {
           type: Sequelize.UUID,
           references: {
@@ -13,7 +16,10 @@ module.exports = {
           onUpdate: 'cascade',
           onDelete: 'cascade'
         },
-        name: { type: Sequelize.STRING, unique: true },
+        name: {
+          type: Sequelize.STRING(255),
+          unique: true
+        },
         currencyId: {
           type: Sequelize.UUID,
           references: {
@@ -23,8 +29,12 @@ module.exports = {
           onUpdate: 'cascade',
           onDelete: 'cascade'
         },
-        amount: { type: Sequelize.DECIMAL(19, 6) },
-        description: { type: Sequelize.TEXT },
+        amount: {
+          type: Sequelize.DECIMAL(19, 6)
+        },
+        description: {
+          type: Sequelize.TEXT
+        },
         createdAt: {
           type: Sequelize.DATE
         },

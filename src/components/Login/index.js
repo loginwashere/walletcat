@@ -11,9 +11,7 @@ export class Login extends Component {
 
   render() {
     return (
-      <div>
-        <LoginForm onSubmit={this.handleSubmit} />
-      </div>
+      <LoginForm onSubmit={this.handleSubmit} />
     );
   }
 }

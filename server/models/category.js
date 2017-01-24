@@ -1,8 +1,15 @@
 module.exports = (sequelize, Sequelize) => {
   const category = sequelize.define('category', {
-    id: { type: Sequelize.UUID,  primaryKey: true },
-    name: { type: Sequelize.STRING, unique: true },
-    description: { type: Sequelize.STRING },
+    id: {
+      type: Sequelize.UUID,
+      primaryKey: true
+    },
+    name: {
+      type: Sequelize.STRING(255)
+    },
+    description: {
+      type: Sequelize.TEXT
+    },
   }, {
     classMethods: {
       associate: function(models) {
@@ -17,7 +24,13 @@ module.exports = (sequelize, Sequelize) => {
         delete values.deletedAt
         return values
       }
-    }
+    },
+    indexes: [
+      {
+        unique: true,
+        fields: ['userId', 'name']
+      }
+    ]
   })
   return category
 }

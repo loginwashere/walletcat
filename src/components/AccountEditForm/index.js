@@ -1,57 +1,76 @@
-import React, { Component, PropTypes } from 'react';
-import { Field, reduxForm } from 'redux-form';
-import { LinkContainer } from 'react-router-bootstrap';
+import React, { Component, PropTypes } from 'react'
+import { Field, reduxForm } from 'redux-form'
+import { LinkContainer } from 'react-router-bootstrap'
 import {
   Form,
   FormGroup,
   Col,
-  Button
-} from 'react-bootstrap';
-import { RenderField, RenderFieldSelect } from '../Common';
+  Button,
+  FormControl
+} from 'react-bootstrap'
+import { accountSchema } from '../../../common/validation'
+import { RenderField, RenderError, RenderFieldSelect, getValidate } from '../Common'
 
-const validate = values => {
-  const errors = {}
-  if (!values.name) {
-    errors.name = 'Required';
-  } else if (values.name.length > 15) {
-    errors.name = 'Must be 15 characters or less';
-  }
-  if (values.description && values.description.length > 15) {
-    errors.description = 'Must be 15 characters or less';
-  }
-  return errors;
-};
+const validate = values => getValidate(values, accountSchema)
 
 class AccountEditForm extends Component {
   render() {
-    const { handleSubmit, account, options } = this.props;
+    const { error, handleSubmit, account, options, pristine, submitting, reset, invalid } = this.props
+    const validationState = error => (error && 'error') || null
     return (
       <Form horizontal
             onSubmit={handleSubmit}>
+        <FormGroup validationState={validationState(error)}>
+          <h1 className="form-signin-heading truncate">Account {account.name}</h1>
+          <FormControl.Feedback />
+          <RenderError error={error} />
+        </FormGroup>
 
-        <Field name="name" component={RenderField} label="Name" type="text" />
-        <Field name="amount" component={RenderField} label="Amount" type="number" />
-        <Field name="currencyId" component={RenderFieldSelect} label="Currency" type="select" options={options} />
-        <Field name="description" component={RenderField} label="Description" type="text" />
+        <Field autoFocus={true}
+               required={true}
+               name="name"
+               component={RenderField}
+               label="Name"
+               type="text" />
+        <Field required={true}
+               name="currencyId"
+               component={RenderFieldSelect}
+               label="Currency"
+               type="select"
+               options={options} />
+        <Field name="amount"
+               component={RenderField}
+               label="Amount"
+               type="number" />
+        <Field name="description"
+               component={RenderField}
+               label="Description"
+               type="text" />
 
         <FormGroup>
-          <Col smOffset={2} sm={2} xs={4}>
+          <Col smOffset={2} sm={2} xs={3}>
             <LinkContainer to="/accounts">
               <Button>
                 Cancel
               </Button>
             </LinkContainer>
           </Col>
-          <Col sm={2} xs={4}>
+          <Col sm={2} xs={3}>
             <LinkContainer to={`/accounts/${account.id}/delete`}>
               <Button>
                 Delete
               </Button>
             </LinkContainer>
           </Col>
-          <Col sm={2} xs={4}>
-            <Button type="submit">
+          <Col sm={2} xs={3}>
+            <Button type="submit" disabled={submitting || (!error && invalid)}>
               Edit
+            </Button>
+          </Col>
+          <Col sm={2} xs={3}>
+            <Button disabled={pristine || submitting}
+                    onClick={reset}>
+              Clear
             </Button>
           </Col>
         </FormGroup>
@@ -70,6 +89,6 @@ AccountEditForm.PropTypes = {
 AccountEditForm = reduxForm({
   form: 'accountEdit',
   validate
-})(AccountEditForm);
+})(AccountEditForm)
 
-export default AccountEditForm;
+export default AccountEditForm

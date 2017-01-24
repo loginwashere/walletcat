@@ -11,9 +11,7 @@ export class Register extends Component {
 
   render() {
     return (
-      <div>
-        <RegisterForm onSubmit={this.handleSubmit} />
-      </div>
+      <RegisterForm onSubmit={this.handleSubmit} />
     )
   }
 }

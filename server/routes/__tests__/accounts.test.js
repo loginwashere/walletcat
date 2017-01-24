@@ -14,10 +14,10 @@ chai.use(chaiHttp)
 
 describe('routes : accounts', () => {
   let token
-  let server = {}
+  let server
 
   before('before', () => {
-    server.app = require('../../server')()
+    server = require('../../server')()
   })
 
   beforeEach('get token', function() {
@@ -39,7 +39,7 @@ describe('routes : accounts', () => {
 
   describe('GET /api/accounts', () => {
     it('should respond with all accounts', (done) => {
-      chai.request(server.app)
+      chai.request(server)
       .get('/api/accounts')
       .set('Authorization', `Bearer ${token.value}`)
       .end((err, res) => {
@@ -64,7 +64,7 @@ describe('routes : accounts', () => {
 
   describe('POST /api/accounts', () => {
     it('should create new account when provide valid data', (done) => {
-      chai.request(server.app)
+      chai.request(server)
       .post('/api/accounts')
       .set('Authorization', `Bearer ${token.value}`)
       .send({
@@ -99,7 +99,7 @@ describe('routes : accounts', () => {
       const description = 'Account in Cool Bank 2 in USD'
       const currencyId = userCurrencySeeder.items[1].id
       const amount = 10
-      chai.request(server.app)
+      chai.request(server)
       .put(`/api/accounts/${accountId}`)
       .set('Authorization', `Bearer ${token.value}`)
       .send({
@@ -139,7 +139,7 @@ describe('routes : accounts', () => {
       const description = 'Account in Cool Bank 2 in USD'
       const currencyId = userCurrencySeeder.items[1].id
       const amount = 10
-      chai.request(server.app)
+      chai.request(server)
       .put(`/api/accounts/${notExistingAccountId}`)
       .set('Authorization', `Bearer ${token.value}`)
       .send({
@@ -160,7 +160,7 @@ describe('routes : accounts', () => {
   describe('DELETE /api/accounts/:accountId', () => {
     it('should delete account when provide valid data', (done) => {
       const accountId = accountSeeder.items[0].id
-      chai.request(server.app)
+      chai.request(server)
       .delete(`/api/accounts/${accountId}`)
       .set('Authorization', `Bearer ${token.value}`)
       .end((err, res) => {
@@ -175,7 +175,7 @@ describe('routes : accounts', () => {
 
     it('should return error when delete not exisiting account', (done) => {
       const notExistingAccountId = v4()
-      chai.request(server.app)
+      chai.request(server)
       .delete(`/api/accounts/${notExistingAccountId}`)
       .set('Authorization', `Bearer ${token.value}`)
       .end((err, res) => {

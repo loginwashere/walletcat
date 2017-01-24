@@ -13,7 +13,7 @@ const ServerError = require('../../errors/server-error')
 chai.use(chaiHttp)
 
 describe('routes : users',  () => {
-  let server = {}
+  let server
 
   beforeEach('before', () => {
     return helpers.all([
@@ -58,7 +58,7 @@ describe('routes : users',  () => {
         warnOnUnregistered: false
       })
 
-      server.app = require('../../server')()
+      server = require('../../server')()
     })
 
     after('after', () => {
@@ -67,7 +67,7 @@ describe('routes : users',  () => {
     })
 
     it('should create user and send verification email', (done) => {
-      chai.request(server.app)
+      chai.request(server)
         .post('/api/users')
         .send({
           email: 'admin-create@mail.com',
@@ -94,7 +94,7 @@ describe('routes : users',  () => {
     })
 
     it('should return error if fail to send email', (done) => {
-      chai.request(server.app)
+      chai.request(server)
         .post('/api/users')
         .send({
           email: 'should-reject@mail.com',
@@ -112,7 +112,7 @@ describe('routes : users',  () => {
 
   describe('POST /api/users/email-confirm', () => {
     before('before', () => {
-      server.app = require('../../server')()
+      server = require('../../server')()
     })
 
     beforeEach('before', () => {
@@ -122,7 +122,7 @@ describe('routes : users',  () => {
     })
 
     it('should return error if email confirm token is invalid', (done) => {
-      chai.request(server.app)
+      chai.request(server)
         .post('/api/users/email-confirm')
         .send({
           emailConfirm: 'admin-create@mail.com',
@@ -137,7 +137,7 @@ describe('routes : users',  () => {
 
     it('should return error if email confirm token is valid but user with email does not exist', (done) => {
       const emailConfirm = generateToken('user-does-not-exist@mail.com').value
-      chai.request(server.app)
+      chai.request(server)
         .post('/api/users/email-confirm')
         .send({
           emailConfirm: emailConfirm
@@ -152,7 +152,7 @@ describe('routes : users',  () => {
 
     it('should return success response if token is valid and user exists', (done) => {
       const emailConfirm = generateToken(userSeeder.items[0].email).value
-      chai.request(server.app)
+      chai.request(server)
         .post('/api/users/email-confirm')
         .send({
           emailConfirm: emailConfirm

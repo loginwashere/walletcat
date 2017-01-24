@@ -1,32 +1,29 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import TransactionCreateForm from '../TransactionCreateForm';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import TransactionCreateForm from '../TransactionCreateForm'
 import {
   createTransaction,
   fetchTransactionsAccountsCategoriesIfNeeded
-} from '../../actions';
+} from '../../actions'
 
 export class TransactionCreate extends Component {
   handleSubmit = (values) => {
-    const { dispatch } = this.props;
-    dispatch(createTransaction(values));
+    const { dispatch } = this.props
+    return dispatch(createTransaction(values))
   }
 
   render() {
-    const { accountOptions, categoryOptions } = this.props;
+    const { accountOptions, categoryOptions } = this.props
     return (
-      <div>
-        <h1>New Transaction</h1>
-        <TransactionCreateForm onSubmit={this.handleSubmit}
-                               accountOptions={accountOptions}
-                               categoryOptions={categoryOptions} />
-      </div>
-    );
+      <TransactionCreateForm onSubmit={this.handleSubmit}
+                             accountOptions={accountOptions}
+                             categoryOptions={categoryOptions} />
+    )
   }
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch(fetchTransactionsAccountsCategoriesIfNeeded());
+    const { dispatch } = this.props
+    dispatch(fetchTransactionsAccountsCategoriesIfNeeded())
   }
 }
 
@@ -35,11 +32,11 @@ TransactionCreate.PropTypes = {
 }
 
 function mapStateToProps(state) {
-  const { items: accounts, itemIds: accountIds } = state.accounts || { items: {}, itemIds: [] };
-  const { items: categories, itemIds: categoryIds } = state.categories || { items: {}, itemIds: [] };
+  const { items: accounts, itemIds: accountIds } = state.accounts || { items: {}, itemIds: [] }
+  const { items: categories, itemIds: categoryIds } = state.categories || { items: {}, itemIds: [] }
 
-  const accountOptions = accountIds.map(id => accounts[id]);
-  const categoryOptions = categoryIds.map(id => categories[id]);
+  const accountOptions = accountIds.map(id => accounts[id])
+  const categoryOptions = categoryIds.map(id => categories[id])
 
   return {
     accountOptions,
@@ -47,6 +44,6 @@ function mapStateToProps(state) {
   }
 }
 
-export const TransactionCreateConnected = connect(mapStateToProps)(TransactionCreate);
+export const TransactionCreateConnected = connect(mapStateToProps)(TransactionCreate)
 
-export default TransactionCreateConnected;
+export default TransactionCreateConnected

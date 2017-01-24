@@ -5,52 +5,63 @@ import {
   Form,
   FormGroup,
   Col,
-  Button
-} from 'react-bootstrap';
-import { RenderField } from '../Common';
+  Button,
+  FormControl
+} from 'react-bootstrap'
+import { categorySchema } from '../../../common/validation'
+import { RenderField, RenderError, getValidate } from '../Common'
 
-const validate = values => {
-  const errors = {}
-  if (!values.name) {
-    errors.name = 'Required';
-  } else if (values.name.length > 15) {
-    errors.name = 'Must be 15 characters or less';
-  }
-  if (values.description && values.description.length > 15) {
-    errors.description = 'Must be 15 characters or less';
-  }
-  return errors;
-};
+const validate = values => getValidate(values, categorySchema)
 
 class CategoryEditForm extends Component {
   render() {
-    const { handleSubmit, category } = this.props;
+    const { category, error, handleSubmit, pristine, reset, submitting, invalid } = this.props
+    const validationState = error => (error && 'error') || null
     return (
       <Form horizontal
             onSubmit={handleSubmit}>
+        <FormGroup validationState={validationState(error)}>
+          <h1 className="form-signin-heading truncate">Category {category.name}</h1>
+          <FormControl.Feedback />
+          <RenderError error={error} />
+        </FormGroup>
 
-        <Field name="name" component={RenderField} label="Name" type="text" />
+        <Field autoFocus={true}
+               required={true}
+               name="name"
+               component={RenderField}
+               label="Name"
+               type="text" />
 
-        <Field name="description" component={RenderField} label="Description" type="text" />
+        <Field name="description"
+               component={RenderField}
+               label="Description"
+               type="text" />
 
         <FormGroup>
-          <Col smOffset={2} sm={2} xs={4}>
+          <Col smOffset={2} sm={2} xs={3}>
             <LinkContainer to="/categories">
               <Button>
                 Cancel
               </Button>
             </LinkContainer>
           </Col>
-          <Col sm={2} xs={4}>
+          <Col sm={2} xs={3}>
             <LinkContainer to={`/categories/${category.id}/delete`}>
               <Button>
                 Delete
               </Button>
             </LinkContainer>
           </Col>
-          <Col sm={2} xs={4}>
-            <Button type="submit">
+          <Col sm={2} xs={3}>
+            <Button type="submit" disabled={submitting || (!error && invalid)}>
               Edit
+            </Button>
+          </Col>
+          <Col sm={2} xs={3}>
+            <Button disabled={pristine || submitting}
+                    onClick={reset}>
+              Clear
             </Button>
           </Col>
         </FormGroup>

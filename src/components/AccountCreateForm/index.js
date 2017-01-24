@@ -1,31 +1,65 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react'
 import { Field, reduxForm } from 'redux-form'
-import { LinkContainer } from 'react-router-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap'
 import {
   Form,
   FormGroup,
   Col,
-  Button
-} from 'react-bootstrap';
-import { RenderField, RenderFieldSelect } from '../Common';
+  Button,
+  FormControl
+} from 'react-bootstrap'
+import { accountSchema } from '../../../common/validation'
+import { RenderField, RenderError, RenderFieldSelect, getValidate } from '../Common'
+
+const validate = values => getValidate(values, accountSchema)
 
 class AccountCreateForm extends Component {
   render() {
-    const { currencies, userCurrencies, userCurrencyIds } = this.props;
-    const { handleSubmit, pristine, reset, submitting } = this.props
+    const {
+      currencies,
+      userCurrencies,
+      userCurrencyIds,
+      error,
+      handleSubmit,
+      pristine,
+      reset,
+      submitting,
+      invalid
+    } = this.props
     const options = userCurrencyIds.map(userCurrencyId => {
-        const userCurrency = userCurrencies[userCurrencyId];
-        const currency = currencies[userCurrency.currencyId];
-        return {id: userCurrencyId, name: currency.name};
-    });
+        const userCurrency = userCurrencies[userCurrencyId]
+        const currency = currencies[userCurrency.currencyId]
+        return {id: userCurrencyId, name: currency.name}
+    })
+    const validationState = error => (error && 'error') || null
     return (
       <Form horizontal
             onSubmit={handleSubmit}>
+        <FormGroup validationState={validationState(error)}>
+          <h1 className="form-signin-heading">New Account</h1>
+          <FormControl.Feedback />
+          <RenderError error={error} />
+        </FormGroup>
 
-        <Field name="name" component={RenderField} label="Name" type="text" />
-        <Field name="currencyId" component={RenderFieldSelect} label="Currency" type="select" options={options} />
-        <Field name="amount" component={RenderField} label="Amount" type="number" />
-        <Field name="description" component={RenderField} label="Description" type="text" />
+        <Field required={true}
+               name="name"
+               component={RenderField}
+               label="Name"
+               type="text" />
+        <Field required={true}
+               name="currencyId"
+               component={RenderFieldSelect}
+               label="Currency"
+               type="select"
+               options={options} />
+        <Field name="amount"
+               component={RenderField}
+               label="Amount"
+               type="number" />
+        <Field name="description"
+               component={RenderField}
+               label="Description"
+               type="text" />
 
         <FormGroup>
           <Col smOffset={2} sm={2} xs={4}>
@@ -36,7 +70,7 @@ class AccountCreateForm extends Component {
             </LinkContainer>
           </Col>
           <Col sm={2} xs={4}>
-            <Button type="submit" disabled={submitting}>
+            <Button type="submit" disabled={submitting || (!error && invalid)}>
               Create
             </Button>
           </Col>
@@ -48,7 +82,7 @@ class AccountCreateForm extends Component {
           </Col>
         </FormGroup>
       </Form>
-    );
+    )
   }
 }
 
@@ -60,7 +94,8 @@ AccountCreateForm.PropTypes = {
 }
 
 AccountCreateForm = reduxForm({
-  form: 'accountCreate'
-})(AccountCreateForm);
+  form: 'accountCreate',
+  validate
+})(AccountCreateForm)
 
-export default AccountCreateForm;
+export default AccountCreateForm

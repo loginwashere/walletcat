@@ -1,29 +1,26 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import AccountCreateForm from '../AccountCreateForm';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import AccountCreateForm from '../AccountCreateForm'
 import {
   createAccount,
   fetchAppAndUserCurrenciesIfNeeded
-} from '../../actions';
+} from '../../actions'
 
 export class AccountCreate extends Component {
   handleSubmit = (values) => {
-    const { dispatch } = this.props;
-    dispatch(createAccount(values));
+    const { dispatch } = this.props
+    return dispatch(createAccount(values))
   }
 
   render() {
-    const { currencies, userCurrencies, userCurrencyIds } = this.props;
+    const { currencies, userCurrencies, userCurrencyIds } = this.props
     return (
-      <div>
-        <h1>New Account</h1>
-        <AccountCreateForm currencies={currencies}
-                           userCurrencies={userCurrencies}
-                           userCurrencyIds={userCurrencyIds}
-                           onSubmit={this.handleSubmit}
-                           initialValues={{amount: 0}} />
-      </div>
-    );
+      <AccountCreateForm currencies={currencies}
+                          userCurrencies={userCurrencies}
+                          userCurrencyIds={userCurrencyIds}
+                          onSubmit={this.handleSubmit}
+                          initialValues={{amount: 0}} />
+    )
   }
 
   componentDidMount() {
@@ -40,14 +37,14 @@ AccountCreate.PropTypes = {
 }
 
 function mapStateToProps(state) {
-  const { items: currencies } = state.currencies || { items: {} };
+  const { items: currencies } = state.currencies || { items: {} }
   const {
     items: userCurrencies,
     itemIds: userCurrencyIds
   } = state.userCurrencies || {
     items: {},
     itemIds: []
-  };
+  }
 
   return {
     currencies,
@@ -56,6 +53,6 @@ function mapStateToProps(state) {
   }
 }
 
-export const AccountCreateConnected = connect(mapStateToProps)(AccountCreate);
+export const AccountCreateConnected = connect(mapStateToProps)(AccountCreate)
 
-export default AccountCreateConnected;
+export default AccountCreateConnected

@@ -7,10 +7,10 @@ export class Category extends Component {
     return (
       <Link to={`/categories/${category.id}`}
             className="list-group-item">
-        <h4 className="list-group-item-heading">
+        <h4 className="list-group-item-heading truncate">
           {category.name}
         </h4>
-        {category.description && <p className="list-group-item-text">
+        {category.description && <p className="list-group-item-text truncate">
           {category.description}
         </p>}
       </Link>

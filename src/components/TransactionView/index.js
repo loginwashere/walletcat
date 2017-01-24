@@ -1,35 +1,32 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
 import {
   updateTransaction,
   fetchTransactionsAccountsCategoriesIfNeeded
-} from '../../actions';
-import TransactionEditForm from '../TransactionEditForm';
+} from '../../actions'
+import TransactionEditForm from '../TransactionEditForm'
 
 class TransactionView extends Component {
   handleSubmit = (values) => {
-    const { dispatch, transaction: { id } } = this.props;
-    dispatch(updateTransaction(id, values));
+    const { dispatch, transaction: { id } } = this.props
+    return dispatch(updateTransaction(id, values))
   }
 
   render() {
-    const { transaction, initialValues, accountOptions, categoryOptions } = this.props;
+    const { transaction, initialValues, accountOptions, categoryOptions } = this.props
     return (
-      <div>
-        <h1>Transaction {transaction.id}</h1>
-        <TransactionEditForm onSubmit={this.handleSubmit}
-                          transaction={transaction}
-                          initialValues={initialValues}
-                          enableReinitialize={true}
-                          accountOptions={accountOptions}
-                          categoryOptions={categoryOptions} />
-      </div>
-    );
+      <TransactionEditForm onSubmit={this.handleSubmit}
+                           transaction={transaction}
+                           initialValues={initialValues}
+                           enableReinitialize={true}
+                           accountOptions={accountOptions}
+                           categoryOptions={categoryOptions} />
+    )
   }
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch(fetchTransactionsAccountsCategoriesIfNeeded());
+    const { dispatch } = this.props
+    dispatch(fetchTransactionsAccountsCategoriesIfNeeded())
   }
 }
 
@@ -42,22 +39,22 @@ TransactionView.propTypes = {
 }
 
 function mapStateToProps(state, ownProps) {
-  const transaction = state.transactions.items[ownProps.params.transactionId] || {};
+  const transaction = state.transactions.items[ownProps.params.transactionId] || {}
 
-  const { items: accounts, itemIds: accountIds } = state.accounts || { items: {}, itemIds: [] };
-  const { items: categories, itemIds: categoryIds } = state.categories || { items: {}, itemIds: [] };
+  const { items: accounts, itemIds: accountIds } = state.accounts || { items: {}, itemIds: [] }
+  const { items: categories, itemIds: categoryIds } = state.categories || { items: {}, itemIds: [] }
 
-  const accountOptions = accountIds.map(id => accounts[id]);
-  const categoryOptions = categoryIds.map(id => categories[id]);
+  const accountOptions = accountIds.map(id => accounts[id])
+  const categoryOptions = categoryIds.map(id => categories[id])
 
   return {
     transaction,
     initialValues: transaction,
     accountOptions,
     categoryOptions
-  };
+  }
 }
 
-TransactionView = connect(mapStateToProps)(TransactionView);
+TransactionView = connect(mapStateToProps)(TransactionView)
 
-export default TransactionView;
+export default TransactionView

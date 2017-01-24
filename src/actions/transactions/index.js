@@ -1,18 +1,19 @@
-import axios from 'axios';
-import { push } from 'react-router-redux';
-import { alertAdd } from '..';
-import { API_URL } from '../../apiUrl';
+import axios from 'axios'
+import { push } from 'react-router-redux'
+import { alertAdd, convertError } from '..'
+import { API_URL } from '../../apiUrl'
+import { SubmissionError } from 'redux-form'
 
-export const API_TRANSACTION_LIST_URL = `${API_URL}transactions`;
-export const INVALIDATE_TRANSACTION_LIST = 'INVALIDATE_TRANSACTION_LIST';
+export const API_TRANSACTION_LIST_URL = `${API_URL}transactions`
+export const INVALIDATE_TRANSACTION_LIST = 'INVALIDATE_TRANSACTION_LIST'
 
 export function invalidateTransactions() {
   return {
     type: INVALIDATE_TRANSACTION_LIST
-  };
+  }
 }
 
-export const REQUEST_TRANSACTION_LIST = 'REQUEST_TRANSACTION_LIST';
+export const REQUEST_TRANSACTION_LIST = 'REQUEST_TRANSACTION_LIST'
 
 function requestTransactions() {
   return {
@@ -20,7 +21,7 @@ function requestTransactions() {
   }
 }
 
-export const RECEIVE_TRANSACTION_LIST = 'RECEIVE_TRANSACTION_LIST';
+export const RECEIVE_TRANSACTION_LIST = 'RECEIVE_TRANSACTION_LIST'
 
 function receiveTransactions(json) {
   return {
@@ -32,8 +33,8 @@ function receiveTransactions(json) {
 
 function fetchTransactions() {
   return dispatch => {
-    dispatch(requestTransactions());
-    const token = localStorage.getItem('token');
+    dispatch(requestTransactions())
+    const token = localStorage.getItem('token')
     return axios
       .get(API_TRANSACTION_LIST_URL, {
         headers: {
@@ -41,12 +42,12 @@ function fetchTransactions() {
         }
       })
       .then(json => dispatch(receiveTransactions(json)))
-      .catch(error => dispatch(alertAdd(error)));
+      .catch(error => dispatch(alertAdd(error)))
   }
 }
 
 function shouldFetchTransactions(state) {
-  const transactions = state.transactions;
+  const transactions = state.transactions
   if (!transactions.itemIds.length) {
     return true
   } else if (transactions.isFetching) {
@@ -59,17 +60,15 @@ function shouldFetchTransactions(state) {
 export function fetchTransactionsIfNeeded() {
   return (dispatch, getState) => {
     if (shouldFetchTransactions(getState())) {
-      // Dispatch a thunk from thunk!
-      return dispatch(fetchTransactions());
+      return dispatch(fetchTransactions())
     } else {
-      // Let the calling code know there's nothing to wait for.
-      return Promise.resolve();
+      return Promise.resolve()
     }
-  };
+  }
 }
 
-export const REQUEST_TRANSACTION_CREATE = 'REQUEST_TRANSACTION_CREATE';
-export const RECEIVE_TRANSACTION_CREATE = 'RECEIVE_TRANSACTION_CREATE';
+export const REQUEST_TRANSACTION_CREATE = 'REQUEST_TRANSACTION_CREATE'
+export const RECEIVE_TRANSACTION_CREATE = 'RECEIVE_TRANSACTION_CREATE'
 
 export function requestTransactionCreate() {
   return {
@@ -87,8 +86,8 @@ export function receiveTransactionCreate(json) {
 
 export function createTransaction(params) {
   return dispatch => {
-    dispatch(requestTransactionCreate());
-    const token = localStorage.getItem('token');
+    dispatch(requestTransactionCreate())
+    const token = localStorage.getItem('token')
     return axios({
         url: API_TRANSACTION_LIST_URL,
         method: 'post',
@@ -98,14 +97,16 @@ export function createTransaction(params) {
         data: params
       })
       .then(json => {
-        dispatch(receiveTransactionCreate(json));
+        dispatch(receiveTransactionCreate(json))
         dispatch(push('/transactions'));
       })
-      .catch(error => dispatch(alertAdd(error)));
+      .catch(error => {
+        throw new SubmissionError(convertError(error))
+      })
   }
 }
 
-export const REQUEST_TRANSACTION_DELETE = 'REQUEST_TRANSACTION_DELETE';
+export const REQUEST_TRANSACTION_DELETE = 'REQUEST_TRANSACTION_DELETE'
 
 function requestTransactionDelete(id) {
   return {
@@ -114,7 +115,7 @@ function requestTransactionDelete(id) {
   }
 }
 
-export const RECEIVE_TRANSACTION_DELETE = 'RECEIVE_TRANSACTION_DELETE';
+export const RECEIVE_TRANSACTION_DELETE = 'RECEIVE_TRANSACTION_DELETE'
 
 function receiveTransactionDelete(id) {
   return {
@@ -125,8 +126,8 @@ function receiveTransactionDelete(id) {
 
 export function deleteTransaction(id) {
   return dispatch => {
-    dispatch(requestTransactionDelete(id));
-    const token = localStorage.getItem('token');
+    dispatch(requestTransactionDelete(id))
+    const token = localStorage.getItem('token')
     return axios({
         url: `${API_TRANSACTION_LIST_URL}/${id}`,
         method: 'delete',
@@ -135,14 +136,14 @@ export function deleteTransaction(id) {
         }
       })
       .then(json => {
-        dispatch(receiveTransactionDelete(id));
-        dispatch(push('/transactions'));
+        dispatch(receiveTransactionDelete(id))
+        dispatch(push('/transactions'))
       })
-      .catch(error => dispatch(alertAdd(error)));
+      .catch(error => dispatch(alertAdd(error)))
   }
 }
 
-export const REQUEST_TRANSACTION_UPDATE = 'REQUEST_TRANSACTION_UPDATE';
+export const REQUEST_TRANSACTION_UPDATE = 'REQUEST_TRANSACTION_UPDATE'
 
 function requestTransactionUpdate(id, params) {
   return {
@@ -152,7 +153,7 @@ function requestTransactionUpdate(id, params) {
   }
 }
 
-export const RECEIVE_TRANSACTION_UPDATE = 'RECEIVE_TRANSACTION_UPDATE';
+export const RECEIVE_TRANSACTION_UPDATE = 'RECEIVE_TRANSACTION_UPDATE'
 
 function receiveTransactionUpdate(json) {
   return {
@@ -163,8 +164,8 @@ function receiveTransactionUpdate(json) {
 
 export function updateTransaction(id, params) {
   return dispatch => {
-    dispatch(requestTransactionUpdate(id, params));
-    const token = localStorage.getItem('token');
+    dispatch(requestTransactionUpdate(id, params))
+    const token = localStorage.getItem('token')
     return axios({
         url: `${API_TRANSACTION_LIST_URL}/${id}`,
         method: 'put',
@@ -174,9 +175,11 @@ export function updateTransaction(id, params) {
         data: params
       })
       .then(json => {
-        dispatch(receiveTransactionUpdate(json));
-        dispatch(push('/transactions'));
+        dispatch(receiveTransactionUpdate(json))
+        dispatch(push('/transactions'))
       })
-      .catch(error => dispatch(alertAdd(error)));
+      .catch(error => {
+        throw new SubmissionError(convertError(error))
+      })
   }
 }

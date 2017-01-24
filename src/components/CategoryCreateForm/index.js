@@ -1,37 +1,41 @@
-import React, { Component, PropTypes } from 'react';
-import { Field, reduxForm } from 'redux-form';
-import { LinkContainer } from 'react-router-bootstrap';
+import React, { Component, PropTypes } from 'react'
+import { Field, reduxForm } from 'redux-form'
+import { LinkContainer } from 'react-router-bootstrap'
 import {
   Form,
   FormGroup,
   Col,
-  Button
-} from 'react-bootstrap';
-import { RenderField } from '../Common';
+  Button,
+  FormControl
+} from 'react-bootstrap'
+import { categorySchema } from '../../../common/validation'
+import { RenderField, RenderError, getValidate } from '../Common'
 
-const validate = values => {
-  const errors = {}
-  if (!values.name) {
-    errors.name = 'Required';
-  } else if (values.name.length > 15) {
-    errors.name = 'Must be 15 characters or less';
-  }
-  if (values.description && values.description.length > 15) {
-    errors.description = 'Must be 15 characters or less';
-  }
-  return errors;
-};
+const validate = values => getValidate(values, categorySchema)
 
 export class CategoryCreateForm extends Component {
   render() {
-    const { handleSubmit, pristine, reset, submitting } = this.props;
+    const { error, handleSubmit, pristine, reset, submitting, invalid } = this.props
+    const validationState = error => (error && 'error') || null
     return (
       <Form horizontal
             onSubmit={handleSubmit}>
+        <FormGroup validationState={validationState(error)}>
+          <h1 className="form-signin-heading">New Category</h1>
+          <FormControl.Feedback />
+          <RenderError error={error} />
+        </FormGroup>
 
-        <Field name="name" component={RenderField} label="Name" type="text" />
+        <Field required={true}
+               name="name"
+               component={RenderField}
+               label="Name"
+               type="text" />
 
-        <Field name="description" component={RenderField} label="Description" type="text" />
+        <Field name="description"
+               component={RenderField}
+               label="Description"
+               type="text" />
 
         <FormGroup>
           <Col smOffset={2} sm={2} xs={4}>
@@ -42,7 +46,7 @@ export class CategoryCreateForm extends Component {
             </LinkContainer>
           </Col>
           <Col sm={2} xs={4}>
-            <Button type="submit" disabled={submitting}>
+            <Button type="submit" disabled={submitting || (!error && invalid)}>
               Create
             </Button>
           </Col>
@@ -54,7 +58,7 @@ export class CategoryCreateForm extends Component {
           </Col>
         </FormGroup>
       </Form>
-    );
+    )
   }
 }
 
@@ -65,6 +69,6 @@ CategoryCreateForm.PropTypes = {
 CategoryCreateForm = reduxForm({
   form: 'categoryCreate',
   validate
-})(CategoryCreateForm);
+})(CategoryCreateForm)
 
-export default CategoryCreateForm;
+export default CategoryCreateForm

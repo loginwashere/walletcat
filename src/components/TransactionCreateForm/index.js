@@ -1,72 +1,85 @@
-import React, { Component, PropTypes } from 'react';
-import { Field, reduxForm } from 'redux-form';
-import { LinkContainer } from 'react-router-bootstrap';
+import React, { Component, PropTypes } from 'react'
+import { Field, reduxForm } from 'redux-form'
+import { LinkContainer } from 'react-router-bootstrap'
 import {
   Form,
   FormGroup,
   Col,
-  Button
-} from 'react-bootstrap';
-import { RenderField, RenderFieldSelect, RenderFieldDatetime } from '../Common';
+  Button,
+  FormControl
+} from 'react-bootstrap'
+import { transactionSchema } from '../../../common/validation'
+import {
+  RenderField,
+  RenderFieldSelect,
+  RenderFieldDatetime,
+  RenderError,
+  getValidate
+} from '../Common'
 
-const validate = values => {
-  const errors = {}
-  if (!values.name) {
-    errors.name = 'Required';
-  } else if (values.name.length > 15) {
-    errors.name = 'Must be 15 characters or less';
-  }
-  if (values.description && values.description.length > 15) {
-    errors.description = 'Must be 15 characters or less';
-  }
-  return errors;
-};
+const validate = values => getValidate(values, transactionSchema)
 
 export class TransactionCreateForm extends Component {
   render() {
     const {
+      error,
       handleSubmit,
       pristine,
       reset,
       submitting,
       accountOptions,
-      categoryOptions
-    } = this.props;
+      categoryOptions,
+      invalid
+    } = this.props
+    const validationState = error => (error && 'error') || null
     return (
       <Form horizontal
             onSubmit={handleSubmit}>
+        <FormGroup validationState={validationState(error)}>
+          <h1 className="form-signin-heading">New Transaction</h1>
+          <FormControl.Feedback />
+          <RenderError error={error} />
+        </FormGroup>
 
-        <Field name="fromAccountId"
+        <Field required={true}
+               name="fromAccountId"
                component={RenderFieldSelect}
                label="From Account"
                type="select"
                options={accountOptions} />
-        <Field name="toAccountId"
+        <Field required={true}
+               name="toAccountId"
                component={RenderFieldSelect}
                label="To Account"
                type="select"
                options={accountOptions} />
-        <Field name="fromAmount"
+        <Field required={true}
+               name="fromAmount"
                component={RenderField}
                label="From Amount"
                type="number" />
-        <Field name="toAmount"
+        <Field required={true}
+               name="toAmount"
                component={RenderField}
                label="To Amount"
                type="number" />
-        <Field name="fromRate"
+        <Field required={true}
+               name="fromRate"
                component={RenderField}
                label="From Rate"
                type="number" />
-        <Field name="toRate"
+        <Field required={true}
+               name="toRate"
                component={RenderField}
                label="To Rate"
                type="number" />
-        <Field name="date"
+        <Field required={true}
+               name="date"
                component={RenderFieldDatetime}
                label="Date"
                type="text" />
-        <Field name="categoryId"
+        <Field required={true}
+               name="categoryId"
                component={RenderFieldSelect}
                label="Category"
                type="select"
@@ -85,7 +98,7 @@ export class TransactionCreateForm extends Component {
             </LinkContainer>
           </Col>
           <Col sm={2} xs={4}>
-            <Button type="submit" disabled={submitting}>
+            <Button type="submit" disabled={submitting || (!error && invalid)}>
               Create
             </Button>
           </Col>
@@ -97,7 +110,7 @@ export class TransactionCreateForm extends Component {
           </Col>
         </FormGroup>
       </Form>
-    );
+    )
   }
 }
 
@@ -108,6 +121,6 @@ TransactionCreateForm.PropTypes = {
 TransactionCreateForm = reduxForm({
   form: 'transactionCreate',
   validate
-})(TransactionCreateForm);
+})(TransactionCreateForm)
 
-export default TransactionCreateForm;
+export default TransactionCreateForm

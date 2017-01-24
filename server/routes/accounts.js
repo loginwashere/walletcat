@@ -4,6 +4,8 @@ const models = require('../models')
 const format = require('date-fns/format')
 const v4 = require('uuid/v4')
 const NotFoundError = require('../errors/not-found')
+const validate = require('../middleware/validate')
+const accountSchema = require('../../common/validation').accountSchema
 
 router.get('/', (req, res, next) => {
   models.account
@@ -16,7 +18,7 @@ router.get('/', (req, res, next) => {
     .catch(next)
 })
 
-router.post('/', (req, res, next) => {
+router.post('/', validate(accountSchema), (req, res, next) => {
   models.account
     .findOne({
       where: {
@@ -44,7 +46,7 @@ router.post('/', (req, res, next) => {
     .catch(next)
 })
 
-router.put('/:id', (req, res, next) => {
+router.put('/:id', validate(accountSchema), (req, res, next) => {
   models.account
     .findOne({
       where: {

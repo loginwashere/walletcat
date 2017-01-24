@@ -1,19 +1,20 @@
-import axios from 'axios';
-import { push } from 'react-router-redux';
-import { alertAdd } from '..';
-import { API_URL } from '../../apiUrl';
+import axios from 'axios'
+import { push } from 'react-router-redux'
+import { alertAdd, convertError } from '..'
+import { API_URL } from '../../apiUrl'
+import { SubmissionError } from 'redux-form'
 
-const API_CATEGORY_LIST_URL = `${API_URL}categories`;
+const API_CATEGORY_LIST_URL = `${API_URL}categories`
 
-export const INVALIDATE_CATEGORY_LIST = 'INVALIDATE_CATEGORY_LIST';
+export const INVALIDATE_CATEGORY_LIST = 'INVALIDATE_CATEGORY_LIST'
 
 export function invalidateCategories() {
   return {
     type: INVALIDATE_CATEGORY_LIST
-  };
+  }
 }
 
-export const REQUEST_CATEGORY_LIST = 'REQUEST_CATEGORY_LIST';
+export const REQUEST_CATEGORY_LIST = 'REQUEST_CATEGORY_LIST'
 
 export function requestCategories() {
   return {
@@ -21,7 +22,7 @@ export function requestCategories() {
   }
 }
 
-export const RECEIVE_CATEGORY_LIST = 'RECEIVE_CATEGORY_LIST';
+export const RECEIVE_CATEGORY_LIST = 'RECEIVE_CATEGORY_LIST'
 
 export function receiveCategories(json) {
   return {
@@ -33,8 +34,8 @@ export function receiveCategories(json) {
 
 function fetchCategories() {
   return dispatch => {
-    dispatch(requestCategories());
-    const token = localStorage.getItem('token');
+    dispatch(requestCategories())
+    const token = localStorage.getItem('token')
     return axios
       .get(API_CATEGORY_LIST_URL, {
         headers: {
@@ -42,7 +43,7 @@ function fetchCategories() {
         }
       })
       .then(json => dispatch(receiveCategories(json)))
-      .catch(error => dispatch(alertAdd(error)));
+      .catch(error => dispatch(alertAdd(error)))
   }
 }
 
@@ -61,16 +62,14 @@ const shouldFetchCategories = ({
 export function fetchCategoriesIfNeeded() {
   return (dispatch, getState) => {
     if (shouldFetchCategories(getState())) {
-      // Dispatch a thunk from thunk!
-      return dispatch(fetchCategories());
+      return dispatch(fetchCategories())
     } else {
-      // Let the calling code know there's nothing to wait for.
-      return Promise.resolve();
+      return Promise.resolve()
     }
-  };
+  }
 }
 
-export const REQUEST_CATEGORY_CREATE = 'REQUEST_CATEGORY_CREATE';
+export const REQUEST_CATEGORY_CREATE = 'REQUEST_CATEGORY_CREATE'
 
 export function requestCategoryCreate() {
   return {
@@ -78,7 +77,7 @@ export function requestCategoryCreate() {
   }
 }
 
-export const RECEIVE_CATEGORY_CREATE = 'RECEIVE_CATEGORY_CREATE';
+export const RECEIVE_CATEGORY_CREATE = 'RECEIVE_CATEGORY_CREATE'
 
 export function receiveCategoryCreate(json) {
   return {
@@ -90,8 +89,8 @@ export function receiveCategoryCreate(json) {
 
 export function createCategory(params) {
   return dispatch => {
-    dispatch(requestCategoryCreate());
-    const token = localStorage.getItem('token');
+    dispatch(requestCategoryCreate())
+    const token = localStorage.getItem('token')
     return axios({
         url: API_CATEGORY_LIST_URL,
         method: 'post',
@@ -101,14 +100,16 @@ export function createCategory(params) {
         data: params
       })
       .then(json => {
-        dispatch(receiveCategoryCreate(json));
-        dispatch(push('/categories'));
+        dispatch(receiveCategoryCreate(json))
+        dispatch(push('/categories'))
       })
-      .catch(error => dispatch(alertAdd(error)));
+      .catch(error => {
+        throw new SubmissionError(convertError(error))
+      })
   }
 }
 
-export const REQUEST_CATEGORY_DELETE = 'REQUEST_CATEGORY_DELETE';
+export const REQUEST_CATEGORY_DELETE = 'REQUEST_CATEGORY_DELETE'
 
 function requestCategoryDelete(id) {
   return {
@@ -117,7 +118,7 @@ function requestCategoryDelete(id) {
   }
 }
 
-export const RECEIVE_CATEGORY_DELETE = 'RECEIVE_CATEGORY_DELETE';
+export const RECEIVE_CATEGORY_DELETE = 'RECEIVE_CATEGORY_DELETE'
 
 function receiveCategoryDelete(id) {
   return {
@@ -128,8 +129,8 @@ function receiveCategoryDelete(id) {
 
 export function deleteCategory(id) {
   return dispatch => {
-    dispatch(requestCategoryDelete(id));
-    const token = localStorage.getItem('token');
+    dispatch(requestCategoryDelete(id))
+    const token = localStorage.getItem('token')
     return axios({
         url: `${API_CATEGORY_LIST_URL}/${id}`,
         method: 'delete',
@@ -138,14 +139,14 @@ export function deleteCategory(id) {
         }
       })
       .then(json => {
-        dispatch(receiveCategoryDelete(id));
-        dispatch(push('/categories'));
+        dispatch(receiveCategoryDelete(id))
+        dispatch(push('/categories'))
       })
-      .catch(error => dispatch(alertAdd(error)));
+      .catch(error => dispatch(alertAdd(error)))
   }
 }
 
-export const REQUEST_CATEGORY_UPDATE = 'REQUEST_CATEGORY_UPDATE';
+export const REQUEST_CATEGORY_UPDATE = 'REQUEST_CATEGORY_UPDATE'
 
 function requestCategoryUpdate(id, params) {
   return {
@@ -155,7 +156,7 @@ function requestCategoryUpdate(id, params) {
   }
 }
 
-export const RECEIVE_CATEGORY_UPDATE = 'RECEIVE_CATEGORY_UPDATE';
+export const RECEIVE_CATEGORY_UPDATE = 'RECEIVE_CATEGORY_UPDATE'
 
 function receiveCategoryUpdate(json) {
   return {
@@ -166,9 +167,9 @@ function receiveCategoryUpdate(json) {
 
 export function updateCategory(id, params) {
   return dispatch => {
-    dispatch(requestCategoryUpdate(id, params));
-    const token = localStorage.getItem('token');
-    const { name, description } = params;
+    dispatch(requestCategoryUpdate(id, params))
+    const token = localStorage.getItem('token')
+    const { name, description } = params
     return axios({
         url: `${API_CATEGORY_LIST_URL}/${id}`,
         method: 'put',
@@ -178,9 +179,11 @@ export function updateCategory(id, params) {
         data: { name, description }
       })
       .then(json => {
-        dispatch(receiveCategoryUpdate(json));
-        dispatch(push('/categories'));
+        dispatch(receiveCategoryUpdate(json))
+        dispatch(push('/categories'))
       })
-      .catch(error => dispatch(alertAdd(error)));
+      .catch(error => {
+        throw new SubmissionError(convertError(error))
+      })
   }
 }

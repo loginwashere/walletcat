@@ -11,10 +11,10 @@ export class Account extends Component {
         <Badge bsStyle="danger" pullRight>
           {account.amount} {accountCurrency.name}
         </Badge>
-        <h4 className="list-group-item-heading">
+        <h4 className="list-group-item-heading truncate">
           {account.name}
         </h4>
-        <p className="list-group-item-text">
+        <p className="list-group-item-text truncate">
           {account.description}
         </p>
       </Link>
@@ -27,7 +27,7 @@ Account.propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     description: PropTypes.string,
-    amount: PropTypes.number.isRequired
+    amount: PropTypes.string.isRequired
   }).isRequired,
   accountCurrency: PropTypes.shape({
     id: PropTypes.string.isRequired,

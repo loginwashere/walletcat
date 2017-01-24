@@ -6,7 +6,7 @@ const v4 = require('uuid/v4')
 const hashPassword = require('../utils').hashPassword
 const generateAvatarUrl = require('../utils').generateAvatarUrl
 const verifyToken = require('../utils').verifyToken
-const validation = require('../../common/validation')
+const registerSchema = require('../../common/validation').registerSchema
 const mailSend = require('../services/mail').send
 const emailTypes = require('../services/emailData').types
 const generateEmailData = require('../services/emailData').generate
@@ -14,7 +14,7 @@ const NotFoundError = require('../errors/not-found')
 const BadRequestError = require('../errors/bad-request')
 const validate = require('../middleware/validate')
 
-router.post('/', validate(validation.registerSchema), (req, res, next) => {
+router.post('/', validate(registerSchema), (req, res, next) => {
   models.user
     .create({
       id: v4(),

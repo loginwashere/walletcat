@@ -6,15 +6,12 @@ import { createCategory } from '../../actions';
 export class CategoryCreate extends Component {
   handleSubmit = (values) => {
     const { dispatch } = this.props;
-    dispatch(createCategory(values));
+    return dispatch(createCategory(values));
   }
 
   render() {
     return (
-      <div>
-        <h1>New Category</h1>
-        <CategoryCreateForm onSubmit={this.handleSubmit} />
-      </div>
+      <CategoryCreateForm onSubmit={this.handleSubmit} />
     );
   }
 }

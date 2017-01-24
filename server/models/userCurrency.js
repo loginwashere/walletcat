@@ -1,6 +1,9 @@
 module.exports = (sequelize, Sequelize) => {
   const userCurrency = sequelize.define('userCurrency', {
-    id: { type: Sequelize.UUID, primaryKey: true },
+    id: {
+      type: Sequelize.UUID,
+      primaryKey: true
+    },
   }, {
     classMethods: {
       associate: function(models) {

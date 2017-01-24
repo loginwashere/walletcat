@@ -19,23 +19,23 @@ export class Transaction extends Component {
     return (
       <Link to={`/transactions/${transaction.id}`}
             className="list-group-item">
-        <p>
+        <p className="list-group-item-text truncate">
           <Badge bsStyle="danger" pullRight>
             {transaction.fromAmount} {fromAccountCurrency.name}
           </Badge>
           From <b>{fromAccount.name}</b>
         </p>
-        <p>
+        <p className="list-group-item-text truncate">
           <Badge bsStyle="success" pullRight>
             {transaction.toAmount} {toAccountCurrency.name}
           </Badge>
           To <b>{toAccount.name}</b>
         </p>
-        <p className="list-group-item-text">
+        <p className="list-group-item-text truncate">
           <Badge pullRight>{date}</Badge>
           <b>{category.name}</b>
         </p>
-        {transaction.description && <p>{transaction.description}</p>}
+        {transaction.description && <p className="list-group-item-text truncate">{transaction.description}</p>}
       </Link>
     );
   }
@@ -46,8 +46,8 @@ Transaction.propTypes = {
     id: PropTypes.string.isRequired,
     description: PropTypes.string,
     date: PropTypes.string.isRequired,
-    fromAmount: PropTypes.number.isRequired,
-    toAmount: PropTypes.number.isRequired
+    fromAmount: PropTypes.string.isRequired,
+    toAmount: PropTypes.string.isRequired
   }).isRequired,
   fromAccount: PropTypes.shape({
     id: PropTypes.string.isRequired,

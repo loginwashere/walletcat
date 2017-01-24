@@ -1,8 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { v4 } from 'uuid';
-import { CategoryView } from '.';
-import configureStore from '../../configureStore';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { v4 } from 'uuid'
+import { CategoryView } from '.'
+import configureStore from '../../configureStore'
 
 it('renders without crashing', () => {
   const store = configureStore();
@@ -10,7 +10,7 @@ it('renders without crashing', () => {
     id: v4(),
     name: 'Fast Food'
   }
-  const div = document.createElement('div');
+  const div = document.createElement('div')
   ReactDOM.render(<CategoryView category={category}
-                                dispatch={store.dispatch} />, div);
-});
+                                dispatch={store.dispatch} />, div)
+})

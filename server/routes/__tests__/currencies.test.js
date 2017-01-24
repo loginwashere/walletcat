@@ -11,10 +11,10 @@ chai.use(chaiHttp)
 
 describe('routes : curencies', () => {
   let token
-  let server = {}
+  let server
 
   before('before', () => {
-    server.app = require('../../server')()
+    server = require('../../server')()
   })
 
   beforeEach('get token', function() {
@@ -34,7 +34,7 @@ describe('routes : curencies', () => {
 
   describe('GET /api/currencies', () => {
     it('should respond with all currencies', (done) => {
-      chai.request(server.app)
+      chai.request(server)
         .get('/api/currencies')
         .set('Authorization', `Bearer ${token.value}`)
         .end((err, res) => {

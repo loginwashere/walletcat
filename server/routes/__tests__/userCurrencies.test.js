@@ -13,10 +13,10 @@ chai.use(chaiHttp)
 
 describe('routes : userCurrencies', () => {
   let token
-  let server = {}
+  let server
 
   before('before', () => {
-    server.app = require('../../server')()
+    server = require('../../server')()
   })
 
   beforeEach('get token', function() {
@@ -37,7 +37,7 @@ describe('routes : userCurrencies', () => {
 
   describe('GET /api/user-currencies', () => {
     it('should respond with all userCurrencies', (done) => {
-      chai.request(server.app)
+      chai.request(server)
         .get('/api/user-currencies')
         .set('Authorization', `Bearer ${token.value}`)
         .end((err, res) => {
@@ -59,7 +59,7 @@ describe('routes : userCurrencies', () => {
 
   describe('POST /api/user-currencies', () => {
     it('should create userCurrency when provided valid data', (done) => {
-      chai.request(server.app)
+      chai.request(server)
         .post('/api/user-currencies')
         .set('Authorization', `Bearer ${token.value}`)
         .send({
@@ -87,7 +87,7 @@ describe('routes : userCurrencies', () => {
   describe('DELETE /api/user-currencies/:userCurrencyId', () => {
     it('should create userCurrency when provided valid data', (done) => {
       const userCurrencyId = userCurrencySeeder.items[0].id
-      chai.request(server.app)
+      chai.request(server)
         .delete(`/api/user-currencies/${userCurrencyId}`)
         .set('Authorization', `Bearer ${token.value}`)
         .end((err, res) => {
@@ -102,7 +102,7 @@ describe('routes : userCurrencies', () => {
 
     it('should return not found error when delete userCurrency which is not exist', (done) => {
       const notExistingUserCurrencyId = v4()
-      chai.request(server.app)
+      chai.request(server)
         .delete(`/api/user-currencies/${notExistingUserCurrencyId}`)
         .set('Authorization', `Bearer ${token.value}`)
         .end((err, res) => {

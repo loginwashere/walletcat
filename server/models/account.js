@@ -1,9 +1,20 @@
 module.exports = (sequelize, Sequelize) => {
   const account = sequelize.define('account', {
-    id: { type: Sequelize.UUID,  primaryKey: true },
-    name: { type: Sequelize.STRING, unique: true },
-    description: { type: Sequelize.STRING },
-    amount: { type: Sequelize.DECIMAL(19, 6) },
+    id: {
+      type: Sequelize.UUID,
+      primaryKey: true
+    },
+    name: {
+      type: Sequelize.STRING(255)
+    },
+    description: {
+      type: Sequelize.TEXT
+    },
+    amount: {
+      type: Sequelize.DECIMAL(19, 8),
+      allowNull: false,
+      defaultValue: 0
+    },
   }, {
     classMethods: {
       associate: models => {
@@ -19,7 +30,13 @@ module.exports = (sequelize, Sequelize) => {
         delete values.deletedAt
         return values
       }
-    }
+    },
+    indexes: [
+      {
+        unique: true,
+        fields: ['userId', 'name']
+      }
+    ]
   })
   return account
 }

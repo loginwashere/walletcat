@@ -14,7 +14,7 @@ describe('routes : auth', () => {
   let server
 
   before('before', () => {
-    server = require('../..')
+    server = require('../../server')()
   })
 
   beforeEach('get token', function() {
@@ -30,13 +30,9 @@ describe('routes : auth', () => {
     return helpers.umzug.down({ to: 0 })
   })
 
-  after('after', (done) => {
-    server.httpServer.close(done)
-  })
-
   describe('POST /api/auth', () => {
     it('should respond with validation errors to request with invalid data', (done) => {
-      chai.request(server.app)
+      chai.request(server)
         .post('/api/auth')
         .send({
           login: 'invalid-email',
@@ -61,7 +57,7 @@ describe('routes : auth', () => {
     })
 
     it('should respond with error if credentils do not match', (done) => {
-      chai.request(server.app)
+      chai.request(server)
         .post('/api/auth')
         .send({
           login: 'admin@mail.com',
@@ -82,7 +78,7 @@ describe('routes : auth', () => {
     })
 
     it('should respond user and token if all ok', (done) => {
-      chai.request(server.app)
+      chai.request(server)
         .post('/api/auth')
         .send({
           login: userSeeder.items[0].email,
@@ -116,7 +112,7 @@ describe('routes : auth', () => {
 
   describe('DELETE /api/auth', () => {
     it('should respond with auth error when try to logout without token', (done) => {
-      chai.request(server.app)
+      chai.request(server)
         .delete('/api/auth')
         .end((err, res) => {
           console.log(err.response.body)
