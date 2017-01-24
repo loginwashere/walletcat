@@ -6,7 +6,7 @@ import {
   FormControl,
   Button
 } from 'react-bootstrap'
-import { loginSchema } from '../../../server/validation'
+import { loginSchema } from '../../../common/validation'
 import { RenderFieldWithoutCol, RenderError, getValidate } from '../Common'
 
 import './style.less'
