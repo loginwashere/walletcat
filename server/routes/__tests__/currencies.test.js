@@ -41,7 +41,7 @@ describe('routes : curencies', () => {
           should.not.exist(err)
           res.status.should.equal(200)
           res.type.should.equal('application/json')
-          res.body.currencies.length.should.eql(3)
+          res.body.currencies.length.should.eql(194)
           Object.keys(res.body.currencies[0]).should.eql([
             'id',
             'name',
