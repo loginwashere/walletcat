@@ -113,7 +113,8 @@
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "test:server": "NODE_ENV=test node_modules/.bin/mocha  './server' --recursive",
-    "lint": "eslint"
+    "lint": "eslint",
+    "reload-rates": "node server/commands/reload-rates"
   },
   "jest": {
     "collectCoverageFrom": [

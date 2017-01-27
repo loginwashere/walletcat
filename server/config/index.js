@@ -18,5 +18,6 @@ module.exports = {
       apiKey: process.env.MAIL_MAILGUN_API_KEY || 'MAILGUN-API-KEY',
       domain: process.env.MAIL_MAILGUN_DOMAIN || 'YOUR-DOMAIN.com'
     }
-  }
+  },
+  openexchangeratesAppId: process.env.OPENEXCHANGERATES_APP_ID
 }

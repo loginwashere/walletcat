@@ -1,0 +1,1 @@
+require('../seeds/20170125173837-reload-rates').up()
