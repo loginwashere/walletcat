@@ -9,14 +9,14 @@ import {
   REQUEST_TRANSACTION_DELETE,
   RECEIVE_TRANSACTION_DELETE,
   LOGOUT_SUCCESS
-} from '../actions';
+} from '../actions'
 
 export const initialState = {
   isFetching: false,
   didInvalidate: false,
   items: {},
   itemIds: []
-};
+}
 
 export default function transactions(state = initialState, action) {
   switch (action.type) {
@@ -24,13 +24,13 @@ export default function transactions(state = initialState, action) {
       return {
         ...state,
         didInvalidate: true
-      };
+      }
     case REQUEST_TRANSACTION_LIST:
       return {
         ...state,
         isFetching: true,
         didInvalidate: false
-      };
+      }
     case RECEIVE_TRANSACTION_LIST:
       return {
         ...state,
@@ -39,7 +39,7 @@ export default function transactions(state = initialState, action) {
         items: {
           ...state.items,
           ...action.transactions
-            .reduce((obj, item) => ({...obj, [item.id]: item}), {})
+            .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
         },
         itemIds: [
           ...state.itemIds,
@@ -48,14 +48,14 @@ export default function transactions(state = initialState, action) {
             .filter(id => state.itemIds.indexOf(id) === -1)
         ],
         lastUpdated: action.receivedAt
-      };
+      }
     case REQUEST_TRANSACTION_UPDATE:
     case REQUEST_TRANSACTION_CREATE:
       return {
         ...state,
         isFetching: true,
         didInvalidate: false
-      };
+      }
     case RECEIVE_TRANSACTION_UPDATE:
     case RECEIVE_TRANSACTION_CREATE:
       return {
@@ -72,12 +72,12 @@ export default function transactions(state = initialState, action) {
             .map(item => item.id)
             .filter(id => state.itemIds.indexOf(id) === -1)
         ]
-      };
+      }
     case REQUEST_TRANSACTION_DELETE:
       return {
         ...state,
         isFetching: true
-      };
+      }
     case RECEIVE_TRANSACTION_DELETE:
       return {
         ...state,
@@ -85,16 +85,16 @@ export default function transactions(state = initialState, action) {
         items: Object.keys(state.items)
           .filter(key => key !== action.id)
           .reduce((result, current) => {
-            result[current] = state.items[current];
-            return result;
+            result[current] = state.items[current]
+            return result
           }, {}),
         itemIds: [
           ...state.itemIds.slice(0, state.itemIds.indexOf(action.id)),
           ...state.itemIds.slice(state.itemIds.indexOf(action.id) + 1)
         ]
-      };
+      }
     case LOGOUT_SUCCESS:
-      return initialState;
+      return initialState
     default:
       return state
   }

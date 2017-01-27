@@ -25,10 +25,8 @@ router.post('/', validate(registerSchema), (req, res, next) => {
       createdAt: format(new Date()),
       updatedAt: format(new Date()),
     })
-    .then(user => {
-      return mailSend(generateEmailData(emailTypes.REGISTER, { user }))
-        .then(body => res.json(user))
-    })
+    .then(user => mailSend(generateEmailData(emailTypes.REGISTER, { user }))
+      .then(() => res.json(user)))
     .catch(next)
 })
 

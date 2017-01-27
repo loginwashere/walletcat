@@ -1,14 +1,14 @@
-import deepFreeze from 'deep-freeze';
-import { v4 } from 'uuid';
+import deepFreeze from 'deep-freeze'
+import { v4 } from 'uuid'
 import reducer, {
   initialState as expectedDefaultInitialState
-} from '../userCurrencies';
-import * as actions from '../../actions';
+} from '../userCurrencies'
+import * as actions from '../../actions'
 
 describe('userCurrencies reducer', () => {
-  const firstUserCurrency = {id: v4(), currencyId: v4()};
-  const secondUserCurrency = {id: v4(), currencyId: v4()};
-  const initialState = undefined;
+  const firstUserCurrency = { id: v4(), currencyId: v4() }
+  const secondUserCurrency = { id: v4(), currencyId: v4() }
+  const initialState = undefined
   const expectedAfterFirstListReceive = {
     ...expectedDefaultInitialState,
     items: {
@@ -19,20 +19,20 @@ describe('userCurrencies reducer', () => {
       [firstUserCurrency.currencyId]: firstUserCurrency.id
     },
     lastUpdated: 1317416400000
-  };
+  }
   const expectedAfterFirstItemCreate = {
     ...expectedAfterFirstListReceive,
     lastUpdated: undefined
-  };
+  }
 
-  deepFreeze(expectedAfterFirstListReceive);
-  deepFreeze(expectedAfterFirstItemCreate);
+  deepFreeze(expectedAfterFirstListReceive)
+  deepFreeze(expectedAfterFirstItemCreate)
 
   it('should return the initial state', () => {
     expect(
       reducer(initialState, {})
     ).toEqual(expectedDefaultInitialState)
-  });
+  })
 
   it('should handle RECEIVE_USER_CURRENCY_LIST', () => {
     expect(
@@ -63,7 +63,7 @@ describe('userCurrencies reducer', () => {
       isFetching: false,
       lastUpdated: 1317416400001
     })
-  });
+  })
 
   it('should handle RECEIVE_USER_CURRENCY_LIST with duplicates', () => {
     expect(
@@ -73,7 +73,7 @@ describe('userCurrencies reducer', () => {
         receivedAt: 1317416400000,
       })
     ).toEqual(expectedAfterFirstListReceive)
-  });
+  })
 
   it('should handle RECEIVE_ADD_USER_CURRENCY', () => {
     expect(
@@ -104,7 +104,7 @@ describe('userCurrencies reducer', () => {
       isFetching: false,
       lastUpdated: undefined
     })
-  });
+  })
 
   it('should handle RECEIVE_ADD_USER_CURRENCY with duplicates', () => {
     expect(
@@ -114,7 +114,7 @@ describe('userCurrencies reducer', () => {
         receivedAt: 1317416400000,
       })
     ).toEqual(expectedAfterFirstItemCreate)
-  });
+  })
 
   it('should handle RECEIVE_REMOVE_USER_CURRENCY', () => {
     expect(
@@ -124,7 +124,7 @@ describe('userCurrencies reducer', () => {
         receivedAt: 1317416400000,
       })
     ).toEqual(expectedDefaultInitialState)
-  });
+  })
 
   it('should handle LOGOUT_SUCCESS and return initial state', () => {
     expect(
@@ -132,5 +132,5 @@ describe('userCurrencies reducer', () => {
         type: actions.LOGOUT_SUCCESS
       })
     ).toEqual(expectedDefaultInitialState)
-  });
-});
+  })
+})

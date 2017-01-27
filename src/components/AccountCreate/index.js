@@ -16,20 +16,20 @@ export class AccountCreate extends Component {
     const { currencies, userCurrencies, userCurrencyIds } = this.props
     return (
       <AccountCreateForm currencies={currencies}
-                          userCurrencies={userCurrencies}
-                          userCurrencyIds={userCurrencyIds}
-                          onSubmit={this.handleSubmit}
-                          initialValues={{amount: 0}} />
+                         userCurrencies={userCurrencies}
+                         userCurrencyIds={userCurrencyIds}
+                         onSubmit={this.handleSubmit}
+                         initialValues={{ amount: 0 }} />
     )
   }
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch(fetchAppAndUserCurrenciesIfNeeded());
+    const { dispatch } = this.props
+    dispatch(fetchAppAndUserCurrenciesIfNeeded())
   }
 }
 
-AccountCreate.PropTypes = {
+AccountCreate.propTypes = {
   userCurrencies: PropTypes.object.isRequired,
   userCurrencyIds: PropTypes.array.isRequired,
   currencies: PropTypes.object.isRequired,
@@ -53,6 +53,4 @@ function mapStateToProps(state) {
   }
 }
 
-export const AccountCreateConnected = connect(mapStateToProps)(AccountCreate)
-
-export default AccountCreateConnected
+export default  connect(mapStateToProps)(AccountCreate)

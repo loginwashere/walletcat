@@ -12,23 +12,17 @@ module.exports.generateToken = (userId, expires) => ({
   )
 })
 
-module.exports.verifyToken = (token) => {
-  return jwt.verify(token, config.JWT_SECRET)
-}
+module.exports.verifyToken = token => jwt.verify(token, config.JWT_SECRET)
 
-module.exports.hashPassword = password => {
-  return crypto
-    .createHmac('sha256', config.HASH_SECRET)
-    .update(password)
-    .digest('hex')
-}
+module.exports.hashPassword = password => crypto
+  .createHmac('sha256', config.HASH_SECRET)
+  .update(password)
+  .digest('hex')
 
-const md5 = string => {
-  return crypto
-    .createHash('md5')
-    .update(string)
-    .digest("hex");
-}
+const md5 = string => crypto
+  .createHash('md5')
+  .update(string)
+  .digest('hex')
 
 module.exports.generateAvatarUrl = email => (
   `https://www.gravatar.com/avatar/${md5(email)}?s=50`

@@ -27,7 +27,9 @@ export class TransactionCreate extends Component {
   }
 }
 
-TransactionCreate.PropTypes = {
+TransactionCreate.propTypes = {
+  accountOptions: PropTypes.array.isRequired,
+  categoryOptions: PropTypes.array.isRequired,
   dispatch: PropTypes.func.isRequired
 }
 
@@ -44,6 +46,4 @@ function mapStateToProps(state) {
   }
 }
 
-export const TransactionCreateConnected = connect(mapStateToProps)(TransactionCreate)
-
-export default TransactionCreateConnected
+export default connect(mapStateToProps)(TransactionCreate)

@@ -1,9 +1,9 @@
-import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
+import React, { Component, PropTypes } from 'react'
+import { Link } from 'react-router'
 
 export class Category extends Component {
   render() {
-    const { category } = this.props;
+    const { category } = this.props
     return (
       <Link to={`/categories/${category.id}`}
             className="list-group-item">
@@ -14,7 +14,7 @@ export class Category extends Component {
           {category.description}
         </p>}
       </Link>
-    );
+    )
   }
 }
 
@@ -24,6 +24,6 @@ Category.propTypes = {
     name: PropTypes.string.isRequired,
     description: PropTypes.string
   }).isRequired
-};
+}
 
-export default Category;
+export default Category

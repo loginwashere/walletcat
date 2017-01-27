@@ -22,11 +22,11 @@ const categories = [
 ]
 
 module.exports = {
-  up: function (queryInterface, Sequelize) {
+  up: function(queryInterface) {
     return queryInterface.bulkInsert('categories', categories, {})
   },
 
-  down: function (queryInterface, Sequelize) {
+  down: function(queryInterface) {
     return queryInterface.bulkDelete('categories', null, {})
   },
 

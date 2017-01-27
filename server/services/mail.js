@@ -6,8 +6,4 @@ const mailgun = new Mailgun({
   domain: config.mail.mailgun.domain
 })
 
-module.exports.send = (data) => {
-  return mailgun
-    .messages()
-    .send(data)
-}
+module.exports.send = data => mailgun.messages().send(data)

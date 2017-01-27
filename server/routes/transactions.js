@@ -14,7 +14,7 @@ router.get('/', (req, res, next) => {
         userId: req.user.sub
       }
     })
-    .then(transactions => res.json({transactions}))
+    .then(transactions => res.json({ transactions }))
     .catch(next)
 })
 
@@ -89,7 +89,7 @@ router.delete('/:id', (req, res, next) => {
         .destroy({
           where: { id: transaction.id }
         })
-        .then(result => res.status(204).json())
+        .then(() => res.status(204).json())
     })
     .catch(next)
 })

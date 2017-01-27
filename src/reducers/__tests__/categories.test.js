@@ -1,14 +1,14 @@
-import deepFreeze from 'deep-freeze';
-import { v4 } from 'uuid';
+import deepFreeze from 'deep-freeze'
+import { v4 } from 'uuid'
 import reducer, {
   initialState as expectedDefaultInitialState
-} from '../categories';
-import * as actions from '../../actions';
+} from '../categories'
+import * as actions from '../../actions'
 
 describe('categories reducer', () => {
-  const firstCategory = {id: v4(), name: 'Fast Food'};
-  const secondCategory = {id: v4(), name: 'Transaport'};
-  const initialState = undefined;
+  const firstCategory = { id: v4(), name: 'Fast Food' }
+  const secondCategory = { id: v4(), name: 'Transaport' }
+  const initialState = undefined
   const expectedAfterFirstListReceive = {
     ...expectedDefaultInitialState,
     items: {
@@ -16,20 +16,20 @@ describe('categories reducer', () => {
     },
     itemIds: [firstCategory.id],
     lastUpdated: 1317416400000
-  };
+  }
   const expectedAfterFirstItemCreate = {
     ...expectedAfterFirstListReceive,
     lastUpdated: undefined
-  };
+  }
 
-  deepFreeze(expectedAfterFirstListReceive);
-  deepFreeze(expectedAfterFirstItemCreate);
+  deepFreeze(expectedAfterFirstListReceive)
+  deepFreeze(expectedAfterFirstItemCreate)
 
   it('should return the initial state', () => {
     expect(
       reducer(initialState, {})
     ).toEqual(expectedDefaultInitialState)
-  });
+  })
 
   it('should handle RECEIVE_CATEGORY_LIST', () => {
     expect(
@@ -56,7 +56,7 @@ describe('categories reducer', () => {
       isFetching: false,
       lastUpdated: 1317416400001
     })
-  });
+  })
 
   it('should handle RECEIVE_CATEGORY_LIST with duplicates', () => {
     expect(
@@ -66,7 +66,7 @@ describe('categories reducer', () => {
         receivedAt: 1317416400000,
       })
     ).toEqual(expectedAfterFirstListReceive)
-  });
+  })
 
   it('should handle RECEIVE_CATEGORY_CREATE', () => {
     expect(
@@ -93,7 +93,7 @@ describe('categories reducer', () => {
       isFetching: false,
       lastUpdated: undefined
     })
-  });
+  })
 
   it('should handle RECEIVE_CATEGORY_CREATE with duplicates', () => {
     expect(
@@ -103,7 +103,7 @@ describe('categories reducer', () => {
         receivedAt: 1317416400000,
       })
     ).toEqual(expectedAfterFirstItemCreate)
-  });
+  })
 
   it('should handle LOGOUT_SUCCESS and return initial state', () => {
     expect(
@@ -111,5 +111,5 @@ describe('categories reducer', () => {
         type: actions.LOGOUT_SUCCESS
       })
     ).toEqual(expectedDefaultInitialState)
-  });
-});
+  })
+})

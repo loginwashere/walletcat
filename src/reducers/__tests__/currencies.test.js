@@ -1,14 +1,14 @@
-import deepFreeze from 'deep-freeze';
-import { v4 } from 'uuid';
+import deepFreeze from 'deep-freeze'
+import { v4 } from 'uuid'
 import reducer, {
   initialState as expectedDefaultInitialState
-} from '../currencies';
-import * as actions from '../../actions';
+} from '../currencies'
+import * as actions from '../../actions'
 
 describe('currecnes reducer', () => {
-  const firstCurrency = {id: v4(), name: 'USD'};
-  const secondCurrency = {id: v4(), name: 'UAH'};
-  const initialState = undefined;
+  const firstCurrency = { id: v4(), name: 'USD' }
+  const secondCurrency = { id: v4(), name: 'UAH' }
+  const initialState = undefined
   const expectedAfterFirstListReceive = {
     ...expectedDefaultInitialState,
     items: {
@@ -16,15 +16,15 @@ describe('currecnes reducer', () => {
     },
     itemIds: [firstCurrency.id],
     lastUpdated: 1317416400000
-  };
+  }
 
-  deepFreeze(expectedAfterFirstListReceive);
+  deepFreeze(expectedAfterFirstListReceive)
 
   it('should return the initial state', () => {
     expect(
       reducer(initialState, {})
     ).toEqual(expectedDefaultInitialState)
-  });
+  })
 
   it('should handle RECEIVE_APP_CURRENCY_LIST', () => {
     expect(
@@ -51,7 +51,7 @@ describe('currecnes reducer', () => {
       isFetching: false,
       lastUpdated: 1317416400001
     })
-  });
+  })
 
   it('should handle RECEIVE_APP_CURRENCY_LIST with duplicates', () => {
     expect(
@@ -61,7 +61,7 @@ describe('currecnes reducer', () => {
         receivedAt: 1317416400000,
       })
     ).toEqual(expectedAfterFirstListReceive)
-  });
+  })
 
   it('should handle LOGOUT_SUCCESS and return initial state', () => {
     expect(
@@ -69,5 +69,5 @@ describe('currecnes reducer', () => {
         type: actions.LOGOUT_SUCCESS
       })
     ).toEqual(expectedDefaultInitialState)
-  });
-});
+  })
+})

@@ -1,12 +1,12 @@
 module.exports = {
-  up: function (queryInterface, Sequelize) {
+  up: function(queryInterface, Sequelize) {
     return queryInterface.changeColumn('currencies', 'name', {
       type: Sequelize.STRING(10),
       allowNull: false
     })
   },
 
-  down: function (queryInterface, Sequelize) {
+  down: function() {
     return Promise.resolve()
   }
-};
+}

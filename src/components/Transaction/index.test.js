@@ -1,7 +1,7 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { v4 } from 'uuid';
-import Transaction from '.';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { v4 } from 'uuid'
+import Transaction from '.'
 
 it('renders without crashing', () => {
 
@@ -38,11 +38,11 @@ it('renders without crashing', () => {
     categoryId: category.id
   }
 
-  const div = document.createElement('div');
+  const div = document.createElement('div')
   ReactDOM.render(<Transaction transaction={transaction}
                                fromAccount={fromAccount}
                                fromAccountCurrency={fromAccountCurrency}
                                toAccount={toAccount}
                                toAccountCurrency={toAccountCurrency}
-                               category={category} />, div);
-});
+                               category={category} />, div)
+})

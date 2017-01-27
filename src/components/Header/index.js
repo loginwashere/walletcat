@@ -1,19 +1,19 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
 import {
   Nav,
   Navbar,
   NavItem,
   NavDropdown,
   MenuItem
-} from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
-import { Logout, HeaderProfile } from '..';
+} from 'react-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap'
+import { Logout, HeaderProfile } from '..'
 import HeaderBrandLink from '../HeaderBrandLink'
 
 export class Header extends Component {
   render() {
-    const { user, isAuthenticated, dispatch } = this.props;
+    const { user, isAuthenticated, dispatch } = this.props
     return (
       <Navbar collapseOnSelect fixedTop>
         <Navbar.Header>
@@ -100,7 +100,7 @@ export class Header extends Component {
           </Nav>
         </Navbar.Collapse>
       </Navbar>
-    );
+    )
   }
 }
 
@@ -111,13 +111,11 @@ Header.propTypes = {
 }
 
 function mapStateToProps(state) {
-  const { auth } = state;
-  const { user, isAuthenticated } = auth;
-  return { user, isAuthenticated };
+  const { auth } = state
+  const { user, isAuthenticated } = auth
+  return { user, isAuthenticated }
 }
 
-export const HeaderConnected = connect(mapStateToProps, null, null, {
+export default connect(mapStateToProps, null, null, {
   pure: false
-})(Header);
-
-export default HeaderConnected;
+})(Header)

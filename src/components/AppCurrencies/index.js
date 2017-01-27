@@ -1,8 +1,8 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { ListGroup } from 'react-bootstrap';
-import { AppCurrency } from '..';
-import { fetchAppAndUserCurrenciesIfNeeded } from '../../actions';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { ListGroup } from 'react-bootstrap'
+import { AppCurrency } from '..'
+import { fetchAppAndUserCurrenciesIfNeeded } from '../../actions'
 
 export class AppCurrencies extends Component {
   render() {
@@ -12,31 +12,31 @@ export class AppCurrencies extends Component {
       userCurrencies,
       userCurrenciesIdsByCurrencyId,
       dispatch
-    } = this.props;
+    } = this.props
     return (
       <div>
         <h1>App Currencies</h1>
         <ListGroup>
           {currencyIds.map(id => {
-            const currency = currencies[id];
-            const userCurrencyId = userCurrenciesIdsByCurrencyId[id];
-            const userCurrency = userCurrencyId && userCurrencies[userCurrencyId];
+            const currency = currencies[id]
+            const userCurrencyId = userCurrenciesIdsByCurrencyId[id]
+            const userCurrency = userCurrencyId && userCurrencies[userCurrencyId]
             return (
-              currency
-              && <AppCurrency key={currency.id}
+              currency &&
+              <AppCurrency key={currency.id}
                            currency={currency}
                            userCurrency={userCurrency}
                            dispatch={dispatch} />
-            );
+            )
           })}
         </ListGroup>
       </div>
-    );
+    )
   }
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch(fetchAppAndUserCurrenciesIfNeeded());
+    const { dispatch } = this.props
+    dispatch(fetchAppAndUserCurrenciesIfNeeded())
   }
 }
 
@@ -45,7 +45,8 @@ AppCurrencies.propTypes = {
   currencyIds: PropTypes.array.isRequired,
   userCurrencies: PropTypes.object.isRequired,
   userCurrenciesIdsByCurrencyId: PropTypes.object.isRequired,
-};
+  dispatch: PropTypes.func.isRequired
+}
 
 function mapStateToProps(state) {
   const {
@@ -65,7 +66,7 @@ function mapStateToProps(state) {
   } = state.userCurrencies || {
     items: {},
     itemsByCurrencyId: {}
-  };
+  }
 
   return {
     isFetching,
@@ -74,9 +75,7 @@ function mapStateToProps(state) {
     currencyIds,
     userCurrencies,
     userCurrenciesIdsByCurrencyId
-  };
+  }
 }
 
-export const AppCurrenciesConnected = connect(mapStateToProps)(AppCurrencies);
-
-export default AppCurrenciesConnected;
+export default connect(mapStateToProps)(AppCurrencies)

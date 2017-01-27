@@ -119,20 +119,25 @@ class TransactionEditForm extends Component {
           </Col>
         </FormGroup>
       </Form>
-    );
+    )
   }
 }
 
-TransactionEditForm.PropTypes = {
+TransactionEditForm.propTypes = {
   transaction: PropTypes.shape({
     id: PropTypes.string.isRequired
   }).isRequired,
-  handleSubmit: PropTypes.func.isRequired
+  accountOptions: PropTypes.array.isRequired,
+  categoryOptions: PropTypes.array.isRequired,
+  handleSubmit: PropTypes.func.isRequired.isRequired,
+  error: PropTypes.object,
+  submitting: PropTypes.bool.isRequired,
+  pristine: PropTypes.bool.isRequired,
+  invalid: PropTypes.bool.isRequired,
+  reset: PropTypes.func.isRequired
 }
 
-TransactionEditForm = reduxForm({
+export default reduxForm({
   form: 'transactionEdit',
   validate
-})(TransactionEditForm);
-
-export default TransactionEditForm;
+})(TransactionEditForm)

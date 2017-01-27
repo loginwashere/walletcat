@@ -1,5 +1,5 @@
 module.exports = {
-  up: function (queryInterface, Sequelize) {
+  up: function(queryInterface, Sequelize) {
     return Promise.all([
       queryInterface.changeColumn('accounts', 'amount', {
         type: Sequelize.DECIMAL(19, 8),
@@ -29,7 +29,7 @@ module.exports = {
     ])
   },
 
-  down: function (queryInterface, Sequelize) {
+  down: function(queryInterface, Sequelize) {
     return Promise.all([
       queryInterface.changeColumn('accounts', 'amount', {
         type: Sequelize.DECIMAL(19, 6)

@@ -1,19 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { v4 } from 'uuid';
-import { Header } from '.';
-import configureStore from '../../configureStore';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { v4 } from 'uuid'
+import { Header } from '.'
+import configureStore from '../../configureStore'
 
 it('renders without crashing', () => {
-  const store = configureStore();
+  const store = configureStore()
   const user = {
     id: v4(),
     username: 'admin',
     avatar: 'https://www.gravatar.com/avatar/edb0e96701c209ab4b50211c856c50c4?s=50'
-  };
-  const isAuthenticated = true;
-  const div = document.createElement('div');
+  }
+  const isAuthenticated = true
+  const div = document.createElement('div')
   ReactDOM.render(<Header user={user}
                           isAuthenticated={isAuthenticated}
-                          dispatch={store.dispatch} />, div);
-});
+                          dispatch={store.dispatch} />, div)
+})

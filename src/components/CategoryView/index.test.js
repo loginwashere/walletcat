@@ -5,7 +5,7 @@ import { CategoryView } from '.'
 import configureStore from '../../configureStore'
 
 it('renders without crashing', () => {
-  const store = configureStore();
+  const store = configureStore()
   const category = {
     id: v4(),
     name: 'Fast Food'

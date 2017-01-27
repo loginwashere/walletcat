@@ -1,8 +1,9 @@
-import axios from 'axios'
+/* global localStorage */
+
 import { push } from 'react-router-redux'
 import { convertError } from '..'
-import { API_URL } from '../../apiUrl'
 import { SubmissionError } from 'redux-form'
+import api from '../../api'
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
@@ -40,13 +41,9 @@ const receiveLogout = () => ({
 })
 
 export const loginUser = creds => dispatch => {
-  const { login, password } = creds
   dispatch(requestLogin(creds))
-  return axios
-    .post(`${API_URL}auth`, {
-      login,
-      password
-    })
+  return api.auth
+    .login(creds)
     .then((json) =>  {
       localStorage.setItem('token', json.data.token)
       localStorage.setItem('user', JSON.stringify(json.data.user))
@@ -83,14 +80,9 @@ const receiveRegister = data => ({
 })
 
 export const registerUser = params => dispatch => {
-  const { email, username, password } = params;
-  dispatch(requestRegister(params));
-  return axios
-    .post(`${API_URL}users`, {
-      email,
-      username,
-      password
-    })
+  dispatch(requestRegister(params))
+  return api.auth
+    .register(params)
     .then((json) =>  {
       dispatch(receiveRegister(json.data))
       return dispatch(push('/sign-in'))

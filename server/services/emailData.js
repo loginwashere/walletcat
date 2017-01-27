@@ -16,15 +16,16 @@ module.exports.types = {
 
 module.exports.generate = (type, options = {}) => {
   switch (type) {
-    case REGISTER:
+    case REGISTER: {
       const emailConfirm = generateToken(options.user.email, '1d').value
       const emailConfirmLink = `${config.publicUrl}email-confirm/${emailConfirm}`
       return {
         from: config.mail.defaultFrom,
         to: options.user.email,
         subject: `[${config.projectName}] Please confirm your email`,
-        html: prepareRegisterTemplate({emailConfirmLink})
+        html: prepareRegisterTemplate({ emailConfirmLink })
       }
+    }
     default:
       throw new Error('Invalid email type')
   }

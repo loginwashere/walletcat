@@ -62,13 +62,16 @@ export class CategoryCreateForm extends Component {
   }
 }
 
-CategoryCreateForm.PropTypes = {
-  handleSubmit: PropTypes.func.isRequired
+CategoryCreateForm.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+  error: PropTypes.object,
+  submitting: PropTypes.bool.isRequired,
+  pristine: PropTypes.bool.isRequired,
+  invalid: PropTypes.bool.isRequired,
+  reset: PropTypes.func.isRequired
 }
 
-CategoryCreateForm = reduxForm({
+export default reduxForm({
   form: 'categoryCreate',
   validate
 })(CategoryCreateForm)
-
-export default CategoryCreateForm

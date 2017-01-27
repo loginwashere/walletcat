@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react'
 import {
   Image,
   Form,
@@ -6,12 +6,12 @@ import {
   Col,
   FormControl,
   ControlLabel
-} from 'react-bootstrap';
-import { connect } from 'react-redux';
+} from 'react-bootstrap'
+import { connect } from 'react-redux'
 
 export class Profile extends Component {
   render() {
-    const { user } = this.props;
+    const { user } = this.props
     return (
       <div>
         <h1>Profile</h1>
@@ -46,7 +46,7 @@ export class Profile extends Component {
           </FormGroup>
         </Form>
       </div>
-    );
+    )
   }
 }
 
@@ -59,11 +59,9 @@ Profile.propTypes = {
 }
 
 function mapStateToProps(state) {
-  const { auth } = state;
-  const { user } = auth;
-  return { user };
+  const { auth } = state
+  const { user } = auth
+  return { user }
 }
 
-export const ProfileConnected = connect(mapStateToProps)(Profile);
-
-export default ProfileConnected;
+export default connect(mapStateToProps)(Profile)

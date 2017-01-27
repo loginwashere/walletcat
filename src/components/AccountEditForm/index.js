@@ -15,7 +15,7 @@ const validate = values => getValidate(values, accountSchema)
 
 class AccountEditForm extends Component {
   render() {
-    const { error, handleSubmit, account, options, pristine, submitting, reset, invalid } = this.props
+    const { error, handleSubmit, account, pristine, submitting, reset, invalid, currencyOptions } = this.props
     const validationState = error => (error && 'error') || null
     return (
       <Form horizontal
@@ -37,7 +37,7 @@ class AccountEditForm extends Component {
                component={RenderFieldSelect}
                label="Currency"
                type="select"
-               options={options} />
+               options={currencyOptions} />
         <Field name="amount"
                component={RenderField}
                label="Amount"
@@ -75,20 +75,23 @@ class AccountEditForm extends Component {
           </Col>
         </FormGroup>
       </Form>
-    );
+    )
   }
 }
 
-AccountEditForm.PropTypes = {
+AccountEditForm.propTypes = {
   account: PropTypes.shape({
     id: PropTypes.string.isRequired
   }).isRequired,
-  handleSubmit: PropTypes.func.isRequired
+  currencyOptions: PropTypes.array.isRequired,
+  handleSubmit: PropTypes.func.isRequired.isRequired,
+  error: PropTypes.object,
+  submitting: PropTypes.bool.isRequired,
+  pristine: PropTypes.bool.isRequired,
+  invalid: PropTypes.bool.isRequired,
+  reset: PropTypes.func.isRequired
 }
-
-AccountEditForm = reduxForm({
+export default reduxForm({
   form: 'accountEdit',
   validate
 })(AccountEditForm)
-
-export default AccountEditForm

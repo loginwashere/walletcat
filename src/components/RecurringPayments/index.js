@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { Button } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
+import React, { Component } from 'react'
+import { Button } from 'react-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap'
 
 export class RecurringPayments extends Component {
   render() {
@@ -11,8 +11,8 @@ export class RecurringPayments extends Component {
           <Button className="pull-right">Create</Button>
         </LinkContainer>
       </h1>
-    );
+    )
   }
 }
 
-export default RecurringPayments;
+export default RecurringPayments

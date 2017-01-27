@@ -1,10 +1,10 @@
-import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
-import { Badge } from 'react-bootstrap';
+import React, { Component, PropTypes } from 'react'
+import { Link } from 'react-router'
+import { Badge } from 'react-bootstrap'
 
 export class Account extends Component {
   render() {
-    const { account, accountCurrency } = this.props;
+    const { account, accountCurrency } = this.props
     return (
       <Link to={`/accounts/${account.id}`}
             className="list-group-item">
@@ -18,7 +18,7 @@ export class Account extends Component {
           {account.description}
         </p>
       </Link>
-    );
+    )
   }
 }
 
@@ -35,4 +35,4 @@ Account.propTypes = {
   }).isRequired
 }
 
-export default Account;
+export default Account

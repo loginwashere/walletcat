@@ -1,20 +1,20 @@
-import React, { Component, PropTypes } from 'react';
-import { Button } from 'react-bootstrap';
-import { addUserCurrency, removeUserCurrency } from '../../actions';
+import React, { Component, PropTypes } from 'react'
+import { Button } from 'react-bootstrap'
+import { addUserCurrency, removeUserCurrency } from '../../actions'
 
 export class AppCurrency extends Component {
   handleAddUserCurrency = () => {
-    const { dispatch, currency } = this.props;
-    dispatch(addUserCurrency(currency));
+    const { dispatch, currency } = this.props
+    dispatch(addUserCurrency(currency))
   }
 
   handleRemoveUserCurrency = () => {
-    const { dispatch, userCurrency } = this.props;
-    dispatch(removeUserCurrency(userCurrency));
+    const { dispatch, userCurrency } = this.props
+    dispatch(removeUserCurrency(userCurrency))
   }
 
   render() {
-    const { currency, userCurrency } = this.props;
+    const { currency, userCurrency } = this.props
     return (
       <li className="list-group-item">
         {
@@ -33,7 +33,7 @@ export class AppCurrency extends Component {
           {currency.description}
         </p>
       </li>
-    );
+    )
   }
 }
 
@@ -49,6 +49,6 @@ AppCurrency.propTypes = {
     currencyId: PropTypes.string.isRequired
   }),
   dispatch: PropTypes.func.isRequired
-};
+}
 
-export default AppCurrency;
+export default AppCurrency

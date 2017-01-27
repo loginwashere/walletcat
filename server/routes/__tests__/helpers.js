@@ -19,22 +19,20 @@ function all(promises) {
   let ready = Promise.resolve(null)
 
   promises.forEach((promise, ndx) => {
-    ready = ready.then(() => {
-      return promise()
-    }).then((value) => {
-      accumulator[ndx] = { status: 'resolved', value: value }
-    })
-    .catch(err => accumulator[ndx] = { status: 'rejected', value: err })
+    ready = ready
+      .then(() => promise())
+      .then((value) => {
+        accumulator[ndx] = { status: 'resolved', value: value }
+      })
+      .catch(err => accumulator[ndx] = { status: 'rejected', value: err })
   })
 
   return ready.then(() => accumulator)
 }
 
 function getTokenByUsername(username) {
-  return models.user.findOne({ where: { username: 'admin' } })
-    .then(user => {
-      return generateToken(user.id)
-    })
+  return models.user.findOne({ where: { username } })
+    .then(user => generateToken(user.id))
 }
 
 module.exports = {

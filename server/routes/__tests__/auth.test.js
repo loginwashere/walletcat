@@ -1,4 +1,3 @@
-const path = require('path')
 const chai = require('chai')
 const should = chai.should()
 const chaiHttp = require('chai-http')
@@ -39,21 +38,22 @@ describe('routes : auth', () => {
           password: 'qwe'
         })
         .end((err, res) => {
-          err.response.status.should.equal(400)
-          err.response.type.should.equal('application/json')
-          err.response.body.should.be.a('object')
-          Object.keys(err.response.body).sort().should.eql([
+          should.exist(err)
+          res.status.should.equal(400)
+          res.type.should.equal('application/json')
+          res.body.should.be.a('object')
+          Object.keys(res.body).sort().should.eql([
             'name',
             'errors',
             'status'
           ].sort())
-          err.response.body.errors.should.be.a('object')
-          Object.keys(err.response.body.errors).sort().should.eql([
+          res.body.errors.should.be.a('object')
+          Object.keys(res.body.errors).sort().should.eql([
             'login',
             'password'
           ].sort())
           done()
-      })
+        })
     })
 
     it('should respond with error if credentils do not match', (done) => {
@@ -64,17 +64,18 @@ describe('routes : auth', () => {
           password: 'invalid-password'
         })
         .end((err, res) => {
-          err.response.status.should.equal(403)
-          err.response.type.should.equal('application/json')
-          err.response.body.should.be.a('object')
+          should.exist(err)
+          res.status.should.equal(403)
+          res.type.should.equal('application/json')
+          res.body.should.be.a('object')
           Object.keys(res.body).sort().should.eql([
             'name',
             'message',
             'status'
           ].sort())
-          err.response.body.message.should.equal('Credentials do not match')
+          res.body.message.should.equal('Credentials do not match')
           done()
-      })
+        })
     })
 
     it('should respond user and token if all ok', (done) => {
@@ -106,7 +107,7 @@ describe('routes : auth', () => {
           ].sort())
           res.body.user.email.should.equal(userSeeder.items[0].email)
           done()
-      })
+        })
     })
   })
 
@@ -115,14 +116,14 @@ describe('routes : auth', () => {
       chai.request(server)
         .delete('/api/auth')
         .end((err, res) => {
-          console.log(err.response.body)
-          err.response.status.should.equal(401)
-          err.response.type.should.equal('application/json')
-          err.response.body.should.eql(
+          should.exist(err)
+          res.status.should.equal(401)
+          res.type.should.equal('application/json')
+          res.body.should.eql(
             new ServerError(new UnauthorizedError(null, new Error('No authorization token was found')))
           )
           done()
-      })
+        })
     })
   })
 })

@@ -1,5 +1,5 @@
 module.exports = {
-  up: function (queryInterface, Sequelize) {
+  up: function(queryInterface, Sequelize) {
     return queryInterface.createTable(
       'transactions',
       {
@@ -10,8 +10,8 @@ module.exports = {
         userId: {
           type: Sequelize.UUID,
           references: {
-              model: 'users',
-              key: 'id'
+            model: 'users',
+            key: 'id'
           },
           onUpdate: 'cascade',
           onDelete: 'cascade'
@@ -19,8 +19,8 @@ module.exports = {
         fromAccountId: {
           type: Sequelize.UUID,
           references: {
-              model: 'accounts',
-              key: 'id'
+            model: 'accounts',
+            key: 'id'
           },
           onUpdate: 'cascade',
           onDelete: 'cascade'
@@ -28,8 +28,8 @@ module.exports = {
         toAccountId: {
           type: Sequelize.UUID,
           references: {
-              model: 'accounts',
-              key: 'id'
+            model: 'accounts',
+            key: 'id'
           },
           onUpdate: 'cascade',
           onDelete: 'cascade'
@@ -37,8 +37,8 @@ module.exports = {
         categoryId: {
           type: Sequelize.UUID,
           references: {
-              model: 'categories',
-              key: 'id'
+            model: 'categories',
+            key: 'id'
           },
           onUpdate: 'cascade',
           onDelete: 'cascade'
@@ -74,7 +74,7 @@ module.exports = {
     )
   },
 
-  down: function (queryInterface, Sequelize) {
+  down: function(queryInterface) {
     return queryInterface.dropTable('transactions')
   }
 }

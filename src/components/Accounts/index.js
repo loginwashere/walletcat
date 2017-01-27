@@ -1,12 +1,12 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
 import {
   ListGroup,
   Button
-} from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
-import { Account } from '..';
-import { fetchAccountsAndAppAndUserCurrenciesIfNeeded } from '../../actions';
+} from 'react-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap'
+import { Account } from '..'
+import { fetchAccountsAndAppAndUserCurrenciesIfNeeded } from '../../actions'
 
 export class Accounts extends Component {
   render() {
@@ -15,7 +15,7 @@ export class Accounts extends Component {
       accountIds,
       currencies,
       userCurrencies
-    } = this.props;
+    } = this.props
     return (
       <div>
         <h1>
@@ -26,26 +26,26 @@ export class Accounts extends Component {
         </h1>
         <ListGroup>
           {accountIds.map(id => {
-            const account = accounts[id];
-            const accountUserCurrency = userCurrencies[account.currencyId];
-            const accountCurrency = accountUserCurrency && currencies[accountUserCurrency.currencyId];
+            const account = accounts[id]
+            const accountUserCurrency = userCurrencies[account.currencyId]
+            const accountCurrency = accountUserCurrency && currencies[accountUserCurrency.currencyId]
             return (
-              account
-              && accountUserCurrency
-              && accountCurrency
-              && <Account key={account.id}
-                          account={account}
-                          accountCurrency={accountCurrency} />
-            );
+              account &&
+              accountUserCurrency &&
+              accountCurrency &&
+              <Account key={account.id}
+                       account={account}
+                       accountCurrency={accountCurrency} />
+            )
           })}
         </ListGroup>
       </div>
-    );
+    )
   }
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch(fetchAccountsAndAppAndUserCurrenciesIfNeeded());
+    const { dispatch } = this.props
+    dispatch(fetchAccountsAndAppAndUserCurrenciesIfNeeded())
   }
 }
 
@@ -53,8 +53,9 @@ Accounts.propTypes = {
   accounts: PropTypes.object.isRequired,
   accountIds: PropTypes.array.isRequired,
   userCurrencies: PropTypes.object.isRequired,
-  currencies: PropTypes.object.isRequired
-};
+  currencies: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired
+}
 
 function mapStateToProps(state) {
   const {
@@ -67,12 +68,12 @@ function mapStateToProps(state) {
     items: {},
     itemIds: []
   }
-  const { items: currencies } = state.currencies || { items: [] };
+  const { items: currencies } = state.currencies || { items: [] }
   const {
     items: userCurrencies,
   } = state.userCurrencies || {
     items: {}
-  };
+  }
 
   return {
     isFetching,
@@ -81,9 +82,7 @@ function mapStateToProps(state) {
     accountIds,
     currencies,
     userCurrencies
-  };
+  }
 }
 
-export const AccountsConnected = connect(mapStateToProps)(Accounts);
-
-export default AccountsConnected;
+export default connect(mapStateToProps)(Accounts)

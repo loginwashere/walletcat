@@ -21,11 +21,11 @@ const userCurrencies = [
 ]
 
 module.exports = {
-  up: function (queryInterface, Sequelize) {
+  up: function(queryInterface) {
     return queryInterface.bulkInsert('userCurrencies', userCurrencies, {})
   },
 
-  down: function (queryInterface, Sequelize) {
+  down: function(queryInterface) {
     return queryInterface.bulkDelete('userCurrencies', null, {})
   },
 

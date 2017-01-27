@@ -11,24 +11,24 @@ const ServerError = require('./errors/server-error')
 module.exports = () => {
   const app = express()
   const jwtMiddleware = expressJwt({
-      secret: config.JWT_SECRET
-    })
-    .unless({
-      path: [
-        {
-          url: '/api/auth',
-          methods: ['POST']
-        },
-        {
-          url: '/api/users',
-          methods: ['POST']
-        },
-        {
-          url: '/api/users/email-confirm',
-          methods: ['POST']
-        }
-      ]
-    })
+    secret: config.JWT_SECRET
+  })
+  .unless({
+    path: [
+      {
+        url: '/api/auth',
+        methods: ['POST']
+      },
+      {
+        url: '/api/users',
+        methods: ['POST']
+      },
+      {
+        url: '/api/users/email-confirm',
+        methods: ['POST']
+      }
+    ]
+  })
 
   app.use(bodyParser.json())
   app.use('/api/*', jwtMiddleware)
@@ -73,6 +73,7 @@ module.exports = () => {
     } else {
       res.json(new ServerError(error))
     }
+    next(req)
   })
 
   const pathToIndex = path.resolve(`${__dirname}/../build/index.html`)

@@ -13,13 +13,13 @@ class AccountView extends Component {
   }
 
   render() {
-    const { account, initialValues, options } = this.props
+    const { account, initialValues, currencyOptions } = this.props
     return (
       <AccountEditForm onSubmit={this.handleSubmit}
                        account={account}
                        initialValues={initialValues}
                        enableReinitialize={true}
-                       options={options} />
+                       currencyOptions={currencyOptions} />
     )
   }
 
@@ -35,6 +35,8 @@ AccountView.propTypes = {
     name: PropTypes.string.isRequired,
     description: PropTypes.string
   }).isRequired,
+  currencyOptions: PropTypes.array.isRequired,
+  initialValues: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired
 }
 
@@ -43,19 +45,17 @@ function mapStateToProps(state, ownProps) {
   const userCurrencyIds = state.userCurrencies.itemIds || []
   const userCurrencies = state.userCurrencies.items || {}
   const currencies = state.currencies.items || {}
-  const options = userCurrencyIds.map(userCurrencyId => {
-        const userCurrency = userCurrencies[userCurrencyId]
-        const currency = currencies[userCurrency.currencyId]
-        return {id: userCurrencyId, name: currency.name}
-    });
+  const currencyOptions = userCurrencyIds.map(userCurrencyId => {
+    const userCurrency = userCurrencies[userCurrencyId]
+    const currency = currencies[userCurrency.currencyId]
+    return { id: userCurrencyId, name: currency.name }
+  })
 
   return {
     account,
     initialValues: account,
-    options: options
+    currencyOptions
   }
 }
 
-AccountView = connect(mapStateToProps)(AccountView)
-
-export default AccountView
+export default connect(mapStateToProps)(AccountView)

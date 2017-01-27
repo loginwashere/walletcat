@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 import { withRouter } from 'react-router'
-import { HeaderConnected, AppAlertListConnected, Footer } from '..'
+import { Header, AppAlertList, Footer } from '..'
 import Landing from '../Landing'
 
 import './style.less'
@@ -9,9 +9,9 @@ export class App extends Component {
   render() {
     return this.props.location.pathname !== '/'
       ? <div>
-          <HeaderConnected />
+          <Header />
           <div className="appContent container">
-            <AppAlertListConnected />
+            <AppAlertList />
             {this.props.children}
           </div>
           <Footer />
@@ -20,6 +20,14 @@ export class App extends Component {
   }
 }
 
-App = withRouter(App)
+App.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
+  ]),
+  location: PropTypes.shape({
+    pathname: PropTypes.string
+  })
+}
 
-export default App
+export default withRouter(App)

@@ -1,4 +1,4 @@
-import React, { Component,PropTypes } from 'react'
+import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import LoginForm from '../LoginForm'
 import { loginUser } from '../../actions'
@@ -12,14 +12,12 @@ export class Login extends Component {
   render() {
     return (
       <LoginForm onSubmit={this.handleSubmit} />
-    );
+    )
   }
 }
 
-Login.PropTypes = {
+Login.propTypes = {
   dispatch: PropTypes.func.isRequired
 }
 
-export const LoginConnected = connect()(Login);
-
-export default LoginConnected;
+export default connect()(Login)

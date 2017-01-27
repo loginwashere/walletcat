@@ -1,6 +1,6 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { LinkContainer } from 'react-router-bootstrap';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { LinkContainer } from 'react-router-bootstrap'
 import {
   Form,
   FormGroup,
@@ -8,12 +8,12 @@ import {
   FormControl,
   Button,
   ControlLabel
-} from 'react-bootstrap';
-import { createCategory } from '../../actions';
+} from 'react-bootstrap'
+import { createCategory } from '../../actions'
 
 export class RecurringPaymentCreate extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       name: '',
@@ -22,30 +22,30 @@ export class RecurringPaymentCreate extends Component {
   }
 
   handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    const { dispatch } = this.props;
+    const { dispatch } = this.props
     const params = {
       name: this.state.name,
       description: this.state.description
-    };
+    }
 
-    dispatch(createCategory(params));
+    dispatch(createCategory(params))
   }
 
   getValidationState = () => {
-    const length = this.state.value.length;
-    if (length > 10) return 'success';
-    else if (length > 5) return 'warning';
-    else if (length > 0) return 'error';
+    const length = this.state.value.length
+    if (length > 10) return 'success'
+    else if (length > 5) return 'warning'
+    else if (length > 0) return 'error'
   }
 
   handleNameChange = (e) => {
-    this.setState({ name: e.target.value });
+    this.setState({ name: e.target.value })
   }
 
   handleDescriptionChange = (e) => {
-    this.setState({ description: e.target.value });
+    this.setState({ description: e.target.value })
   }
 
   render() {
@@ -96,14 +96,12 @@ export class RecurringPaymentCreate extends Component {
           </FormGroup>
         </Form>
       </div>
-    );
+    )
   }
 }
 
-RecurringPaymentCreate.PropTypes = {
+RecurringPaymentCreate.propTypes = {
   dispatch: PropTypes.func.isRequired
 }
 
-export const RecurringPaymentCreateConnected = connect()(RecurringPaymentCreate);
-
-export default RecurringPaymentCreateConnected;
+export default connect()(RecurringPaymentCreate)

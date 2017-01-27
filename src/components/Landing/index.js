@@ -44,12 +44,15 @@ export class Landing extends Component {
     const scrollTo = (name) => Scroll.scroller.scrollTo(name, { duration: 1500, delay: 100, smooth: true })
 
     const { user, isAuthenticated, dispatch } = this.props
+    const fixNavClass = fixNav
+      ? 'affix'
+      : 'affix-top'
     return (
       <div id="page-top" className="landing">
 
         <Navbar collapseOnSelect
                 id="mainNav"
-                className={`navbar navbar-default navbar-fixed-top ${fixNav ? 'affix' : 'affix-top'}`}>
+                className={`navbar navbar-default navbar-fixed-top ${fixNavClass}`}>
           <Navbar.Header>
               <HeaderBrandLink to="page-top" scroll={true} duration={1500} delay={100} smooth={true} />
             <Navbar.Toggle />
@@ -238,13 +241,11 @@ Landing.propTypes = {
 }
 
 function mapStateToProps(state) {
-  const { auth } = state;
-  const { user, isAuthenticated } = auth;
-  return { user, isAuthenticated };
+  const { auth } = state
+  const { user, isAuthenticated } = auth
+  return { user, isAuthenticated }
 }
 
-Landing = connect(mapStateToProps, null, null, {
+export default connect(mapStateToProps, null, null, {
   pure: false
-})(Landing);
-
-export default Landing
+})(Landing)

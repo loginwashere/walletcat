@@ -1,6 +1,6 @@
-import React, { Component, PropTypes } from 'react';
-import { Field, reduxForm } from 'redux-form';
-import { LinkContainer } from 'react-router-bootstrap';
+import React, { Component, PropTypes } from 'react'
+import { Field, reduxForm } from 'redux-form'
+import { LinkContainer } from 'react-router-bootstrap'
 import {
   Form,
   FormGroup,
@@ -66,20 +66,23 @@ class CategoryEditForm extends Component {
           </Col>
         </FormGroup>
       </Form>
-    );
+    )
   }
 }
 
-CategoryEditForm.PropTypes = {
+CategoryEditForm.propTypes = {
   category: PropTypes.shape({
     id: PropTypes.string.isRequired
   }).isRequired,
-  handleSubmit: PropTypes.func.isRequired
+  handleSubmit: PropTypes.func.isRequired,
+  error: PropTypes.object,
+  submitting: PropTypes.bool.isRequired,
+  pristine: PropTypes.bool.isRequired,
+  invalid: PropTypes.bool.isRequired,
+  reset: PropTypes.func.isRequired
 }
 
-CategoryEditForm = reduxForm({
+export default reduxForm({
   form: 'categoryEdit',
   validate
-})(CategoryEditForm);
-
-export default CategoryEditForm;
+})(CategoryEditForm)

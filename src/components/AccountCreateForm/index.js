@@ -27,9 +27,9 @@ class AccountCreateForm extends Component {
       invalid
     } = this.props
     const options = userCurrencyIds.map(userCurrencyId => {
-        const userCurrency = userCurrencies[userCurrencyId]
-        const currency = currencies[userCurrency.currencyId]
-        return {id: userCurrencyId, name: currency.name}
+      const userCurrency = userCurrencies[userCurrencyId]
+      const currency = currencies[userCurrency.currencyId]
+      return { id: userCurrencyId, name: currency.name }
     })
     const validationState = error => (error && 'error') || null
     return (
@@ -86,16 +86,19 @@ class AccountCreateForm extends Component {
   }
 }
 
-AccountCreateForm.PropTypes = {
+AccountCreateForm.propTypes = {
   userCurrencies: PropTypes.object.isRequired,
   userCurrencyIds: PropTypes.array.isRequired,
   currencies: PropTypes.object.isRequired,
-  handleSubmit: PropTypes.func.isRequired
+  handleSubmit: PropTypes.func.isRequired,
+  error: PropTypes.object,
+  submitting: PropTypes.bool.isRequired,
+  pristine: PropTypes.bool.isRequired,
+  invalid: PropTypes.bool.isRequired,
+  reset: PropTypes.func.isRequired
 }
 
-AccountCreateForm = reduxForm({
+export default reduxForm({
   form: 'accountCreate',
   validate
 })(AccountCreateForm)
-
-export default AccountCreateForm

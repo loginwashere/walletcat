@@ -35,6 +35,9 @@ TransactionView.propTypes = {
     id: PropTypes.string.isRequired,
     description: PropTypes.string
   }).isRequired,
+  initialValues: PropTypes.object,
+  accountOptions: PropTypes.array,
+  categoryOptions: PropTypes.array,
   dispatch: PropTypes.func.isRequired
 }
 
@@ -55,6 +58,4 @@ function mapStateToProps(state, ownProps) {
   }
 }
 
-TransactionView = connect(mapStateToProps)(TransactionView)
-
-export default TransactionView
+export default connect(mapStateToProps)(TransactionView)

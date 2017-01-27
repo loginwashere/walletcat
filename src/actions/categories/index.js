@@ -1,10 +1,7 @@
-import axios from 'axios'
 import { push } from 'react-router-redux'
 import { alertAdd, convertError } from '..'
-import { API_URL } from '../../apiUrl'
 import { SubmissionError } from 'redux-form'
-
-const API_CATEGORY_LIST_URL = `${API_URL}categories`
+import api from '../../api'
 
 export const INVALIDATE_CATEGORY_LIST = 'INVALIDATE_CATEGORY_LIST'
 
@@ -35,13 +32,8 @@ export function receiveCategories(json) {
 function fetchCategories() {
   return dispatch => {
     dispatch(requestCategories())
-    const token = localStorage.getItem('token')
-    return axios
-      .get(API_CATEGORY_LIST_URL, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
+    return api.categories
+      .fetchAll()
       .then(json => dispatch(receiveCategories(json)))
       .catch(error => dispatch(alertAdd(error)))
   }
@@ -90,15 +82,8 @@ export function receiveCategoryCreate(json) {
 export function createCategory(params) {
   return dispatch => {
     dispatch(requestCategoryCreate())
-    const token = localStorage.getItem('token')
-    return axios({
-        url: API_CATEGORY_LIST_URL,
-        method: 'post',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-        data: params
-      })
+    return api.categories
+      .create(params)
       .then(json => {
         dispatch(receiveCategoryCreate(json))
         dispatch(push('/categories'))
@@ -130,15 +115,9 @@ function receiveCategoryDelete(id) {
 export function deleteCategory(id) {
   return dispatch => {
     dispatch(requestCategoryDelete(id))
-    const token = localStorage.getItem('token')
-    return axios({
-        url: `${API_CATEGORY_LIST_URL}/${id}`,
-        method: 'delete',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
-      .then(json => {
+    return api.categories
+      .del(id)
+      .then(() => {
         dispatch(receiveCategoryDelete(id))
         dispatch(push('/categories'))
       })
@@ -168,16 +147,8 @@ function receiveCategoryUpdate(json) {
 export function updateCategory(id, params) {
   return dispatch => {
     dispatch(requestCategoryUpdate(id, params))
-    const token = localStorage.getItem('token')
-    const { name, description } = params
-    return axios({
-        url: `${API_CATEGORY_LIST_URL}/${id}`,
-        method: 'put',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-        data: { name, description }
-      })
+    return api.categories
+      .update(id, params)
       .then(json => {
         dispatch(receiveCategoryUpdate(json))
         dispatch(push('/categories'))

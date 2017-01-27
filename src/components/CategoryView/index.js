@@ -20,7 +20,7 @@ class CategoryView extends Component {
   }
 
   componentDidMount() {
-    const { dispatch } = this.props;
+    const { dispatch } = this.props
     dispatch(fetchCategoriesIfNeeded())
   }
 }
@@ -31,6 +31,7 @@ CategoryView.propTypes = {
     name: PropTypes.string.isRequired,
     description: PropTypes.string
   }).isRequired,
+  initialValues: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired
 }
 
@@ -43,6 +44,4 @@ function mapStateToProps(state, ownProps) {
   }
 }
 
-CategoryView = connect(mapStateToProps)(CategoryView)
-
-export default CategoryView
+export default connect(mapStateToProps)(CategoryView)

@@ -7,7 +7,7 @@ import {
   REQUEST_REMOVE_USER_CURRENCY,
   RECEIVE_REMOVE_USER_CURRENCY,
   LOGOUT_SUCCESS
-} from '../actions';
+} from '../actions'
 
 export const initialState = {
   isFetching: false,
@@ -15,7 +15,7 @@ export const initialState = {
   items: {},
   itemIds: [],
   itemsByCurrencyId: {}
-};
+}
 
 export default function userCurrencies(state = initialState, action) {
   switch (action.type) {
@@ -23,13 +23,13 @@ export default function userCurrencies(state = initialState, action) {
       return {
         ...state,
         didInvalidate: true
-      };
+      }
     case REQUEST_USER_CURRENCY_LIST:
       return {
         ...state,
         isFetching: true,
         didInvalidate: false
-      };
+      }
     case RECEIVE_USER_CURRENCY_LIST:
       return {
         ...state,
@@ -38,7 +38,7 @@ export default function userCurrencies(state = initialState, action) {
         items: {
           ...state.items,
           ...action.userCurrencies
-            .reduce((obj, item) => ({...obj, [item.id]: item}), {})
+            .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
         },
         itemIds: [
           ...state.itemIds,
@@ -49,16 +49,16 @@ export default function userCurrencies(state = initialState, action) {
         itemsByCurrencyId: {
           ...state.itemsByCurrencyId,
           ...action.userCurrencies
-            .reduce((obj, item) => ({...obj, [item.currencyId]: item.id}), {})
+            .reduce((obj, item) => ({ ...obj, [item.currencyId]: item.id }), {})
         },
         lastUpdated: action.receivedAt
-      };
+      }
     case REQUEST_ADD_USER_CURRENCY:
       return {
         ...state,
         isFetching: true,
         didInvalidate: false
-      };
+      }
     case RECEIVE_ADD_USER_CURRENCY:
       return {
         ...state,
@@ -78,13 +78,13 @@ export default function userCurrencies(state = initialState, action) {
           ...state.itemsByCurrencyId,
           [action.userCurrency.currencyId]: action.userCurrency.id
         }
-      };
+      }
     case REQUEST_REMOVE_USER_CURRENCY:
       return {
         ...state,
         isFetching: true,
         didInvalidate: false
-      };
+      }
     case RECEIVE_REMOVE_USER_CURRENCY:
       return {
         ...state,
@@ -93,8 +93,8 @@ export default function userCurrencies(state = initialState, action) {
         items: Object.keys(state.items)
           .filter(key => key !== action.userCurrency.id)
           .reduce((result, current) => {
-            result[current] = state.items[current];
-            return result;
+            result[current] = state.items[current]
+            return result
           }, {}),
         itemIds: [
           ...state.itemIds.slice(0, state.itemIds.indexOf(action.userCurrency.id)),
@@ -103,12 +103,12 @@ export default function userCurrencies(state = initialState, action) {
         itemsByCurrencyId: Object.keys(state.itemsByCurrencyId)
           .filter(key => key !== action.userCurrency.currencyId)
           .reduce((result, current) => {
-            result[current] = state.itemsByCurrencyId[current];
-            return result;
+            result[current] = state.itemsByCurrencyId[current]
+            return result
           }, {}),
-      };
+      }
     case LOGOUT_SUCCESS:
-      return initialState;
+      return initialState
     default:
       return state
   }

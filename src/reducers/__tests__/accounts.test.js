@@ -1,14 +1,14 @@
-import deepFreeze from 'deep-freeze';
-import { v4 } from 'uuid';
+import deepFreeze from 'deep-freeze'
+import { v4 } from 'uuid'
 import reducer, {
   initialState as expectedDefaultInitialState
-} from '../accounts';
-import * as actions from '../../actions';
+} from '../accounts'
+import * as actions from '../../actions'
 
 describe('accounts reducer', () => {
-  const firstAccount = {id: v4(), name: 'Wallet'};
-  const secondAccount = {id: v4(), name: 'Stash'};
-  const initialState = undefined;
+  const firstAccount = { id: v4(), name: 'Wallet' }
+  const secondAccount = { id: v4(), name: 'Stash' }
+  const initialState = undefined
   const expectedAfterFirstListReceive = {
     ...expectedDefaultInitialState,
     items: {
@@ -16,20 +16,20 @@ describe('accounts reducer', () => {
     },
     itemIds: [firstAccount.id],
     lastUpdated: 1317416400000
-  };
+  }
   const expectedAfterFirstItemCreate = {
     ...expectedAfterFirstListReceive,
     lastUpdated: undefined
-  };
+  }
 
-  deepFreeze(expectedAfterFirstListReceive);
-  deepFreeze(expectedAfterFirstItemCreate);
+  deepFreeze(expectedAfterFirstListReceive)
+  deepFreeze(expectedAfterFirstItemCreate)
 
   it('should return the initial state', () => {
     expect(
       reducer(initialState, {})
     ).toEqual(expectedDefaultInitialState)
-  });
+  })
 
   it('should handle RECEIVE_ACCOUNT_LIST', () => {
     expect(
@@ -56,7 +56,7 @@ describe('accounts reducer', () => {
       isFetching: false,
       lastUpdated: 1317416400001
     })
-  });
+  })
 
   it('should handle RECEIVE_ACCOUNT_LIST with duplicates', () => {
     expect(
@@ -66,7 +66,7 @@ describe('accounts reducer', () => {
         receivedAt: 1317416400000,
       })
     ).toEqual(expectedAfterFirstListReceive)
-  });
+  })
 
   it('should handle RECEIVE_ACCOUNT_CREATE', () => {
     expect(
@@ -93,7 +93,7 @@ describe('accounts reducer', () => {
       isFetching: false,
       lastUpdated: undefined
     })
-  });
+  })
 
   it('should handle RECEIVE_ACCOUNT_CREATE with duplicates', () => {
     expect(
@@ -103,7 +103,7 @@ describe('accounts reducer', () => {
         receivedAt: 1317416400000,
       })
     ).toEqual(expectedAfterFirstItemCreate)
-  });
+  })
 
   it('should handle LOGOUT_SUCCESS and return initial state', () => {
     expect(
@@ -111,5 +111,5 @@ describe('accounts reducer', () => {
         type: actions.LOGOUT_SUCCESS
       })
     ).toEqual(expectedDefaultInitialState)
-  });
-});
+  })
+})

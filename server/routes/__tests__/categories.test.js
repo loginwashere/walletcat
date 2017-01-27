@@ -51,8 +51,8 @@ describe('routes : categories', () => {
             'updatedAt',
             'userId'
           ].sort())
-        done()
-      })
+          done()
+        })
     })
   })
 
@@ -129,9 +129,10 @@ describe('routes : categories', () => {
           description: newDescription
         })
         .end((err, res) => {
-          err.response.status.should.equal(404)
-          err.response.type.should.equal('application/json')
-          err.response.body.should.eql(new NotFoundError('Category not found'))
+          should.exist(err)
+          res.status.should.equal(404)
+          res.type.should.equal('application/json')
+          res.body.should.eql(new NotFoundError('Category not found'))
           done()
         })
     })
@@ -141,16 +142,16 @@ describe('routes : categories', () => {
     it('should delete category if valid data sent', (done) => {
       const categoryId = categorySeeder.items[0].id
       chai.request(server)
-      .delete(`/api/categories/${categoryId}`)
-      .set('Authorization', `Bearer ${token.value}`)
-      .end((err, res) => {
-        should.not.exist(err)
-        res.status.should.equal(204)
-        res.type.should.equal('')
-        res.body.should.be.a('object')
-        res.body.should.eql({})
-        done()
-      })
+        .delete(`/api/categories/${categoryId}`)
+        .set('Authorization', `Bearer ${token.value}`)
+        .end((err, res) => {
+          should.not.exist(err)
+          res.status.should.equal(204)
+          res.type.should.equal('')
+          res.body.should.be.a('object')
+          res.body.should.eql({})
+          done()
+        })
     })
 
     it('should return not found error when delete category which is not exist', (done) => {
@@ -159,9 +160,10 @@ describe('routes : categories', () => {
         .delete(`/api/categories/${notExistingCategoryId}`)
         .set('Authorization', `Bearer ${token.value}`)
         .end((err, res) => {
-          err.response.status.should.equal(404)
-          err.response.type.should.equal('application/json')
-          err.response.body.should.eql(new NotFoundError('Category not found'))
+          should.exist(err)
+          res.status.should.equal(404)
+          res.type.should.equal('application/json')
+          res.body.should.eql(new NotFoundError('Category not found'))
           done()
         })
     })

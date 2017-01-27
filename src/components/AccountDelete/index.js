@@ -1,27 +1,27 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { LinkContainer } from 'react-router-bootstrap';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { LinkContainer } from 'react-router-bootstrap'
 import {
   Form,
   FormGroup,
   Col,
   Button,
   Alert
-} from 'react-bootstrap';
+} from 'react-bootstrap'
 import {
   deleteAccount,
   fetchAccountsAndAppAndUserCurrenciesIfNeeded
-} from '../../actions';
+} from '../../actions'
 
 export class AccountDelete extends Component {
   handleSubmit = (e) => {
-    e.preventDefault();
-    const { dispatch, account: { id } } = this.props;
-    dispatch(deleteAccount(id));
+    e.preventDefault()
+    const { dispatch, account: { id } } = this.props
+    return dispatch(deleteAccount(id))
   }
 
   render() {
-    const { account } = this.props;
+    const { account } = this.props
     return (
       <div>
         <h1>Delete Account</h1>
@@ -51,12 +51,12 @@ export class AccountDelete extends Component {
           </FormGroup>
         </Form>
       </div>
-    );
+    )
   }
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch(fetchAccountsAndAppAndUserCurrenciesIfNeeded());
+    const { dispatch } = this.props
+    dispatch(fetchAccountsAndAppAndUserCurrenciesIfNeeded())
   }
 }
 
@@ -70,12 +70,10 @@ AccountDelete.propTypes = {
 }
 
 function mapStateToProps(state, ownProps) {
-  const account = state.accounts.items[ownProps.params.accountId] || {};
+  const account = state.accounts.items[ownProps.params.accountId] || {}
   return {
     account
-  };
+  }
 }
 
-AccountDelete = connect(mapStateToProps)(AccountDelete);
-
-export default AccountDelete;
+export default connect(mapStateToProps)(AccountDelete)

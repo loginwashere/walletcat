@@ -9,7 +9,7 @@ import {
   REQUEST_CATEGORY_UPDATE,
   RECEIVE_CATEGORY_UPDATE,
   LOGOUT_SUCCESS
-} from '../actions';
+} from '../actions'
 
 export const initialState = {
   isFetching: false,
@@ -17,7 +17,7 @@ export const initialState = {
   items: {},
   itemIds: [],
   lastUpdated: undefined
-};
+}
 
 export default function categories(state = initialState, action) {
   switch (action.type) {
@@ -25,13 +25,13 @@ export default function categories(state = initialState, action) {
       return {
         ...state,
         didInvalidate: true
-      };
+      }
     case REQUEST_CATEGORY_LIST:
       return {
         ...state,
         isFetching: true,
         didInvalidate: false
-      };
+      }
     case RECEIVE_CATEGORY_LIST:
       return {
         ...state,
@@ -40,7 +40,7 @@ export default function categories(state = initialState, action) {
         items: {
           ...state.items,
           ...action.categories
-            .reduce((obj, item) => ({...obj, [item.id]: item}), {})
+            .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
         },
         itemIds: [
           ...state.itemIds,
@@ -49,14 +49,14 @@ export default function categories(state = initialState, action) {
             .filter(id => state.itemIds.indexOf(id) === -1)
         ],
         lastUpdated: action.receivedAt
-      };
+      }
     case REQUEST_CATEGORY_UPDATE:
     case REQUEST_CATEGORY_CREATE:
       return {
         ...state,
         isFetching: true,
         didInvalidate: false
-      };
+      }
     case RECEIVE_CATEGORY_UPDATE:
     case RECEIVE_CATEGORY_CREATE:
       return {
@@ -73,12 +73,12 @@ export default function categories(state = initialState, action) {
             .map(item => item.id)
             .filter(id => state.itemIds.indexOf(id) === -1)
         ]
-      };
+      }
     case REQUEST_CATEGORY_DELETE:
       return {
         ...state,
         isFetching: true
-      };
+      }
     case RECEIVE_CATEGORY_DELETE:
       return {
         ...state,
@@ -86,16 +86,16 @@ export default function categories(state = initialState, action) {
         items: Object.keys(state.items)
           .filter(key => key !== action.id)
           .reduce((result, current) => {
-            result[current] = state.items[current];
-            return result;
+            result[current] = state.items[current]
+            return result
           }, {}),
         itemIds: [
           ...state.itemIds.slice(0, state.itemIds.indexOf(action.id)),
           ...state.itemIds.slice(state.itemIds.indexOf(action.id) + 1)
         ]
-      };
+      }
     case LOGOUT_SUCCESS:
-      return initialState;
+      return initialState
     default:
       return state
   }

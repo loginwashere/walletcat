@@ -9,7 +9,7 @@ import {
 import { registerSchema } from '../../../common/validation'
 import { RenderFieldWithoutCol, RenderError, getValidate } from '../Common'
 
-import './style.less';
+import './style.less'
 
 const validate = values => getValidate(values, registerSchema)
 
@@ -54,17 +54,19 @@ export class RegisterForm extends Component {
           Create an account
         </Button>
       </Form>
-    );
+    )
   }
 }
 
-RegisterForm.PropTypes = {
-  handleSubmit: PropTypes.func.isRequired
+RegisterForm.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+  error: PropTypes.object,
+  submitting: PropTypes.bool.isRequired,
+  pristine: PropTypes.bool.isRequired,
+  invalid: PropTypes.bool.isRequired
 }
 
-RegisterForm = reduxForm({
+export default reduxForm({
   form: 'register',
   validate
 })(RegisterForm)
-
-export default RegisterForm

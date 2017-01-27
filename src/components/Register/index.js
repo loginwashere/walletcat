@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { RegisterForm } from '../RegisterForm'
+import RegisterForm from '../RegisterForm'
 import { registerUser } from '../../actions'
 
 export class Register extends Component {
@@ -16,10 +16,8 @@ export class Register extends Component {
   }
 }
 
-Register.PropTypes = {
+Register.propTypes = {
   dispatch: PropTypes.func.isRequired
 }
 
-export const RegisterConnected = connect()(Register)
-
-export default RegisterConnected
+export default connect()(Register)

@@ -1,4 +1,5 @@
 require('dotenv').config({ silent: process.env.NODE_ENV === 'production' })
+const debug = require('debug')('sequelize')
 
 const config = {
   dialect: 'postgres',
@@ -6,7 +7,9 @@ const config = {
   migrationStorage: process.env.DATABASE_MIGRATION_STORAGE || 'sequelize',
   migrationStoragePath: process.env.DATABASE_MIGRATION_STORAGE_PATH || 'sequelize-meta.json',
   seederStorage: process.env.DATABASE_SEEDER_STORAGE || 'sequelize',
-  logging: !!process.env.DATABASE_LOGGING ? console.log : false
+  logging: Boolean(process.env.DATABASE_LOGGING)
+    ? debug
+    : false
 }
 
 module.exports = {

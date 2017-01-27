@@ -1,25 +1,23 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import CategoryCreateForm from '../CategoryCreateForm';
-import { createCategory } from '../../actions';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import CategoryCreateForm from '../CategoryCreateForm'
+import { createCategory } from '../../actions'
 
 export class CategoryCreate extends Component {
   handleSubmit = (values) => {
-    const { dispatch } = this.props;
-    return dispatch(createCategory(values));
+    const { dispatch } = this.props
+    return dispatch(createCategory(values))
   }
 
   render() {
     return (
       <CategoryCreateForm onSubmit={this.handleSubmit} />
-    );
+    )
   }
 }
 
-CategoryCreate.PropTypes = {
+CategoryCreate.propTypes = {
   dispatch: PropTypes.func.isRequired
 }
 
-export const CategoryCreateConnected = connect()(CategoryCreate);
-
-export default CategoryCreateConnected;
+export default connect()(CategoryCreate)

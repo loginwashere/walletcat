@@ -52,8 +52,8 @@ describe('routes : userCurrencies', () => {
             'createdAt',
             'updatedAt'
           ].sort())
-        done()
-      })
+          done()
+        })
     })
   })
 
@@ -106,9 +106,10 @@ describe('routes : userCurrencies', () => {
         .delete(`/api/user-currencies/${notExistingUserCurrencyId}`)
         .set('Authorization', `Bearer ${token.value}`)
         .end((err, res) => {
-          err.response.status.should.equal(404)
-          err.response.type.should.equal('application/json')
-          err.response.body.should.eql(new NotFoundError('User currency not found'))
+          should.exist(err)
+          res.status.should.equal(404)
+          res.type.should.equal('application/json')
+          res.body.should.eql(new NotFoundError('User currency not found'))
           done()
         })
     })

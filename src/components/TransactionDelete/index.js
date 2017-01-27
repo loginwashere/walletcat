@@ -1,24 +1,24 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { LinkContainer } from 'react-router-bootstrap';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { LinkContainer } from 'react-router-bootstrap'
 import {
   Form,
   FormGroup,
   Col,
   Button,
   Alert
-} from 'react-bootstrap';
-import { deleteTransaction, fetchTransactionsIfNeeded } from '../../actions';
+} from 'react-bootstrap'
+import { deleteTransaction, fetchTransactionsIfNeeded } from '../../actions'
 
 export class TransactionDelete extends Component {
   handleSubmit = (e) => {
-    e.preventDefault();
-    const { dispatch, transaction: { id } } = this.props;
-    dispatch(deleteTransaction(id));
+    e.preventDefault()
+    const { dispatch, transaction: { id } } = this.props
+    return dispatch(deleteTransaction(id))
   }
 
   render() {
-    const { transaction } = this.props;
+    const { transaction } = this.props
     return (
       <div>
         <h1>Delete Transaction</h1>
@@ -48,12 +48,12 @@ export class TransactionDelete extends Component {
           </FormGroup>
         </Form>
       </div>
-    );
+    )
   }
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch(fetchTransactionsIfNeeded());
+    const { dispatch } = this.props
+    dispatch(fetchTransactionsIfNeeded())
   }
 }
 
@@ -66,12 +66,10 @@ TransactionDelete.propTypes = {
 }
 
 function mapStateToProps(state, ownProps) {
-  const transaction = state.transactions.items[ownProps.params.transactionId] || {};
+  const transaction = state.transactions.items[ownProps.params.transactionId] || {}
   return {
     transaction
-  };
+  }
 }
 
-TransactionDelete = connect(mapStateToProps)(TransactionDelete);
-
-export default TransactionDelete;
+export default connect(mapStateToProps)(TransactionDelete)

@@ -1,37 +1,37 @@
-import React, { Component, PropTypes } from 'react';
-import { Alert } from 'react-bootstrap';
-import { removeAlert } from '../../actions';
+import React, { Component, PropTypes } from 'react'
+import { Alert } from 'react-bootstrap'
+import { removeAlert } from '../../actions'
 
-const DEFAULT_TIMEUT = 3000;
+const DEFAULT_TIMEUT = 3000
 
 export class AppAlert extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.timeoutId = setTimeout(
       this.handleAlertDismiss,
       this.props.alert.timeout || DEFAULT_TIMEUT
-    );
+    )
   }
 
   handleAlertDismiss = () => {
-    const { alert, dispatch } = this.props;
-    dispatch(removeAlert(alert));
+    const { alert, dispatch } = this.props
+    dispatch(removeAlert(alert))
   }
 
   render() {
-    const { message, description, type } = this.props.alert;
+    const { message, description, type } = this.props.alert
     return (
       <Alert bsStyle={ type || 'danger' }
              onDismiss={this.handleAlertDismiss}>
         <h4>{message}</h4>
         {description && <p>{description}</p>}
       </Alert>
-    );
+    )
   }
 
   componentWillUnmount() {
-    clearTimeout(this.timeoutId);
+    clearTimeout(this.timeoutId)
   }
 }
 
@@ -45,4 +45,4 @@ AppAlert.propTypes = {
   dispatch: PropTypes.func.isRequired
 }
 
-export default AppAlert;
+export default AppAlert

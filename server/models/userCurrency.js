@@ -14,7 +14,7 @@ module.exports = (sequelize, Sequelize) => {
     tableName: 'userCurrencies',
     paranoid: true,
     instanceMethods: {
-      toJSON: function () {
+      toJSON: function() {
         const values = Object.assign({}, this.get())
         delete values.deletedAt
         return values

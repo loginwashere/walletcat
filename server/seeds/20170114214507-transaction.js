@@ -23,11 +23,11 @@ const transactions = [
 ]
 
 module.exports = {
-  up: function (queryInterface, Sequelize) {
+  up: function(queryInterface) {
     return queryInterface.bulkInsert('transactions', transactions, {})
   },
 
-  down: function (queryInterface, Sequelize) {
+  down: function(queryInterface) {
     return queryInterface.bulkDelete('transactions', null, {})
   },
 

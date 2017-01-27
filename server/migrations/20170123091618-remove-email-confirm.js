@@ -1,9 +1,9 @@
 module.exports = {
-  up: function (queryInterface, Sequelize) {
+  up: function(queryInterface) {
     return queryInterface.removeColumn('users', 'emailConfirm')
   },
 
-  down: function (queryInterface, Sequelize) {
+  down: function(queryInterface, Sequelize) {
     return queryInterface.addColumn(
       'users',
       'emailConfirm',

@@ -173,9 +173,10 @@ describe('routes : transactions', () => {
           date: format(new Date()),
         })
         .end((err, res) => {
-          err.response.status.should.equal(404)
-          err.response.type.should.equal('application/json')
-          err.response.body.should.eql(new NotFoundError('Transaction not found'))
+          should.exist(err)
+          res.status.should.equal(404)
+          res.type.should.equal('application/json')
+          res.body.should.eql(new NotFoundError('Transaction not found'))
           done()
         })
     })
@@ -185,16 +186,16 @@ describe('routes : transactions', () => {
     it('should delete transaction if valid data sent', (done) => {
       const transacionId = transactionSeeder.items[0].id
       chai.request(server)
-      .delete(`/api/transactions/${transacionId}`)
-      .set('Authorization', `Bearer ${token.value}`)
-      .end((err, res) => {
-        should.not.exist(err)
-        res.status.should.equal(204)
-        res.type.should.equal('')
-        res.body.should.be.a('object')
-        res.body.should.eql({})
-        done()
-      })
+        .delete(`/api/transactions/${transacionId}`)
+        .set('Authorization', `Bearer ${token.value}`)
+        .end((err, res) => {
+          should.not.exist(err)
+          res.status.should.equal(204)
+          res.type.should.equal('')
+          res.body.should.be.a('object')
+          res.body.should.eql({})
+          done()
+        })
     })
 
     it('should return error when try to delete not existing transation', (done) => {
@@ -203,9 +204,10 @@ describe('routes : transactions', () => {
         .delete(`/api/transactions/${notExistingTransacionId}`)
         .set('Authorization', `Bearer ${token.value}`)
         .end((err, res) => {
-          err.response.status.should.equal(404)
-          err.response.type.should.equal('application/json')
-          err.response.body.should.eql(new NotFoundError('Transaction not found'))
+          should.exist(err)
+          res.status.should.equal(404)
+          res.type.should.equal('application/json')
+          res.body.should.eql(new NotFoundError('Transaction not found'))
           done()
         })
     })

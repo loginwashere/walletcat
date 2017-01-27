@@ -114,13 +114,18 @@ export class TransactionCreateForm extends Component {
   }
 }
 
-TransactionCreateForm.PropTypes = {
-  handleSubmit: PropTypes.func.isRequired
+TransactionCreateForm.propTypes = {
+  accountOptions: PropTypes.array.isRequired,
+  categoryOptions: PropTypes.array.isRequired,
+  handleSubmit: PropTypes.func.isRequired.isRequired,
+  error: PropTypes.object,
+  submitting: PropTypes.bool.isRequired,
+  pristine: PropTypes.bool.isRequired,
+  invalid: PropTypes.bool.isRequired,
+  reset: PropTypes.func.isRequired
 }
 
-TransactionCreateForm = reduxForm({
+export default reduxForm({
   form: 'transactionCreate',
   validate
 })(TransactionCreateForm)
-
-export default TransactionCreateForm

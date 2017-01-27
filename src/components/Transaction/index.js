@@ -1,9 +1,9 @@
-import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
-import { Badge } from 'react-bootstrap';
-import format from 'date-fns/format';
+import React, { Component, PropTypes } from 'react'
+import { Link } from 'react-router'
+import { Badge } from 'react-bootstrap'
+import format from 'date-fns/format'
 
-import './style.less';
+import './style.less'
 
 export class Transaction extends Component {
   render() {
@@ -14,7 +14,7 @@ export class Transaction extends Component {
       toAccount,
       toAccountCurrency,
       category
-    } = this.props;
+    } = this.props
     const date = format(new Date(transaction.date), 'YYYY-MM-DD HH:mm:ss')
     return (
       <Link to={`/transactions/${transaction.id}`}
@@ -37,7 +37,7 @@ export class Transaction extends Component {
         </p>
         {transaction.description && <p className="list-group-item-text truncate">{transaction.description}</p>}
       </Link>
-    );
+    )
   }
 }
 
@@ -71,4 +71,4 @@ Transaction.propTypes = {
   }).isRequired
 }
 
-export default Transaction;
+export default Transaction

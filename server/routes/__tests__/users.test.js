@@ -15,17 +15,13 @@ chai.use(chaiHttp)
 describe('routes : users',  () => {
   let server
 
-  beforeEach('before', () => {
-    return helpers.all([
-      () => models.sequelize.authenticate(),
-      () => helpers.umzug.down({ to: 0 }),
-      () => helpers.umzug.up(),
-    ])
-  })
+  beforeEach('before', () => helpers.all([
+    () => models.sequelize.authenticate(),
+    () => helpers.umzug.down({ to: 0 }),
+    () => helpers.umzug.up(),
+  ]))
 
-  afterEach('after', () => {
-    return helpers.umzug.down({ to: 0 })
-  })
+  afterEach('after', () => helpers.umzug.down({ to: 0 }))
 
   describe('POST /api/users', () => {
     before('before', () => {
@@ -54,7 +50,7 @@ describe('routes : users',  () => {
       mockery.registerMock('mailgun-js', MailgunMock)
 
       mockery.enable({
-        useCleanCache:      true,
+        useCleanCache: true,
         warnOnUnregistered: false
       })
 
@@ -102,9 +98,10 @@ describe('routes : users',  () => {
           password: 'qwerty'
         })
         .end((err, res) => {
-          err.response.status.should.equal(500)
-          err.response.type.should.equal('application/json')
-          err.response.body.should.eql(new ServerError(new Error('test')))
+          should.exist(err)
+          res.status.should.equal(500)
+          res.type.should.equal('application/json')
+          res.body.should.eql(new ServerError(new Error('test')))
           done()
         })
     })
@@ -115,11 +112,9 @@ describe('routes : users',  () => {
       server = require('../../server')()
     })
 
-    beforeEach('before', () => {
-      return helpers.all([
-        () => userSeeder.up(models.sequelize.getQueryInterface(), models.Sequelize),
-      ])
-    })
+    beforeEach('before', () => helpers.all([
+      () => userSeeder.up(models.sequelize.getQueryInterface(), models.Sequelize),
+    ]))
 
     it('should return error if email confirm token is invalid', (done) => {
       chai.request(server)
@@ -128,9 +123,10 @@ describe('routes : users',  () => {
           emailConfirm: 'admin-create@mail.com',
         })
         .end((err, res) => {
-          err.response.status.should.equal(400)
-          err.response.type.should.equal('application/json')
-          err.response.body.should.eql(new BadRequestError('Invalid email confirm token'))
+          should.exist(err)
+          res.status.should.equal(400)
+          res.type.should.equal('application/json')
+          res.body.should.eql(new BadRequestError('Invalid email confirm token'))
           done()
         })
     })
@@ -143,9 +139,10 @@ describe('routes : users',  () => {
           emailConfirm: emailConfirm
         })
         .end((err, res) => {
-          err.response.status.should.equal(404)
-          err.response.type.should.equal('application/json')
-          err.response.body.should.eql(new NotFoundError('User not found'))
+          should.exist(err)
+          res.status.should.equal(404)
+          res.type.should.equal('application/json')
+          res.body.should.eql(new NotFoundError('User not found'))
           done()
         })
     })

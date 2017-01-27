@@ -40,55 +40,55 @@ describe('routes : accounts', () => {
   describe('GET /api/accounts', () => {
     it('should respond with all accounts', (done) => {
       chai.request(server)
-      .get('/api/accounts')
-      .set('Authorization', `Bearer ${token.value}`)
-      .end((err, res) => {
-        should.not.exist(err)
-        res.status.should.equal(200)
-        res.type.should.equal('application/json')
-        res.body.accounts.length.should.eql(2)
-        Object.keys(res.body.accounts[0]).sort().should.eql([
-          'id',
-          'name',
-          'description',
-          'amount',
-          'createdAt',
-          'updatedAt',
-          'userId',
-          'currencyId'
-        ].sort())
-        done()
-      })
+        .get('/api/accounts')
+        .set('Authorization', `Bearer ${token.value}`)
+        .end((err, res) => {
+          should.not.exist(err)
+          res.status.should.equal(200)
+          res.type.should.equal('application/json')
+          res.body.accounts.length.should.eql(2)
+          Object.keys(res.body.accounts[0]).sort().should.eql([
+            'id',
+            'name',
+            'description',
+            'amount',
+            'createdAt',
+            'updatedAt',
+            'userId',
+            'currencyId'
+          ].sort())
+          done()
+        })
     })
   })
 
   describe('POST /api/accounts', () => {
     it('should create new account when provide valid data', (done) => {
       chai.request(server)
-      .post('/api/accounts')
-      .set('Authorization', `Bearer ${token.value}`)
-      .send({
-        name: 'Cool Bank USD',
-        description: 'Account in Cool Bank in USD',
-        currencyId: userCurrencySeeder.items[0].id
-      })
-      .end((err, res) => {
-        should.not.exist(err)
-        res.status.should.equal(200)
-        res.type.should.equal('application/json')
-        res.body.should.be.a('object')
-        Object.keys(res.body).sort().should.eql([
-          'id',
-          'name',
-          'description',
-          'amount',
-          'createdAt',
-          'updatedAt',
-          'userId',
-          'currencyId'
-        ].sort())
-        done()
-      })
+        .post('/api/accounts')
+        .set('Authorization', `Bearer ${token.value}`)
+        .send({
+          name: 'Cool Bank USD',
+          description: 'Account in Cool Bank in USD',
+          currencyId: userCurrencySeeder.items[0].id
+        })
+        .end((err, res) => {
+          should.not.exist(err)
+          res.status.should.equal(200)
+          res.type.should.equal('application/json')
+          res.body.should.be.a('object')
+          Object.keys(res.body).sort().should.eql([
+            'id',
+            'name',
+            'description',
+            'amount',
+            'createdAt',
+            'updatedAt',
+            'userId',
+            'currencyId'
+          ].sort())
+          done()
+        })
     })
   })
 
@@ -100,37 +100,37 @@ describe('routes : accounts', () => {
       const currencyId = userCurrencySeeder.items[1].id
       const amount = 10
       chai.request(server)
-      .put(`/api/accounts/${accountId}`)
-      .set('Authorization', `Bearer ${token.value}`)
-      .send({
-        name,
-        description,
-        currencyId,
-        amount
-      })
-      .end((err, res) => {
-        should.not.exist(err)
-        res.status.should.equal(200)
-        res.type.should.equal('application/json')
-        res.body.should.be.a('object')
-        Object.keys(res.body).sort().should.eql([
-          'id',
-          'name',
-          'description',
-          'amount',
-          'createdAt',
-          'updatedAt',
-          'userId',
-          'currencyId'
-        ].sort())
-        res.body.userId.should.equal(userSeeder.items[0].id)
-        res.body.id.should.equal(accountId)
-        res.body.name.should.equal(name)
-        res.body.description.should.equal(description)
-        res.body.currencyId.should.equal(currencyId)
-        res.body.amount.should.equal(amount)
-        done()
-      })
+        .put(`/api/accounts/${accountId}`)
+        .set('Authorization', `Bearer ${token.value}`)
+        .send({
+          name,
+          description,
+          currencyId,
+          amount
+        })
+        .end((err, res) => {
+          should.not.exist(err)
+          res.status.should.equal(200)
+          res.type.should.equal('application/json')
+          res.body.should.be.a('object')
+          Object.keys(res.body).sort().should.eql([
+            'id',
+            'name',
+            'description',
+            'amount',
+            'createdAt',
+            'updatedAt',
+            'userId',
+            'currencyId'
+          ].sort())
+          res.body.userId.should.equal(userSeeder.items[0].id)
+          res.body.id.should.equal(accountId)
+          res.body.name.should.equal(name)
+          res.body.description.should.equal(description)
+          res.body.currencyId.should.equal(currencyId)
+          res.body.amount.should.equal(amount)
+          done()
+        })
     })
 
     it('should return error when update not existing account', (done) => {
@@ -140,20 +140,21 @@ describe('routes : accounts', () => {
       const currencyId = userCurrencySeeder.items[1].id
       const amount = 10
       chai.request(server)
-      .put(`/api/accounts/${notExistingAccountId}`)
-      .set('Authorization', `Bearer ${token.value}`)
-      .send({
-        name,
-        description,
-        currencyId,
-        amount
-      })
-      .end((err, res) => {
-        err.response.status.should.equal(404)
-        err.response.type.should.equal('application/json')
-        err.response.body.should.eql(new NotFoundError('Account not found'))
-        done()
-      })
+        .put(`/api/accounts/${notExistingAccountId}`)
+        .set('Authorization', `Bearer ${token.value}`)
+        .send({
+          name,
+          description,
+          currencyId,
+          amount
+        })
+        .end((err, res) => {
+          should.exist(err)
+          res.status.should.equal(404)
+          res.type.should.equal('application/json')
+          res.body.should.eql(new NotFoundError('Account not found'))
+          done()
+        })
     })
   })
 
@@ -161,29 +162,30 @@ describe('routes : accounts', () => {
     it('should delete account when provide valid data', (done) => {
       const accountId = accountSeeder.items[0].id
       chai.request(server)
-      .delete(`/api/accounts/${accountId}`)
-      .set('Authorization', `Bearer ${token.value}`)
-      .end((err, res) => {
-        should.not.exist(err)
-        res.status.should.equal(204)
-        res.type.should.equal('')
-        res.body.should.be.a('object')
-        res.body.should.eql({})
-        done()
-      })
+        .delete(`/api/accounts/${accountId}`)
+        .set('Authorization', `Bearer ${token.value}`)
+        .end((err, res) => {
+          should.not.exist(err)
+          res.status.should.equal(204)
+          res.type.should.equal('')
+          res.body.should.be.a('object')
+          res.body.should.eql({})
+          done()
+        })
     })
 
     it('should return error when delete not exisiting account', (done) => {
       const notExistingAccountId = v4()
       chai.request(server)
-      .delete(`/api/accounts/${notExistingAccountId}`)
-      .set('Authorization', `Bearer ${token.value}`)
-      .end((err, res) => {
-        err.response.status.should.equal(404)
-        err.response.type.should.equal('application/json')
-        err.response.body.should.eql(new NotFoundError('Account not found'))
-        done()
-      })
+        .delete(`/api/accounts/${notExistingAccountId}`)
+        .set('Authorization', `Bearer ${token.value}`)
+        .end((err, res) => {
+          should.exist(err)
+          res.status.should.equal(404)
+          res.type.should.equal('application/json')
+          res.body.should.eql(new NotFoundError('Account not found'))
+          done()
+        })
     })
   })
 })

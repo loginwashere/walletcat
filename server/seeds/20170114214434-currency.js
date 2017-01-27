@@ -1,4 +1,3 @@
-const fs = require('fs')
 const format = require('date-fns/format')
 const v4 = require('uuid/v4')
 
@@ -23,13 +22,13 @@ const currencies = Object.keys(openexchangeratesCurrencies).map(name => ({
 }))
 
 module.exports = {
-  up: function (queryInterface, Sequelize) {
+  up: function(queryInterface) {
     return queryInterface.bulkInsert('currencies', currencies, {})
   },
 
-  down: function (queryInterface, Sequelize) {
+  down: function(queryInterface) {
     return queryInterface.bulkDelete('currencies', null, {})
   },
 
   items: currencies
-};
+}

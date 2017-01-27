@@ -1,10 +1,8 @@
-import axios from 'axios'
 import { push } from 'react-router-redux'
 import { alertAdd, convertError } from '..'
-import { API_URL } from '../../apiUrl'
 import { SubmissionError } from 'redux-form'
+import api from '../../api'
 
-export const API_TRANSACTION_LIST_URL = `${API_URL}transactions`
 export const INVALIDATE_TRANSACTION_LIST = 'INVALIDATE_TRANSACTION_LIST'
 
 export function invalidateTransactions() {
@@ -34,13 +32,8 @@ function receiveTransactions(json) {
 function fetchTransactions() {
   return dispatch => {
     dispatch(requestTransactions())
-    const token = localStorage.getItem('token')
-    return axios
-      .get(API_TRANSACTION_LIST_URL, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
+    return api.transactions
+      .fetchAll()
       .then(json => dispatch(receiveTransactions(json)))
       .catch(error => dispatch(alertAdd(error)))
   }
@@ -87,18 +80,11 @@ export function receiveTransactionCreate(json) {
 export function createTransaction(params) {
   return dispatch => {
     dispatch(requestTransactionCreate())
-    const token = localStorage.getItem('token')
-    return axios({
-        url: API_TRANSACTION_LIST_URL,
-        method: 'post',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-        data: params
-      })
+    return api.transactions
+      .create(params)
       .then(json => {
         dispatch(receiveTransactionCreate(json))
-        dispatch(push('/transactions'));
+        dispatch(push('/transactions'))
       })
       .catch(error => {
         throw new SubmissionError(convertError(error))
@@ -127,15 +113,9 @@ function receiveTransactionDelete(id) {
 export function deleteTransaction(id) {
   return dispatch => {
     dispatch(requestTransactionDelete(id))
-    const token = localStorage.getItem('token')
-    return axios({
-        url: `${API_TRANSACTION_LIST_URL}/${id}`,
-        method: 'delete',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
-      .then(json => {
+    return api.transactions
+      .del(id)
+      .then(() => {
         dispatch(receiveTransactionDelete(id))
         dispatch(push('/transactions'))
       })
@@ -165,15 +145,8 @@ function receiveTransactionUpdate(json) {
 export function updateTransaction(id, params) {
   return dispatch => {
     dispatch(requestTransactionUpdate(id, params))
-    const token = localStorage.getItem('token')
-    return axios({
-        url: `${API_TRANSACTION_LIST_URL}/${id}`,
-        method: 'put',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-        data: params
-      })
+    return api.transactions
+      .update(id, params)
       .then(json => {
         dispatch(receiveTransactionUpdate(json))
         dispatch(push('/transactions'))

@@ -1,24 +1,24 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { LinkContainer } from 'react-router-bootstrap';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { LinkContainer } from 'react-router-bootstrap'
 import {
   Form,
   FormGroup,
   Col,
   Button,
   Alert
-} from 'react-bootstrap';
-import { deleteCategory, fetchCategoriesIfNeeded } from '../../actions';
+} from 'react-bootstrap'
+import { deleteCategory, fetchCategoriesIfNeeded } from '../../actions'
 
 export class CategoryDelete extends Component {
   handleSubmit = (e) => {
-    e.preventDefault();
-    const { dispatch, category: { id } } = this.props;
-    dispatch(deleteCategory(id));
+    e.preventDefault()
+    const { dispatch, category: { id } } = this.props
+    dispatch(deleteCategory(id))
   }
 
   render() {
-    const { category } = this.props;
+    const { category } = this.props
     return (
       <div>
         <h1>Delete Category</h1>
@@ -48,12 +48,12 @@ export class CategoryDelete extends Component {
           </FormGroup>
         </Form>
       </div>
-    );
+    )
   }
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch(fetchCategoriesIfNeeded());
+    const { dispatch } = this.props
+    dispatch(fetchCategoriesIfNeeded())
   }
 }
 
@@ -67,12 +67,10 @@ CategoryDelete.propTypes = {
 }
 
 function mapStateToProps(state, ownProps) {
-  const category = state.categories.items[ownProps.params.categoryId] || {};
+  const category = state.categories.items[ownProps.params.categoryId] || {}
   return {
     category
-  };
+  }
 }
 
-export const CategoryDeleteConnected = connect(mapStateToProps)(CategoryDelete);
-
-export default CategoryDeleteConnected;
+export default connect(mapStateToProps)(CategoryDelete)

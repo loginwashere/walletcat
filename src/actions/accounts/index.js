@@ -1,10 +1,8 @@
-import axios from 'axios'
 import { push } from 'react-router-redux'
 import { alertAdd, convertError } from '..'
-import { API_URL } from '../../apiUrl'
 import { SubmissionError } from 'redux-form'
+import api from '../../api'
 
-const API_ACCOUNT_LIST_URL = `${API_URL}accounts`
 export const INVALIDATE_ACCOUNT_LIST = 'INVALIDATE_ACCOUNT_LIST'
 
 export const invalidateAccounts = () => ({
@@ -27,13 +25,8 @@ export const receiveAccounts = (json) => ({
 
 const fetchAccounts = () => dispatch => {
   dispatch(requestAccounts())
-  const token = localStorage.getItem('token')
-  return axios
-    .get(API_ACCOUNT_LIST_URL, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    })
+  return api.accounts
+    .fetchAll()
     .then(json => dispatch(receiveAccounts(json)))
     .catch(error => dispatch(alertAdd(error)))
 }
@@ -62,7 +55,7 @@ export const REQUEST_ACCOUNT_CREATE = 'REQUEST_ACCOUNT_CREATE'
 export const RECEIVE_ACCOUNT_CREATE = 'RECEIVE_ACCOUNT_CREATE'
 export const ACCOUNT_CREATE_FAILURE = 'ACCOUNT_CREATE_FAILURE'
 
-const accountCreateRequest = (params) => ({
+const accountCreateRequest = () => ({
   type: REQUEST_ACCOUNT_CREATE
 })
 
@@ -73,16 +66,9 @@ const accountCreateReceive = (json) => ({
 })
 
 export const createAccount = params => dispatch => {
-  const token = localStorage.getItem('token')
-  dispatch(accountCreateRequest(params))
-  return axios({
-      url: API_ACCOUNT_LIST_URL,
-      method: 'post',
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
-      data: params
-    })
+  dispatch(accountCreateRequest())
+  return api.accounts
+    .create(params)
     .then(json => {
       dispatch(accountCreateReceive(json))
       dispatch(push('/accounts'))
@@ -94,79 +80,53 @@ export const createAccount = params => dispatch => {
 
 export const REQUEST_ACCOUNT_DELETE = 'REQUEST_ACCOUNT_DELETE'
 
-function requestAccountDelete(id) {
-  return {
-    type: REQUEST_ACCOUNT_DELETE,
-    id
-  }
-}
+const requestAccountDelete = id => ({
+  type: REQUEST_ACCOUNT_DELETE,
+  id
+})
 
 export const RECEIVE_ACCOUNT_DELETE = 'RECEIVE_ACCOUNT_DELETE'
 
-function receiveAccountDelete(id) {
-  return {
-    type: RECEIVE_ACCOUNT_DELETE,
-    id
-  }
-}
+const receiveAccountDelete = id => ({
+  type: RECEIVE_ACCOUNT_DELETE,
+  id
+})
 
-export function deleteAccount(id) {
-  return dispatch => {
-    dispatch(requestAccountDelete(id))
-    const token = localStorage.getItem('token')
-    return axios({
-        url: `${API_ACCOUNT_LIST_URL}/${id}`,
-        method: 'delete',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
-      .then(json => {
-        dispatch(receiveAccountDelete(id))
-        dispatch(push('/accounts'))
-      })
-      .catch(error => dispatch(alertAdd(error)))
-  }
+export const deleteAccount = id => dispatch => {
+  dispatch(requestAccountDelete(id))
+  return api.accounts
+    .del(id)
+    .then(() => {
+      dispatch(receiveAccountDelete(id))
+      dispatch(push('/accounts'))
+    })
+    .catch(error => dispatch(alertAdd(error)))
 }
 
 export const REQUEST_ACCOUNT_UPDATE = 'REQUEST_ACCOUNT_UPDATE'
 
-function requestAccountUpdate(id, params) {
-  return {
-    type: REQUEST_ACCOUNT_UPDATE,
-    id,
-    params
-  }
-}
+const requestAccountUpdate = (id, params) => ({
+  type: REQUEST_ACCOUNT_UPDATE,
+  id,
+  params
+})
 
 export const RECEIVE_ACCOUNT_UPDATE = 'RECEIVE_ACCOUNT_UPDATE'
 
-function receiveAccountUpdate(json) {
-  return {
-    type: RECEIVE_ACCOUNT_UPDATE,
-    account: json.data
-  }
-}
+const receiveAccountUpdate = json => ({
+  type: RECEIVE_ACCOUNT_UPDATE,
+  account: json.data
+})
 
-export function updateAccount(id, params) {
-  return dispatch => {
-    dispatch(requestAccountUpdate(id, params))
-    const token = localStorage.getItem('token')
-    const { name, description, amount, currencyId } = params
-    return axios({
-        url: `${API_ACCOUNT_LIST_URL}/${id}`,
-        method: 'put',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-        data: { name, description, amount, currencyId }
-      })
-      .then(json => {
-        dispatch(receiveAccountUpdate(json))
-        dispatch(push('/accounts'))
-      })
-      .catch(error => {
-        throw new SubmissionError(convertError(error))
-      })
-  }
+export const updateAccount = (id, params) => dispatch => {
+  dispatch(requestAccountUpdate(id, params))
+  return api.accounts
+    .update(id, params)
+    .then(json => {
+      dispatch(receiveAccountUpdate(json))
+      dispatch(push('/accounts'))
+    })
+    .catch(error => {
+      throw new SubmissionError(convertError(error))
+    })
 }

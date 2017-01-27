@@ -50,13 +50,15 @@ export class LoginForm extends Component {
   }
 }
 
-LoginForm.PropTypes = {
-  handleSubmit: PropTypes.func.isRequired
+LoginForm.propTypes = {
+  handleSubmit: PropTypes.func.isRequired.isRequired,
+  error: PropTypes.string,
+  submitting: PropTypes.bool.isRequired,
+  pristine: PropTypes.bool.isRequired,
+  invalid: PropTypes.bool.isRequired
 }
 
-LoginForm = reduxForm({
+export default reduxForm({
   form: 'login',
   validate
 })(LoginForm)
-
-export default LoginForm
