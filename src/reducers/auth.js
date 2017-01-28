@@ -7,7 +7,10 @@ import {
   LOGOUT_SUCCESS,
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
-  REGISTER_FAILURE
+  REGISTER_FAILURE,
+  RECEIVE_RESEND_EMAIL_CONFIRM,
+  RECEIVE_EMAIL_CONFIRM,
+  SET_REDIRECT_URL
 } from '../actions'
 import jwtDecode from 'jwt-decode'
 
@@ -35,8 +38,10 @@ const getTokenExpirationDate = decodedToken => decodedToken
 const initialState = () => ({
   isFetching: false,
   isAuthenticated: !!decodeToken(getToken()),
+  isEmailConfirmResent: false,
   tokenExpirationDate: getTokenExpirationDate(decodeToken(getToken())),
-  user: decodeUser(getUser())
+  user: decodeUser(getUser()),
+  redirectUrl: ''
 })
 
 export default function auth(
@@ -85,6 +90,25 @@ export default function auth(
         isAuthenticated: false,
         errorMessage: action.message
       })
+    case RECEIVE_EMAIL_CONFIRM:
+      return {
+        ...state,
+        user: {
+          ...state.user || {},
+          emailConfirmed: true
+        }
+      }
+    case RECEIVE_RESEND_EMAIL_CONFIRM:
+      console.log(action)
+      return {
+        ...state,
+        isEmailConfirmResent: true
+      }
+    case SET_REDIRECT_URL:
+      return {
+        ...state,
+        redirectUrl: action.url
+      }
     default:
       return state
   }

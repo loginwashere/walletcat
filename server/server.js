@@ -26,6 +26,10 @@ module.exports = () => {
       {
         url: '/api/users/email-confirm',
         methods: ['POST']
+      },
+      {
+        url: '/api/users/resend-email-confirm',
+        methods: ['POST']
       }
     ]
   })

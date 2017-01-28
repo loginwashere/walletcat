@@ -1,7 +1,5 @@
-/* global localStorage */
-
 import { push } from 'react-router-redux'
-import { convertError } from '..'
+import { alertAdd, convertError } from '..'
 import { SubmissionError } from 'redux-form'
 import api from '../../api'
 
@@ -40,17 +38,19 @@ const receiveLogout = () => ({
   isAuthenticated: false
 })
 
+const handleReceiveLogin = dispatch => json =>  {
+  localStorage.setItem('token', json.data.token)
+  localStorage.setItem('user', JSON.stringify(json.data.user))
+
+  dispatch(receiveLogin(json.data))
+  return dispatch(push('/home'))
+}
+
 export const loginUser = creds => dispatch => {
   dispatch(requestLogin(creds))
   return api.auth
     .login(creds)
-    .then((json) =>  {
-      localStorage.setItem('token', json.data.token)
-      localStorage.setItem('user', JSON.stringify(json.data.user))
-
-      dispatch(receiveLogin(json.data))
-      return dispatch(push('/home'))
-    })
+    .then(handleReceiveLogin(dispatch))
     .catch(error => {
       throw new SubmissionError(convertError(error))
     })
@@ -73,21 +73,59 @@ const requestRegister = params => ({
   params
 })
 
-const receiveRegister = data => ({
-  type: REGISTER_SUCCESS,
-  isFetching: false,
-  user: data.user
-})
-
 export const registerUser = params => dispatch => {
   dispatch(requestRegister(params))
   return api.auth
     .register(params)
-    .then((json) =>  {
-      dispatch(receiveRegister(json.data))
-      return dispatch(push('/sign-in'))
-    })
+    .then(handleReceiveLogin(dispatch))
     .catch(error => {
       throw new SubmissionError(convertError(error))
     })
 }
+
+export const REQUEST_EMAIL_CONFIRM = 'REQUEST_EMAIL_CONFIRM'
+
+const requestConfirmEmail = () => ({
+  type: REQUEST_EMAIL_CONFIRM,
+  isFetching: true
+})
+
+export const RECEIVE_EMAIL_CONFIRM = 'RECEIVE_EMAIL_CONFIRM'
+
+export const confirmEmail = code => dispatch => {
+  dispatch(requestConfirmEmail())
+  return api.auth
+    .confirmEmail(code)
+    .then(handleReceiveLogin(dispatch))
+    .catch(error => dispatch(alertAdd(error)))
+}
+
+export const REQUEST_RESEND_EMAIL_CONFIRM = 'REQUEST_RESEND_EMAIL_CONFIRM'
+
+const requestResendConfirmEmail = () => ({
+  type: REQUEST_RESEND_EMAIL_CONFIRM
+})
+
+export const RECEIVE_RESEND_EMAIL_CONFIRM = 'RECEIVE_RESEND_EMAIL_CONFIRM'
+
+const receiveResendConfirmEmail = json => ({
+  type: RECEIVE_RESEND_EMAIL_CONFIRM,
+  data: json.data
+})
+
+export const resendConfirmEmail = email => dispatch => {
+  dispatch(requestResendConfirmEmail())
+  return api.auth
+    .resendConfirmEmail(email)
+    .then(json => dispatch(receiveResendConfirmEmail(json)))
+    .catch(error => {
+      throw new SubmissionError(convertError(error))
+    })
+}
+
+export const SET_REDIRECT_URL = 'SET_REDIRECT_URL'
+
+export const setRedirectUrl = url => ({
+  type: SET_REDIRECT_URL,
+  url
+})

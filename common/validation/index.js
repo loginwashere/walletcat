@@ -26,6 +26,10 @@ const registerSchema = {
   password
 }
 
+const resendEmailConfirmSchema = {
+  email: email.required(),
+}
+
 const emailConfirmSchema = {
   emailConfirm: Joi.string().required()
 }
@@ -83,6 +87,7 @@ module.exports = {
   loginSchema,
   registerSchema,
   emailConfirmSchema,
+  resendEmailConfirmSchema,
   categorySchema,
   accountSchema,
   transactionSchema
