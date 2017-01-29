@@ -28,7 +28,7 @@ router.post('/', validate(registerSchema), (req, res, next) => {
       updatedAt: format(new Date()),
     })
     .then(user => mailSend(generateEmailData(emailTypes.REGISTER, { user }))
-      .then(() => () => {
+      .then(() => {
         const token = generateToken(user.id)
         return res.json({
           token: token.value,
