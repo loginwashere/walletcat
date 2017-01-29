@@ -10,11 +10,24 @@ const ServerError = require('./errors/server-error')
 
 module.exports = () => {
   const app = express()
+
+  app.use((req, res, next) => {
+    debug("req.header('origin')", req.header('origin'))
+    res.setHeader('Access-Control-Allow-Headers', 'accept, authorization, content-type, x-requested-with')
+    res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE')
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    next()
+  })
+
   const jwtMiddleware = expressJwt({
     secret: config.JWT_SECRET
   })
   .unless({
     path: [
+      {
+        url: /.*/,
+        methods: ['OPTIONS']
+      },
       {
         url: '/api/auth',
         methods: ['POST']
@@ -30,6 +43,10 @@ module.exports = () => {
       {
         url: '/api/users/resend-email-confirm',
         methods: ['POST']
+      },
+      {
+        url: '/api/oauth/callback/facebook',
+        methods: ['GET']
       }
     ]
   })
@@ -51,6 +68,7 @@ module.exports = () => {
   const categoriesRouter = require('./routes/categories')
   const transactionsRouter = require('./routes/transactions')
   const usersRouter = require('./routes/users')
+  const oauthRouter = require('./routes/oauth')
 
   app.use('/api/accounts', accountsRouter)
   app.use('/api/auth', authRouter)
@@ -59,6 +77,7 @@ module.exports = () => {
   app.use('/api/categories', categoriesRouter)
   app.use('/api/transactions', transactionsRouter)
   app.use('/api/users', usersRouter)
+  app.use('/api/oauth', oauthRouter)
 
   function removeStack(err) {
     const error = Object.assign({}, err)

@@ -75,16 +75,25 @@ describe('routes : users',  () => {
           res.status.should.equal(200)
           res.type.should.equal('application/json')
           res.body.should.be.a('object')
-          res.body.should.include.keys(
+          Object.keys(res.body).sort().should.eql([
+            'token',
+            'user'
+          ].sort())
+          res.body.token.should.be.a('string')
+          res.body.user.should.be.a('object')
+          Object.keys(res.body.user).sort().should.eql([
             'id',
-            'email',
             'username',
+            'email',
             'emailConfirmed',
             'avatar',
             'createdAt',
-            'updatedAt'
-          )
-          res.body.username.should.equal('admin_create')
+            'updatedAt',
+            'fbUserId',
+            'fbAccessToken',
+            'fbAccesstokenExpireAt'
+          ].sort())
+          res.body.user.username.should.equal('admin_create')
           done()
         })
     })
@@ -159,10 +168,26 @@ describe('routes : users',  () => {
           res.status.should.equal(200)
           res.type.should.equal('application/json')
           res.body.should.be.a('object')
-          Object.keys(res.body).should.eql([
-            'emailConfirmed'
-          ])
-          res.body.emailConfirmed.should.equal(true)
+          Object.keys(res.body).sort().should.eql([
+            'token',
+            'user'
+          ].sort())
+          res.body.token.should.be.a('string')
+          res.body.user.should.be.a('object')
+          Object.keys(res.body.user).sort().should.eql([
+            'id',
+            'username',
+            'email',
+            'emailConfirmed',
+            'avatar',
+            'createdAt',
+            'updatedAt',
+            'fbUserId',
+            'fbAccessToken',
+            'fbAccesstokenExpireAt'
+          ].sort())
+          res.body.user.email.should.equal(userSeeder.items[0].email)
+          res.body.user.emailConfirmed.should.equal(true)
           done()
         })
     })

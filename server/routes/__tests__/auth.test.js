@@ -103,7 +103,10 @@ describe('routes : auth', () => {
             'emailConfirmed',
             'avatar',
             'createdAt',
-            'updatedAt'
+            'updatedAt',
+            'fbUserId',
+            'fbAccessToken',
+            'fbAccesstokenExpireAt'
           ].sort())
           res.body.user.email.should.equal(userSeeder.items[0].email)
           done()

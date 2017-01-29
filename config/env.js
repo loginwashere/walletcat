@@ -1,5 +1,9 @@
 // Grab NODE_ENV and REACT_APP_* environment variables and prepare them to be
 // injected into the application via DefinePlugin in Webpack configuration.
+require('dotenv').config({
+  path: __dirname + '/../.env',
+  silent: process.env.NODE_ENV === 'production'
+})
 
 var REACT_APP = /^REACT_APP_/i;
 
@@ -22,6 +26,7 @@ function getClientEnvironment(publicUrl) {
       // images into the `src` and `import` them in code to get their paths.
       'PUBLIC_URL': JSON.stringify(publicUrl)
     });
+    console.log(processEnv)
   return {'process.env': processEnv};
 }
 

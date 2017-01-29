@@ -1,7 +1,10 @@
 import { push } from 'react-router-redux'
+import querystring from 'querystring'
 import { alertAdd, convertError } from '..'
 import { SubmissionError } from 'redux-form'
 import api from '../../api'
+import openPopup from '../../utils/popup'
+import { API_URL } from '../../api/common'
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
@@ -129,3 +132,71 @@ export const setRedirectUrl = url => ({
   type: SET_REDIRECT_URL,
   url
 })
+
+export const REQUEST_OAUTH_SIGNIN = 'REQUEST_OAUTH_SIGNIN'
+export const RECEIVE_OAUTH_SIGNIN = 'REQUEST_OAUTH_SIGNIN'
+
+const requestOAuthSignIn = provider => ({
+  type: REQUEST_OAUTH_SIGNIN,
+  provider
+})
+
+const auth = (provider) => {
+  const url = `${API_URL}oauth/callback/${provider}?popup=true`
+  const popup = openPopup(provider, url, provider)
+  return listenForCredentials(popup, provider)
+}
+
+const getSearchQs = function(location) {
+  const rawQs = location.search || ''
+  const qs = rawQs.replace('?', '')
+  const qsObj = (qs)
+    ? querystring.parse(qs)
+    : {}
+
+  return qsObj
+}
+
+function getAllParams(location) {
+  return getSearchQs(location)
+}
+
+function listenForCredentials(popup, provider, resolve, reject) {
+  if (!resolve) {
+    return new Promise((resolve, reject) => {
+      listenForCredentials(popup, provider, resolve, reject)
+    })
+
+  } else {
+    let creds
+
+    try {
+      creds = getAllParams(popup.location)
+    } catch (err) {} // eslint-disable-line no-empty
+
+    if (creds && creds.id && creds.token) {
+      popup.close()
+      localStorage.setItem('token', creds.token)
+      api.users
+        .fetchOne(creds.id)
+        .then(({ data }) => resolve({ data: { user: data, token: creds.token } }))
+        .catch(({ error }) => reject({ error }))
+    } else if (popup.closed) {
+      reject({ error: 'Authentication was cancelled.' })
+    } else {
+      setTimeout(() => {
+        listenForCredentials(popup, provider, resolve, reject)
+      }, 0)
+    }
+  }
+}
+
+export const oauthSignIn = provider => dispatch => {
+  dispatch(requestOAuthSignIn(provider))
+  return auth(provider)
+    .then(handleReceiveLogin(dispatch))
+    .catch(({ error }) => {
+      console.log(error)
+      return dispatch(alertAdd({ response: { data: { message: error } } }))
+    })
+}

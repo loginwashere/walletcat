@@ -38,13 +38,27 @@ router.post('/', validate(registerSchema), (req, res, next) => {
     .catch(next)
 })
 
+router.get('/:id', (req, res, next) => {
+  models.user
+    .findOne({
+      where: {
+        id: req.params.id
+      }
+    })
+    .then(user => {
+      if (!user) {
+        return next(new NotFoundError('User not found'))
+      }
+      return res.json(user)
+    })
+    .catch(next)
+})
+
 router.post('/resend-email-confirm', validate(resendEmailConfirmSchema), (req, res, next) => {
   models.user
     .findOne({
       where: {
-        $and: [
-          { email: req.body.email }
-        ]
+        email: req.body.email
       }
     })
     .then(user => {

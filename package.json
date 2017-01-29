@@ -83,6 +83,7 @@
     "mailgun-js": "^0.8.0",
     "pg": "^6.1.2",
     "pg-hstore": "^2.3.2",
+    "querystring": "^0.2.0",
     "react": "^15.4.1",
     "react-bootstrap": "^0.30.7",
     "react-dom": "^15.4.1",
@@ -161,6 +162,5 @@
         }
       ]
     ]
-  },
-  "proxy": "http://localhost:3001/"
+  }
 }

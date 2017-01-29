@@ -28,4 +28,6 @@ module.exports.generateAvatarUrl = email => (
   `https://www.gravatar.com/avatar/${md5(email)}?s=50`
 )
 
+module.exports.generateUsername = email => email.replace(/[^a-zA-z_]/i, '_')
+
 module.exports.errorMessages = errorMessages

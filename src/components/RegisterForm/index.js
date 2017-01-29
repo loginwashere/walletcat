@@ -8,6 +8,7 @@ import {
 } from 'react-bootstrap'
 import { registerSchema } from '../../../common/validation'
 import { RenderFieldWithoutCol, RenderError, getValidate } from '../Common'
+import OAuthSignInButton from '../OAuthSignInButton'
 
 import './style.less'
 
@@ -30,7 +31,6 @@ export class RegisterForm extends Component {
         </FormGroup>
 
         <Field required={true}
-               autoFocus={true}
                name="email"
                type="email"
                component={RenderFieldWithoutCol}
@@ -53,6 +53,9 @@ export class RegisterForm extends Component {
                 className="btn btn-lg btn-primary btn-block">
           Create an account
         </Button>
+        <OAuthSignInButton provider="facebook"
+                           title="Sign Up using Facebook"
+                           className="btn btn-lg btn-block" />
       </Form>
     )
   }

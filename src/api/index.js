@@ -4,6 +4,7 @@ import categories from './categories'
 import currencies from './currencies'
 import transactions from './transactions'
 import userCurrencies from './userCurrencies'
+import users from './users'
 
 export default {
   accounts,
@@ -11,5 +12,6 @@ export default {
   categories,
   currencies,
   transactions,
-  userCurrencies
+  userCurrencies,
+  users
 }

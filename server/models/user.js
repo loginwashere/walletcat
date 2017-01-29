@@ -20,8 +20,21 @@ module.exports = (sequelize, Sequelize) => sequelize.define('user', {
     type: Sequelize.STRING(255)
   },
   password: {
-    type: Sequelize.STRING(255)
+    type: Sequelize.STRING(255),
+    allowNull: true
   },
+  fbUserId: {
+    type: Sequelize.BIGINT.UNSIGNED,
+    allowNull: true
+  },
+  fbAccessToken: {
+    type: Sequelize.TEXT,
+    allowNull: true
+  },
+  fbAccesstokenExpireAt: {
+    type: Sequelize.DATE,
+    allowNull: true
+  }
 }, {
   tableName: 'users',
   paranoid: true,

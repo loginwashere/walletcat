@@ -6,6 +6,7 @@ const sequelizeConfig = require('./sequelize')[env]
 module.exports = {
   projectName: process.env.PROJECT_NAME,
   publicUrl: process.env.PUBLIC_URL,
+  apiUrl: process.env.API_URL,
   PORT: process.env.NODE_APP_PORT || process.env.PORT || 3001,
   HASH_SECRET: process.env.HASH_SECRET || 'abcdefg',
   JWT_SECRET: process.env.JWT_SECRET || 'shhhhhhared-secret',
@@ -19,5 +20,7 @@ module.exports = {
       domain: process.env.MAIL_MAILGUN_DOMAIN || 'YOUR-DOMAIN.com'
     }
   },
-  openexchangeratesAppId: process.env.OPENEXCHANGERATES_APP_ID
+  openexchangeratesAppId: process.env.OPENEXCHANGERATES_APP_ID,
+  fbAppId: process.env.REACT_APP_FB_APP_ID,
+  fbAppSecret: process.env.FB_APP_SECRET
 }
