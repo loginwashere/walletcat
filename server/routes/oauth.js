@@ -23,7 +23,7 @@ router.get('/callback/:provider', (req, res, next) => {
           maxRedirects: 30,
           params: {
             client_id: config.fbAppId,
-            redirect_uri: `${config.apiUrl}oauth/callback/${req.params.provider}`,
+            redirect_uri: `${config.apiUrl}api/oauth/callback/${req.params.provider}`,
             client_secret: config.fbAppSecret,
             code: req.query.code
           }
@@ -96,7 +96,7 @@ router.get('/callback/:provider', (req, res, next) => {
       debug('req.query.popup', req.query.popup)
       const apiVersion = '2.8'
       const clientId = config.fbAppId
-      const redirectUri = `${config.apiUrl}oauth/callback/${req.params.provider}`
+      const redirectUri = `${config.apiUrl}api/oauth/callback/${req.params.provider}`
       const scope = 'public_profile,email'
       const params = `client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`
       const url = `https://www.facebook.com/v${apiVersion}/dialog/oauth?${params}`
