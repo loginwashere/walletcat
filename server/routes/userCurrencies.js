@@ -1,19 +1,34 @@
 const express = require('express')
 const router = express.Router()
 const models = require('../models')
+const validate = require('../middleware/validate')
 const format = require('date-fns/format')
 const v4 = require('uuid/v4')
 const NotFoundError = require('../errors/not-found')
+const paginationSchema = require('../../common/validation').paginationSchema
+const pagination = require('../utils/pagination')
 
-router.get('/', (req, res, next) => {
-  models.userCurrency
-    .findAll({
-      where: {
-        userId: req.user.sub
-      }
-    })
-    .then(userCurrencies => res.json({ userCurrencies }))
-    .catch(next)
+router.get('/', validate.query(paginationSchema), (req, res, next) => {
+  if (req.query.ids) {
+    models.userCurrency
+      .findAll({
+        where: {
+          userId: req.user.sub,
+          id: req.query.ids
+        }
+      })
+      .then(items => res.json({ [models.userCurrency.getTableName()]: items }))
+      .catch(next)
+  } else {
+    pagination
+      .paginate(models.userCurrency, req.query, {
+        where: {
+          userId: req.user.sub
+        }
+      })
+      .then(res.json.bind(res))
+      .catch(next)
+  }
 })
 
 router.post('/', (req, res, next) => {

@@ -10,7 +10,7 @@ import {
 } from 'react-bootstrap'
 import {
   deleteAccount,
-  fetchAccountsAndAppAndUserCurrenciesIfNeeded
+  fetchAccountsPageWithDependenies
 } from '../../actions'
 
 export class AccountDelete extends Component {
@@ -25,42 +25,44 @@ export class AccountDelete extends Component {
     return (
       <div>
         <h1>Delete Account</h1>
-        <Form horizontal
-              onSubmit={this.handleSubmit}>
-          <Col sm={12}>
-            <Alert bsStyle="warning">
-              Are you  sure you want to delete account
-              {' '}
-              <strong>{account.name}</strong>?
-            </Alert>
-          </Col>
+        { account &&
+          <Form horizontal
+                onSubmit={this.handleSubmit}>
+            <Col sm={12}>
+              <Alert bsStyle="warning">
+                Are you  sure you want to delete account
+                {' '}
+                <strong>{account.name}</strong>?
+              </Alert>
+            </Col>
 
-          <FormGroup>
-            <Col smOffset={2} sm={2} xs={6}>
-              <LinkContainer to={`/accounts/${account.id}`}>
+            <FormGroup>
+              <Col smOffset={2} sm={2} xs={6}>
+                <LinkContainer to={`/accounts/${account.id}`}>
+                  <Button type="submit">
+                    Cancel
+                  </Button>
+                </LinkContainer>
+              </Col>
+              <Col sm={2} xs={6}>
                 <Button type="submit">
-                  Cancel
+                  Delete
                 </Button>
-              </LinkContainer>
-            </Col>
-            <Col sm={2} xs={6}>
-              <Button type="submit">
-                Delete
-              </Button>
-            </Col>
-          </FormGroup>
-        </Form>
+              </Col>
+            </FormGroup>
+          </Form>}
       </div>
     )
   }
 
   componentDidMount() {
-    const { dispatch } = this.props
-    dispatch(fetchAccountsAndAppAndUserCurrenciesIfNeeded())
+    const { dispatch, accountId } = this.props
+    dispatch(fetchAccountsPageWithDependenies({ ids: [accountId] }))
   }
 }
 
 AccountDelete.propTypes = {
+  accountId: PropTypes.string.isRequired,
   account: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
@@ -70,8 +72,10 @@ AccountDelete.propTypes = {
 }
 
 function mapStateToProps(state, ownProps) {
-  const account = state.accounts.items[ownProps.params.accountId] || {}
+  const accountId = ownProps.params.accountId
+  const account = state.accounts.items[accountId]
   return {
+    accountId,
     account
   }
 }

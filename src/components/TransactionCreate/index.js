@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import TransactionCreateForm from '../TransactionCreateForm'
 import {
   createTransaction,
-  fetchTransactionsAccountsCategoriesIfNeeded
+  fetchTransactionsPageDependencies
 } from '../../actions'
 
 export class TransactionCreate extends Component {
@@ -23,7 +23,10 @@ export class TransactionCreate extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props
-    dispatch(fetchTransactionsAccountsCategoriesIfNeeded())
+    dispatch(fetchTransactionsPageDependencies({
+      accounts: { page: 1 },
+      categories: { page: 1 }
+    }))
   }
 }
 

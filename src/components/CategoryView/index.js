@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { updateCategory, fetchCategoriesIfNeeded } from '../../actions'
+import { updateCategory, fetchCategoriesPageWithDependencies } from '../../actions'
 import CategoryEditForm from '../CategoryEditForm'
 
 class CategoryView extends Component {
@@ -20,8 +20,8 @@ class CategoryView extends Component {
   }
 
   componentDidMount() {
-    const { dispatch } = this.props
-    dispatch(fetchCategoriesIfNeeded())
+    const { dispatch, category } = this.props
+    dispatch(fetchCategoriesPageWithDependencies({ ids: [category.id] }))
   }
 }
 

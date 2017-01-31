@@ -18,7 +18,7 @@ class AccountCreateForm extends Component {
     const {
       currencies,
       userCurrencies,
-      userCurrencyIds,
+      userCurrenciesPagination,
       error,
       handleSubmit,
       pristine,
@@ -26,11 +26,19 @@ class AccountCreateForm extends Component {
       submitting,
       invalid
     } = this.props
-    const options = userCurrencyIds.map(userCurrencyId => {
-      const userCurrency = userCurrencies[userCurrencyId]
-      const currency = currencies[userCurrency.currencyId]
-      return { id: userCurrencyId, name: currency.name }
-    })
+    const userCurrenciesCurrentPageNumber = parseInt(userCurrenciesPagination.currentPage, 10)
+    const userCurrenciesPages = userCurrenciesPagination.pages || {}
+    const userCurrenciesCurrentPage = userCurrenciesPages[userCurrenciesCurrentPageNumber] || {}
+    const userCurrenciesPageIds = userCurrenciesCurrentPage.ids || []
+    const options = userCurrenciesPageIds
+      .map(userCurrencyId => {
+        const userCurrency = userCurrencies[userCurrencyId]
+        const currency = currencies[userCurrency.currencyId]
+        if (userCurrency && currency) {
+          return { id: userCurrencyId, name: currency.name }
+        }
+      })
+      .filter(Boolean)
     const validationState = error => (error && 'error') || null
     return (
       <Form horizontal
@@ -88,7 +96,7 @@ class AccountCreateForm extends Component {
 
 AccountCreateForm.propTypes = {
   userCurrencies: PropTypes.object.isRequired,
-  userCurrencyIds: PropTypes.array.isRequired,
+  userCurrenciesPagination: PropTypes.object.isRequired,
   currencies: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   error: PropTypes.object,

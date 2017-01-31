@@ -2,6 +2,7 @@ import { push } from 'react-router-redux'
 import { alertAdd, convertError } from '..'
 import { SubmissionError } from 'redux-form'
 import api from '../../api'
+import { transactionsPaginator } from '../../reducers/transactions'
 
 export const INVALIDATE_TRANSACTION_LIST = 'INVALIDATE_TRANSACTION_LIST'
 
@@ -29,34 +30,44 @@ function receiveTransactions(json) {
   }
 }
 
-function fetchTransactions() {
-  return dispatch => {
-    dispatch(requestTransactions())
-    return api.transactions
-      .fetchAll()
-      .then(json => dispatch(receiveTransactions(json)))
-      .catch(error => dispatch(alertAdd(error)))
-  }
+const fetchTransactions = ({ page, limit, ids }) => dispatch => {
+  dispatch(requestTransactions());
+  (!ids || !ids.length) && dispatch(transactionsPaginator.requestPage(page, limit))
+  return api.transactions
+    .fetchAll({ page, limit, ids })
+    .then(json => {
+      dispatch(receiveTransactions(json));
+      (!ids || !ids.length) && dispatch(
+          transactionsPaginator.receivePage(
+            parseInt(json.data.meta.page, 10),
+            parseInt(json.data.meta.limit, 10),
+            Boolean(json.data.meta.hasNextPage),
+            json.data.transactions
+          )
+        )
+      return Promise.resolve(json.data)
+    })
+    .catch(error => dispatch(alertAdd(error)))
 }
 
-function shouldFetchTransactions(state) {
-  const transactions = state.transactions
-  if (!transactions.itemIds.length) {
+function shouldFetchTransactions({
+  transactions: { isFetching, didInvalidate },
+  pagination: { transactions: { currentPage } }
+}, page, ids) {
+  if (ids || currentPage !== page) {
     return true
-  } else if (transactions.isFetching) {
+  } else if (isFetching) {
     return false
   } else {
-    return transactions.didInvalidate
+    return didInvalidate
   }
 }
 
-export function fetchTransactionsIfNeeded() {
-  return (dispatch, getState) => {
-    if (shouldFetchTransactions(getState())) {
-      return dispatch(fetchTransactions())
-    } else {
-      return Promise.resolve()
-    }
+export const fetchTransactionsIfNeeded = ({ page, limit, ids }) => (dispatch, getState) => {
+  if (shouldFetchTransactions(getState(), page, ids)) {
+    return dispatch(fetchTransactions({ page, limit, ids }))
+  } else {
+    return Promise.resolve()
   }
 }
 

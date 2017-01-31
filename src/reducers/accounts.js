@@ -10,6 +10,9 @@ import {
   RECEIVE_ACCOUNT_DELETE,
   LOGOUT_SUCCESS
 } from '../actions'
+import createPaginator from '../utils/createPaginator'
+
+export const accountsPaginator = createPaginator('/accounts/', 'accounts')
 
 export const initialState = {
   isFetching: false,
@@ -97,6 +100,6 @@ export default function accounts(state = initialState, action) {
     case LOGOUT_SUCCESS:
       return initialState
     default:
-      return state
+      return accountsPaginator.itemsReducer(state, action)
   }
 }

@@ -83,6 +83,19 @@ const transactionSchema = {
     .empty('')
 }
 
+const paginationSchema = {
+  limit: Joi.number().positive()
+    .max(50)
+    .empty(10),
+  page: Joi.number().positive()
+    .max(1000)
+    .empty(1),
+  ids: Joi.array()
+    .items(Joi.string().guid({ version: 'uuidv4' }))
+    .empty(''),
+  customQuery: Joi.string().empty('')
+}
+
 module.exports = {
   loginSchema,
   registerSchema,
@@ -90,5 +103,6 @@ module.exports = {
   resendEmailConfirmSchema,
   categorySchema,
   accountSchema,
-  transactionSchema
+  transactionSchema,
+  paginationSchema
 }

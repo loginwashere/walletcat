@@ -84,7 +84,7 @@ AccountEditForm.propTypes = {
     id: PropTypes.string.isRequired
   }).isRequired,
   currencyOptions: PropTypes.array.isRequired,
-  handleSubmit: PropTypes.func.isRequired.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
   error: PropTypes.object,
   submitting: PropTypes.bool.isRequired,
   pristine: PropTypes.bool.isRequired,

@@ -41,7 +41,10 @@ RenderField.propTypes = {
   meta: PropTypes.shape({
     touched: PropTypes.bool,
     valid: PropTypes.bool,
-    error: PropTypes.string,
+    error: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.string),
+      PropTypes.string
+    ]),
     warning: PropTypes.string
   }),
   required: PropTypes.bool,

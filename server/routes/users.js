@@ -16,7 +16,7 @@ const NotFoundError = require('../errors/not-found')
 const BadRequestError = require('../errors/bad-request')
 const validate = require('../middleware/validate')
 
-router.post('/', validate(registerSchema), (req, res, next) => {
+router.post('/', validate.body(registerSchema), (req, res, next) => {
   models.user
     .create({
       id: v4(),
@@ -54,7 +54,7 @@ router.get('/:id', (req, res, next) => {
     .catch(next)
 })
 
-router.post('/resend-email-confirm', validate(resendEmailConfirmSchema), (req, res, next) => {
+router.post('/resend-email-confirm', validate.body(resendEmailConfirmSchema), (req, res, next) => {
   models.user
     .findOne({
       where: {

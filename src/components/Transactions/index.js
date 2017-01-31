@@ -6,17 +6,25 @@ import {
 import { LinkContainer } from 'react-router-bootstrap'
 import { connect } from 'react-redux'
 import { Transaction } from '..'
-import { fetchTransactionsAccountsCategoriesIfNeeded } from '../../actions'
+import { WalletPager } from '../Common'
+import { fetchTransactionsPageWithDependencies } from '../../actions'
 
 export class Transactions extends Component {
+  handlePageChange = (page = 1) => {
+    const { dispatch } = this.props
+    dispatch(fetchTransactionsPageWithDependencies({ page }))
+  }
+
   render() {
     const {
       transactions,
-      transactionIds,
       accounts,
       categories,
       userCurrencies,
-      currencies
+      currencies,
+      pages,
+      page,
+      hasNextPage
     } = this.props
     return (
       <div>
@@ -26,65 +34,76 @@ export class Transactions extends Component {
             <Button className="pull-right">Create</Button>
           </LinkContainer>
         </h1>
-        <ListGroup>
-          {transactionIds.map(id => {
-            const transaction = transactions[id]
-            const fromAccount = transaction && accounts[transaction.fromAccountId]
-            const fromAccountUserCurrency = fromAccount && userCurrencies[fromAccount.currencyId]
-            const fromAccountCurrency = fromAccountUserCurrency && currencies[fromAccountUserCurrency.currencyId]
-            const toAccount = transaction && accounts[transaction.toAccountId]
-            const toAccountUserCurrency = toAccount && userCurrencies[toAccount.currencyId]
-            const toAccountCurrency = toAccountUserCurrency && currencies[toAccountUserCurrency.currencyId]
-            const category = transaction && categories[transaction.categoryId]
-            return (
-              transaction &&
-              toAccount &&
-              toAccountUserCurrency &&
-              toAccountCurrency &&
-              fromAccount &&
-              fromAccountUserCurrency &&
-              fromAccountCurrency &&
-              category &&
-              <Transaction key={transaction.id}
-                           transaction={transaction}
-                           fromAccount={fromAccount}
-                           fromAccountCurrency={fromAccountCurrency}
-                           toAccount={toAccount}
-                           toAccountCurrency={toAccountCurrency}
-                           category={category} />
-            )
-          })}
-        </ListGroup>
+        {pages &&
+          page &&
+          pages[page] &&
+          <ListGroup>
+            {pages[page].ids.map(id => {
+              const transaction = transactions[id]
+              const fromAccount = transaction && accounts[transaction.fromAccountId]
+              const fromAccountUserCurrency = fromAccount && userCurrencies[fromAccount.currencyId]
+              const fromAccountCurrency = fromAccountUserCurrency && currencies[fromAccountUserCurrency.currencyId]
+              const toAccount = transaction && accounts[transaction.toAccountId]
+              const toAccountUserCurrency = toAccount && userCurrencies[toAccount.currencyId]
+              const toAccountCurrency = toAccountUserCurrency && currencies[toAccountUserCurrency.currencyId]
+              const category = transaction && categories[transaction.categoryId]
+              return (
+                transaction &&
+                toAccount &&
+                toAccountUserCurrency &&
+                toAccountCurrency &&
+                fromAccount &&
+                fromAccountUserCurrency &&
+                fromAccountCurrency &&
+                category &&
+                <Transaction key={transaction.id}
+                             transaction={transaction}
+                             fromAccount={fromAccount}
+                             fromAccountCurrency={fromAccountCurrency}
+                             toAccount={toAccount}
+                             toAccountCurrency={toAccountCurrency}
+                             category={category} />
+              )
+            })}
+          </ListGroup>}
+        <WalletPager hasPrev={page > 1}
+                     hasNext={hasNextPage}
+                     page={page}
+                     route="/transactions" />
       </div>
     )
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.page !== this.props.page &&
+      (!this.props.pages[nextProps.page] || !this.props.pages[nextProps.page].fetching)
+    ) {
+      this.handlePageChange(nextProps.page)
+    }
+  }
+
   componentDidMount() {
-    const { dispatch } = this.props
-    dispatch(fetchTransactionsAccountsCategoriesIfNeeded())
+    this.handlePageChange()
   }
 }
 
 Transactions.propTypes = {
   transactions: PropTypes.object.isRequired,
-  transactionIds: PropTypes.array.isRequired,
   accounts: PropTypes.object.isRequired,
   categories: PropTypes.object.isRequired,
   currencies: PropTypes.object.isRequired,
   userCurrencies: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  page: PropTypes.number,
+  hasNextPage: PropTypes.bool,
+  pages: PropTypes.object
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   const {
-    isFetching,
-    lastUpdated,
-    items: transactions,
-    itemIds: transactionIds
+    items: transactions
   }  = state.transactions || {
-    isFetching: true,
-    items: {},
-    itemIds: []
+    items: {}
   }
 
   const { items: accounts } = state.accounts || { items: {} }
@@ -92,15 +111,17 @@ function mapStateToProps(state) {
   const { items: currencies } = state.currencies || { items: {} }
   const { items: userCurrencies } = state.userCurrencies || { items: {} }
 
+  const pagination = state.pagination.transactions
+
   return {
-    isFetching,
-    lastUpdated,
     transactions,
-    transactionIds,
     accounts,
     categories,
     userCurrencies,
-    currencies
+    currencies,
+    pages: pagination.pages,
+    page: parseInt(ownProps.location.query.page, 10) || 1,
+    hasNextPage: pagination.hasNextPage
   }
 }
 

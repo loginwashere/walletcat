@@ -1,5 +1,6 @@
 import { alertAdd } from '..'
 import api from '../../api'
+import { userCurrenciesPaginator } from '../../reducers/userCurrencies'
 
 export const REQUEST_ADD_USER_CURRENCY = 'REQUEST_ADD_USER_CURRENCY'
 export const RECEIVE_ADD_USER_CURRENCY = 'RECEIVE_ADD_USER_CURRENCY'
@@ -69,33 +70,42 @@ export function receiveUserCurrencies(json) {
   }
 }
 
-function fetchUserCurrencies() {
-  return dispatch => {
-    dispatch(requestUserCurrencies())
-    return api.userCurrencies
-      .fetchAll()
-      .then(json => dispatch(receiveUserCurrencies(json)))
-      .catch(error => dispatch(alertAdd(error)))
-  }
+const fetchUserCurrencies = ({ page, limit, ids, customQuery }) => dispatch => {
+  dispatch(requestUserCurrencies());
+  (!ids || !ids.length) && dispatch(userCurrenciesPaginator.requestPage(page, limit))
+  return api.userCurrencies
+    .fetchAll({ page, limit, ids, customQuery })
+    .then(json => {
+      dispatch(receiveUserCurrencies(json));
+      (!ids || !ids.length) && dispatch(
+          userCurrenciesPaginator.receivePage(
+            parseInt(json.data.meta.page, 10),
+            parseInt(json.data.meta.limit, 10),
+            Boolean(json.data.meta.hasNextPage),
+            json.data.userCurrencies)
+        )
+      return Promise.resolve(json.data)
+    })
+    .catch(error => dispatch(alertAdd(error)))
 }
 
-function shouldFetchUserCurrencies(state) {
-  const currencies = state.userCurrencies
-  if (!currencies.itemIds.length) {
+const shouldFetchUserCurrencies = ({
+  userCurrencies: { isFetching, didInvalidate },
+  pagination: { userCurrencies: { currentPage } }
+}, page, ids) => {
+  if (ids || currentPage !== page) {
     return true
-  } else if (currencies.isFetching) {
+  } else if (isFetching) {
     return false
   } else {
-    return currencies.didInvalidate
+    return didInvalidate
   }
 }
 
-export function fetchUserCurrenciesIfNeeded() {
-  return (dispatch, getState) => {
-    if (shouldFetchUserCurrencies(getState())) {
-      return dispatch(fetchUserCurrencies())
-    } else {
-      return Promise.resolve()
-    }
+export const fetchUserCurrenciesIfNeeded = ({ page, limit, ids, customQuery }) => (dispatch, getState) => {
+  if (shouldFetchUserCurrencies(getState(), page, ids)) {
+    return dispatch(fetchUserCurrencies({ page, limit, ids, customQuery }))
+  } else {
+    return Promise.resolve()
   }
 }

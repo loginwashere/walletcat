@@ -1,13 +1,19 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { ListGroup, Button } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Category } from '..'
-import { fetchCategoriesIfNeeded } from '../../actions'
+import CategoriesPage from '../CategoriesPage'
+import { WalletPager } from '../Common'
+import { fetchCategoriesPageWithDependencies } from '../../actions'
 
 export class Categories extends Component {
+  handlePageChange = (page = 1) => {
+    const { dispatch } = this.props
+    dispatch(fetchCategoriesPageWithDependencies({ page }))
+  }
+
   render() {
-    const { categories, categoryIds } = this.props
+    const { categories, page, hasNextPage, pages } = this.props
     return (
       <div>
         <h1>
@@ -16,48 +22,53 @@ export class Categories extends Component {
             <Button className="pull-right">Create</Button>
           </LinkContainer>
         </h1>
-        <ListGroup>
-          {categoryIds.map(id => {
-            const category = categories[id]
-            return (
-              <Category key={category.id}
-                        category={category} />
-            )
-          })}
-        </ListGroup>
+        {page &&
+          pages &&
+          pages[page] &&
+          <CategoriesPage categoryIds={pages[page].ids}
+                          categories={categories} />}
+        <WalletPager hasPrev={page > 1}
+                     hasNext={hasNextPage}
+                     page={page}
+                     route="/categories"/>
       </div>
     )
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.page !== this.props.page &&
+      (!this.props.pages[nextProps.page] || !this.props.pages[nextProps.page].fetching)
+    ) {
+      this.handlePageChange(nextProps.page)
+    }
+  }
+
   componentDidMount() {
-    const { dispatch } = this.props
-    dispatch(fetchCategoriesIfNeeded())
+    this.handlePageChange()
   }
 }
 
 Categories.propTypes = {
+  pages: PropTypes.object,
   categories: PropTypes.object.isRequired,
-  categoryIds: PropTypes.array.isRequired,
+  page: PropTypes.number,
+  hasNextPage: PropTypes.bool,
   dispatch: PropTypes.func.isRequired
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   const {
-    isFetching,
-    lastUpdated,
-    items: categories,
-    itemIds: categoryIds
+    items: categories
   }  = state.categories || {
-    isFetching: true,
-    items: {},
-    itemIds: []
+    items: {}
   }
+  const pagination = state.pagination.categories
 
   return {
-    isFetching,
-    lastUpdated,
     categories,
-    categoryIds
+    pages: pagination.pages,
+    page: parseInt(ownProps.location.query.page, 10) || 1,
+    hasNextPage: pagination.hasNextPage
   }
 }
 

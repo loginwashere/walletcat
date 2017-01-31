@@ -2,6 +2,7 @@ import { push } from 'react-router-redux'
 import { alertAdd, convertError } from '..'
 import { SubmissionError } from 'redux-form'
 import api from '../../api'
+import { accountsPaginator } from '../../reducers/accounts'
 
 export const INVALIDATE_ACCOUNT_LIST = 'INVALIDATE_ACCOUNT_LIST'
 
@@ -23,18 +24,31 @@ export const receiveAccounts = (json) => ({
   receivedAt: Date.now()
 })
 
-const fetchAccounts = () => dispatch => {
-  dispatch(requestAccounts())
+const fetchAccounts = ({ page, limit, ids }) => dispatch => {
+  dispatch(requestAccounts());
+  (!ids || !ids.length) && dispatch(accountsPaginator.requestPage(page, limit))
   return api.accounts
-    .fetchAll()
-    .then(json => dispatch(receiveAccounts(json)))
+    .fetchAll({ page, limit, ids })
+    .then(json => {
+      dispatch(receiveAccounts(json));
+      (!ids || !ids.length) && dispatch(
+        accountsPaginator.receivePage(
+          parseInt(json.data.meta.page, 10),
+          parseInt(json.data.meta.limit, 10),
+          Boolean(json.data.meta.hasNextPage),
+          json.data.accounts
+        )
+      )
+      return Promise.resolve(json.data)
+    })
     .catch(error => dispatch(alertAdd(error)))
 }
 
 const shouldFetchAccounts = ({
-  accounts: { itemIds, lastUpdated, isFetching, didInvalidate }
-}) => {
-  if (!itemIds.length || !lastUpdated) {
+  accounts: { isFetching, didInvalidate },
+  pagination: { accounts: { currentPage } }
+}, page, ids) => {
+  if (ids || currentPage !== page) {
     return true
   } else if (isFetching) {
     return false
@@ -43,9 +57,9 @@ const shouldFetchAccounts = ({
   }
 }
 
-export const fetchAccountsIfNeeded = () => (dispatch, getState) => {
-  if (shouldFetchAccounts(getState())) {
-    return dispatch(fetchAccounts())
+export const fetchAccountsIfNeeded = ({ page, limit, ids }) => (dispatch, getState) => {
+  if (shouldFetchAccounts(getState(), page, ids)) {
+    return dispatch(fetchAccounts({ page, limit, ids }))
   } else {
     return Promise.resolve()
   }

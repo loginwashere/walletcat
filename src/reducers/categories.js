@@ -10,6 +10,9 @@ import {
   RECEIVE_CATEGORY_UPDATE,
   LOGOUT_SUCCESS
 } from '../actions'
+import createPaginator from '../utils/createPaginator'
+
+export const categoriesPaginator = createPaginator('/categories/', 'categories')
 
 export const initialState = {
   isFetching: false,
@@ -97,6 +100,6 @@ export default function categories(state = initialState, action) {
     case LOGOUT_SUCCESS:
       return initialState
     default:
-      return state
+      return categoriesPaginator.itemsReducer(state, action)
   }
 }

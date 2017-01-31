@@ -10,6 +10,9 @@ import {
   RECEIVE_TRANSACTION_DELETE,
   LOGOUT_SUCCESS
 } from '../actions'
+import createPaginator from '../utils/createPaginator'
+
+export const transactionsPaginator = createPaginator('/transactions/', 'transactions')
 
 export const initialState = {
   isFetching: false,

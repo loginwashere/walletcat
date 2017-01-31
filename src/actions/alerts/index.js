@@ -8,7 +8,9 @@ function rand() {
 
 const createAlert = error => ({
   id: rand(),
-  message: error.response.data.message,
+  message: error.response
+    ? error.response.data.message
+    : error.message,
   description: error.message
 })
 

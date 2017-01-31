@@ -6,15 +6,25 @@ import {
 } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Account } from '..'
-import { fetchAccountsAndAppAndUserCurrenciesIfNeeded } from '../../actions'
+import { WalletPager } from '../Common'
+import {
+  fetchAccountsPageWithDependenies
+} from '../../actions'
 
 export class Accounts extends Component {
+  handlePageChange = (page = 1) => {
+    const { dispatch } = this.props
+    dispatch(fetchAccountsPageWithDependenies({ page }))
+  }
+
   render() {
     const {
       accounts,
-      accountIds,
       currencies,
-      userCurrencies
+      userCurrencies,
+      pages,
+      hasNextPage,
+      page
     } = this.props
     return (
       <div>
@@ -24,49 +34,58 @@ export class Accounts extends Component {
             <Button className="pull-right">Create</Button>
           </LinkContainer>
         </h1>
-        <ListGroup>
-          {accountIds.map(id => {
-            const account = accounts[id]
-            const accountUserCurrency = userCurrencies[account.currencyId]
-            const accountCurrency = accountUserCurrency && currencies[accountUserCurrency.currencyId]
-            return (
-              account &&
-              accountUserCurrency &&
-              accountCurrency &&
-              <Account key={account.id}
-                       account={account}
-                       accountCurrency={accountCurrency} />
-            )
-          })}
-        </ListGroup>
+        {pages &&
+          page &&
+          pages[page] &&
+          <ListGroup>
+            {pages[page].ids.map(id => {
+              const account = accounts[id]
+              const accountUserCurrency = userCurrencies[account.currencyId]
+              const accountCurrency = accountUserCurrency && currencies[accountUserCurrency.currencyId]
+              return (
+                account &&
+                accountUserCurrency &&
+                accountCurrency &&
+                <Account key={account.id}
+                        account={account}
+                        accountCurrency={accountCurrency} />
+              )
+            })}
+          </ListGroup>}
+        <WalletPager hasPrev={page > 1}
+                     hasNext={hasNextPage}
+                     page={page}
+                     route="/accounts" />
       </div>
     )
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.page !== this.props.page && !nextProps.fetching) {
+      this.handlePageChange(nextProps.page)
+    }
+  }
+
   componentDidMount() {
-    const { dispatch } = this.props
-    dispatch(fetchAccountsAndAppAndUserCurrenciesIfNeeded())
+    this.handlePageChange()
   }
 }
 
 Accounts.propTypes = {
   accounts: PropTypes.object.isRequired,
-  accountIds: PropTypes.array.isRequired,
   userCurrencies: PropTypes.object.isRequired,
   currencies: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  hasNextPage: PropTypes.bool,
+  pages: PropTypes.object,
+  page: PropTypes.number
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   const {
-    isFetching,
-    lastUpdated,
     items: accounts,
-    itemIds: accountIds
   }  = state.accounts || {
-    isFetching: true,
-    items: {},
-    itemIds: []
+    items: {}
   }
   const { items: currencies } = state.currencies || { items: [] }
   const {
@@ -74,14 +93,15 @@ function mapStateToProps(state) {
   } = state.userCurrencies || {
     items: {}
   }
+  const pagination = state.pagination.accounts
 
   return {
-    isFetching,
-    lastUpdated,
     accounts,
-    accountIds,
     currencies,
-    userCurrencies
+    userCurrencies,
+    pages: pagination.pages,
+    page: parseInt(ownProps.location.query.page, 10) || 1,
+    hasNextPage: pagination.hasNextPage
   }
 }
 

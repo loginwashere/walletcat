@@ -6,19 +6,33 @@ const v4 = require('uuid/v4')
 const NotFoundError = require('../errors/not-found')
 const validate = require('../middleware/validate')
 const transactionSchema = require('../../common/validation').transactionSchema
+const paginationSchema = require('../../common/validation').paginationSchema
+const pagination = require('../utils/pagination')
 
-router.get('/', (req, res, next) => {
-  models.transaction
-    .findAll({
-      where: {
-        userId: req.user.sub
-      }
-    })
-    .then(transactions => res.json({ transactions }))
-    .catch(next)
+router.get('/', validate.query(paginationSchema), (req, res, next) => {
+  if (req.query.ids) {
+    models.transaction
+      .findAll({
+        where: {
+          userId: req.user.sub,
+          id: req.query.ids
+        }
+      })
+      .then(items => res.json({ [models.transaction.getTableName()]: items }))
+      .catch(next)
+  } else {
+    pagination
+      .paginate(models.transaction, req.query, {
+        where: {
+          userId: req.user.sub
+        }
+      })
+      .then(res.json.bind(res))
+      .catch(next)
+  }
 })
 
-router.post('/', validate(transactionSchema), (req, res, next) => {
+router.post('/', validate.body(transactionSchema), (req, res, next) => {
   models.transaction
     .create({
       id: v4(),
@@ -39,7 +53,7 @@ router.post('/', validate(transactionSchema), (req, res, next) => {
     .catch(next)
 })
 
-router.put('/:id', validate(transactionSchema), (req, res, next) => {
+router.put('/:id', validate.body(transactionSchema), (req, res, next) => {
   models.transaction
     .findOne({
       where: {

@@ -1,15 +1,15 @@
-import axios from 'axios'
-import { API_URL, getToken } from './common'
+import { API_URL, resource } from './common'
 
 const API_USERS_LIST_URL = `${API_URL}users`
 
-const fetchOne = (id) => axios
-  .get(`${API_USERS_LIST_URL}/${id}`, {
-    headers: {
-      'Authorization': `Bearer ${getToken()}`
-    }
-  })
+const formatParamsToSend = params => params
 
 export default {
-  fetchOne
+  ...resource(API_USERS_LIST_URL, formatParamsToSend),
+  ...{
+    fetchAll: undefined,
+    update: undefined,
+    create: undefined,
+    del: undefined
+  }
 }

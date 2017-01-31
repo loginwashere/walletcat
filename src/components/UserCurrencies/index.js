@@ -1,75 +1,84 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { ListGroup } from 'react-bootstrap'
-import { AppCurrency } from '..'
-import { fetchAppAndUserCurrenciesIfNeeded } from '../../actions'
+import { WalletPager } from '../Common'
+import UserCurrenciesPage from '../UserCurrenciesPage'
+import { fetchUserCurrenciesPageWithDependencies } from '../../actions'
 
 export class UserCurrencies extends Component {
+  handlePageChange = (page = 1) => {
+    const { dispatch } = this.props
+    dispatch(fetchUserCurrenciesPageWithDependencies({ page }))
+  }
+
   render() {
     const {
       currencies,
       userCurrencies,
-      userCurrencyIds,
-      dispatch
+      dispatch,
+      page,
+      pages,
+      hasNextPage,
     } = this.props
     return (
       <div>
         <h1>User Currencies</h1>
-        <ListGroup>
-          {userCurrencyIds.map(id => {
-            const userCurrency = userCurrencies[id]
-            const currency = userCurrency && currencies[userCurrency.currencyId]
-            return (
-              currency &&
-              userCurrency &&
-              <AppCurrency key={currency.id}
-                           currency={currency}
-                           userCurrency={userCurrency}
-                           dispatch={dispatch} />
-            )
-          })}
-        </ListGroup>
+        {page &&
+          pages &&
+          pages[page] &&
+          <UserCurrenciesPage userCurrencyIds={pages[page].ids}
+                              currencies={currencies}
+                              userCurrencies={userCurrencies}
+                              dispatch={dispatch} />}
+        <WalletPager hasPrev={page > 1}
+                     hasNext={hasNextPage}
+                     page={page}
+                     route="/currencies/user" />
       </div>
     )
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.page !== this.props.page &&
+      (!this.props.pages[nextProps.page] || !this.props.pages[nextProps.page].fetching)
+    ) {
+      this.handlePageChange(nextProps.page)
+    }
+  }
+
   componentDidMount() {
-    const { dispatch } = this.props
-    dispatch(fetchAppAndUserCurrenciesIfNeeded())
+    this.handlePageChange()
   }
 }
 
 UserCurrencies.propTypes = {
   currencies: PropTypes.object.isRequired,
   userCurrencies: PropTypes.object.isRequired,
-  userCurrencyIds: PropTypes.array.isRequired,
   dispatch: PropTypes.func.isRequired,
+  page: PropTypes.number,
+  hasNextPage: PropTypes.bool,
+  pages: PropTypes.object
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   const {
-    isFetching,
-    lastUpdated,
     items: currencies,
   }  = state.currencies || {
-    isFetching: true,
     items: {}
   }
 
   const {
-    items: userCurrencies,
-    itemIds: userCurrencyIds,
+    items: userCurrencies
   } = state.userCurrencies || {
-    items: {},
-    itemIds: []
+    items: {}
   }
+  const pagination = state.pagination.userCurrencies
 
   return {
-    isFetching,
-    lastUpdated,
     currencies,
     userCurrencies,
-    userCurrencyIds
+    pages: pagination.pages,
+    page: parseInt(ownProps.location.query.page, 10) || 1,
+    hasNextPage: pagination.hasNextPage
   }
 }
 

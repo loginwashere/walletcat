@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import AccountCreateForm from '../AccountCreateForm'
 import {
   createAccount,
-  fetchAppAndUserCurrenciesIfNeeded
+  fetchUserCurrenciesPageWithDependencies
 } from '../../actions'
 
 export class AccountCreate extends Component {
@@ -13,11 +13,11 @@ export class AccountCreate extends Component {
   }
 
   render() {
-    const { currencies, userCurrencies, userCurrencyIds } = this.props
+    const { currencies, userCurrencies, userCurrenciesPagination } = this.props
     return (
       <AccountCreateForm currencies={currencies}
                          userCurrencies={userCurrencies}
-                         userCurrencyIds={userCurrencyIds}
+                         userCurrenciesPagination={userCurrenciesPagination}
                          onSubmit={this.handleSubmit}
                          initialValues={{ amount: 0 }} />
     )
@@ -25,31 +25,29 @@ export class AccountCreate extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props
-    dispatch(fetchAppAndUserCurrenciesIfNeeded())
+    dispatch(fetchUserCurrenciesPageWithDependencies({ page: 1 }))
   }
 }
 
 AccountCreate.propTypes = {
   userCurrencies: PropTypes.object.isRequired,
-  userCurrencyIds: PropTypes.array.isRequired,
   currencies: PropTypes.object.isRequired,
+  userCurrenciesPagination: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired
 }
 
 function mapStateToProps(state) {
   const { items: currencies } = state.currencies || { items: {} }
   const {
-    items: userCurrencies,
-    itemIds: userCurrencyIds
+    items: userCurrencies
   } = state.userCurrencies || {
-    items: {},
-    itemIds: []
+    items: {}
   }
 
   return {
     currencies,
     userCurrencies,
-    userCurrencyIds
+    userCurrenciesPagination: state.pagination.userCurrencies
   }
 }
 

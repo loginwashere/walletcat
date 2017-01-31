@@ -8,7 +8,7 @@ import {
   Button,
   Alert
 } from 'react-bootstrap'
-import { deleteCategory, fetchCategoriesIfNeeded } from '../../actions'
+import { deleteCategory, fetchCategoriesPageWithDependencies } from '../../actions'
 
 export class CategoryDelete extends Component {
   handleSubmit = (e) => {
@@ -52,8 +52,8 @@ export class CategoryDelete extends Component {
   }
 
   componentDidMount() {
-    const { dispatch } = this.props
-    dispatch(fetchCategoriesIfNeeded())
+    const { dispatch, category } = this.props
+    dispatch(fetchCategoriesPageWithDependencies({ ids: [category.id] }))
   }
 }
 

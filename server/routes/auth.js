@@ -7,7 +7,7 @@ const loginSchema = require('../../common/validation').loginSchema
 const ForbiddenError = require('../errors/forbidden')
 const validate = require('../middleware/validate')
 
-router.post('/', validate(loginSchema), (req, res, next) => {
+router.post('/', validate.body(loginSchema), (req, res, next) => {
   models.user
     .findOne({
       where: {

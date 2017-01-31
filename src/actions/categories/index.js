@@ -2,6 +2,7 @@ import { push } from 'react-router-redux'
 import { alertAdd, convertError } from '..'
 import { SubmissionError } from 'redux-form'
 import api from '../../api'
+import { categoriesPaginator } from '../../reducers/categories'
 
 export const INVALIDATE_CATEGORY_LIST = 'INVALIDATE_CATEGORY_LIST'
 
@@ -29,20 +30,33 @@ export function receiveCategories(json) {
   }
 }
 
-function fetchCategories() {
+function fetchCategories({ page, limit, ids }) {
   return dispatch => {
-    dispatch(requestCategories())
+    dispatch(requestCategories());
+    (!ids || !ids.length) && dispatch(categoriesPaginator.requestPage(page, limit))
     return api.categories
-      .fetchAll()
-      .then(json => dispatch(receiveCategories(json)))
+      .fetchAll({ page, limit, ids })
+      .then(json => {
+        dispatch(receiveCategories(json));
+        (!ids || !ids.length) && dispatch(
+            categoriesPaginator.receivePage(
+              parseInt(json.data.meta.page, 10),
+              parseInt(json.data.meta.limit, 10),
+              Boolean(json.data.meta.hasNextPage),
+              json.data.categories
+            )
+          )
+        return Promise.resolve(json.data)
+      })
       .catch(error => dispatch(alertAdd(error)))
   }
 }
 
 const shouldFetchCategories = ({
-  categories: { itemIds, lastUpdated, isFetching, didInvalidate }
-}) => {
-  if (!itemIds.length || !lastUpdated) {
+  categories: { isFetching, didInvalidate },
+  pagination: { categories: { currentPage } }
+}, page, ids) => {
+  if (ids || currentPage !== page) {
     return true
   } else if (isFetching) {
     return false
@@ -51,13 +65,11 @@ const shouldFetchCategories = ({
   }
 }
 
-export function fetchCategoriesIfNeeded() {
-  return (dispatch, getState) => {
-    if (shouldFetchCategories(getState())) {
-      return dispatch(fetchCategories())
-    } else {
-      return Promise.resolve()
-    }
+export const fetchCategoriesIfNeeded = ({ page, limit, ids }) => (dispatch, getState) => {
+  if (shouldFetchCategories(getState(), page, ids)) {
+    return dispatch(fetchCategories({ page, limit, ids }))
+  } else {
+    return Promise.resolve()
   }
 }
 

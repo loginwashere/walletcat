@@ -6,19 +6,33 @@ const v4 = require('uuid/v4')
 const NotFoundError = require('../errors/not-found')
 const validate = require('../middleware/validate')
 const accountSchema = require('../../common/validation').accountSchema
+const paginationSchema = require('../../common/validation').paginationSchema
+const pagination = require('../utils/pagination')
 
-router.get('/', (req, res, next) => {
-  models.account
-    .findAll({
-      where: {
-        userId: req.user.sub
-      }
-    })
-    .then(accounts => res.json({ accounts }))
-    .catch(next)
+router.get('/', validate.query(paginationSchema), (req, res, next) => {
+  if (req.query.ids) {
+    models.account
+      .findAll({
+        where: {
+          userId: req.user.sub,
+          id: req.query.ids
+        }
+      })
+      .then(items => res.json({ [models.account.getTableName()]: items }))
+      .catch(next)
+  } else {
+    pagination
+      .paginate(models.account, req.query, {
+        where: {
+          userId: req.user.sub
+        }
+      })
+      .then(res.json.bind(res))
+      .catch(next)
+  }
 })
 
-router.post('/', validate(accountSchema), (req, res, next) => {
+router.post('/', validate.body(accountSchema), (req, res, next) => {
   models.account
     .findOne({
       where: {
@@ -46,7 +60,7 @@ router.post('/', validate(accountSchema), (req, res, next) => {
     .catch(next)
 })
 
-router.put('/:id', validate(accountSchema), (req, res, next) => {
+router.put('/:id', validate.body(accountSchema), (req, res, next) => {
   models.account
     .findOne({
       where: {

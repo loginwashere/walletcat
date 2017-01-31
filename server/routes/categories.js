@@ -6,19 +6,33 @@ const v4 = require('uuid/v4')
 const NotFoundError = require('../errors/not-found')
 const validate = require('../middleware/validate')
 const categorySchema = require('../../common/validation').categorySchema
+const paginationSchema = require('../../common/validation').paginationSchema
+const pagination = require('../utils/pagination')
 
-router.get('/', (req, res, next) => {
-  models.category
-    .findAll({
-      where: {
-        userId: req.user.sub
-      }
-    })
-    .then(categories => res.json({ categories }))
-    .catch(next)
+router.get('/', validate.query(paginationSchema), (req, res, next) => {
+  if (req.query.ids) {
+    models.category
+      .findAll({
+        where: {
+          userId: req.user.sub,
+          id: req.query.ids
+        }
+      })
+      .then(items => res.json({ [models.category.getTableName()]: items }))
+      .catch(next)
+  } else {
+    pagination
+      .paginate(models.category, req.query, {
+        where: {
+          userId: req.user.sub
+        }
+      })
+      .then(res.json.bind(res))
+      .catch(next)
+  }
 })
 
-router.post('/', validate(categorySchema), (req, res, next) => {
+router.post('/', validate.body(categorySchema), (req, res, next) => {
   models.category
     .findOne({
       where: {
@@ -44,7 +58,7 @@ router.post('/', validate(categorySchema), (req, res, next) => {
     .catch(next)
 })
 
-router.put('/:id', validate(categorySchema), (req, res, next) => {
+router.put('/:id', validate.body(categorySchema), (req, res, next) => {
   models.category
     .findOne({
       where: {

@@ -8,6 +8,9 @@ import {
   RECEIVE_REMOVE_USER_CURRENCY,
   LOGOUT_SUCCESS
 } from '../actions'
+import createPaginator from '../utils/createPaginator'
+
+export const userCurrenciesPaginator = createPaginator('/userCurrencies/', 'userCurrencies')
 
 export const initialState = {
   isFetching: false,
@@ -110,6 +113,6 @@ export default function userCurrencies(state = initialState, action) {
     case LOGOUT_SUCCESS:
       return initialState
     default:
-      return state
+      return userCurrenciesPaginator.itemsReducer(state, action)
   }
 }
