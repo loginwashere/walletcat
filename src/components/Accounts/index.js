@@ -40,16 +40,18 @@ export class Accounts extends Component {
           <ListGroup>
             {pages[page].ids.map(id => {
               const account = accounts[id]
-              const accountUserCurrency = userCurrencies[account.currencyId]
-              const accountCurrency = accountUserCurrency && currencies[accountUserCurrency.currencyId]
-              return (
-                account &&
-                accountUserCurrency &&
-                accountCurrency &&
-                <Account key={account.id}
-                        account={account}
-                        accountCurrency={accountCurrency} />
-              )
+              if (account) {
+                const accountUserCurrency = userCurrencies[account.currencyId]
+                const accountCurrency = accountUserCurrency && currencies[accountUserCurrency.currencyId]
+                return (
+                  account &&
+                  accountUserCurrency &&
+                  accountCurrency &&
+                  <Account key={account.id}
+                          account={account}
+                          accountCurrency={accountCurrency} />
+                )
+              }
             })}
           </ListGroup>}
         <WalletPager hasPrev={page > 1}
