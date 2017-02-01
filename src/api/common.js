@@ -9,13 +9,17 @@ const addAuthToken = (token) => ({
   'Authorization': `Bearer ${token}`
 })
 
+const unique = arrArg => arrArg.filter(
+  (elem, pos, arr) => arr.indexOf(elem) == pos
+)
+
 export const resource = (url, formatParamsToSend) => ({
   fetchAll: ({ page, limit, ids, customQuery }) => axios
     .get(url, {
       params: {
         page,
         limit,
-        ids,
+        ids: ids && unique(ids),
         customQuery
       },
       headers: {
