@@ -6,18 +6,24 @@ const paginationSchema = require('../../common/validation').paginationSchema
 const pagination = require('../utils/pagination')
 
 router.get('/', validate.query(paginationSchema), (req, res, next) => {
+  const defaultQuery = {
+    where: {},
+    order: [
+      ['createdAt', 'ASC']
+    ]
+  }
   if (req.query.ids) {
     models.currency
-      .findAll({
-        where: {
+      .findAll(Object.assign({}, defaultQuery, {
+        where: Object.assign({}, defaultQuery.where, {
           id: req.query.ids
-        }
-      })
+        })
+      }))
       .then(items => res.json({ [models.currency.getTableName()]: items }))
       .catch(next)
   } else {
     pagination
-      .paginate(models.currency, req.query)
+      .paginate(models.currency, req.query, defaultQuery)
       .then(res.json.bind(res))
       .catch(next)
   }

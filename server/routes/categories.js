@@ -10,23 +10,26 @@ const paginationSchema = require('../../common/validation').paginationSchema
 const pagination = require('../utils/pagination')
 
 router.get('/', validate.query(paginationSchema), (req, res, next) => {
+  const defaultQuery = {
+    where: {
+      userId: req.user.sub
+    },
+    order: [
+      ['createdAt', 'DESC']
+    ]
+  }
   if (req.query.ids) {
     models.category
-      .findAll({
-        where: {
-          userId: req.user.sub,
+      .findAll(Object.assign({}, defaultQuery, {
+        where: Object.assign({}, defaultQuery.where, {
           id: req.query.ids
-        }
-      })
+        })
+      }))
       .then(items => res.json({ [models.category.getTableName()]: items }))
       .catch(next)
   } else {
     pagination
-      .paginate(models.category, req.query, {
-        where: {
-          userId: req.user.sub
-        }
-      })
+      .paginate(models.category, req.query, defaultQuery)
       .then(res.json.bind(res))
       .catch(next)
   }
