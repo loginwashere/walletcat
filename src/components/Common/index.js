@@ -6,6 +6,7 @@ import RenderFieldDatetime from './RenderFieldDatetime'
 import RenderFieldSelect from './RenderFieldSelect'
 import RenderFieldWithoutCol from './RenderFieldWithoutCol'
 import WalletPager from './WalletPager'
+import WalletSelect from './WalletSelect'
 
 const getValidate = (values, schema) =>
   errorMessages(Joi.validate(values, schema, { abortEarly: false }))
@@ -17,5 +18,6 @@ export {
   RenderFieldDatetime,
   RenderFieldSelect,
   RenderFieldWithoutCol,
-  WalletPager
+  WalletPager,
+  WalletSelect
 }

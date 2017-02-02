@@ -26,6 +26,17 @@ router.get('/', validate.query(paginationSchema), (req, res, next) => {
       }))
       .then(items => res.json({ [models.userCurrency.getTableName()]: items }))
       .catch(next)
+  } else if (req.query.filterName && req.query.filterValue) {
+    models.userCurrency
+      .findAll(Object.assign({}, defaultQuery, {
+        where: Object.assign({}, defaultQuery.where, {
+          [req.query.filterName]: {
+            $in: req.query.filterValue
+          }
+        })
+      }))
+      .then(items => res.json({ [models.userCurrency.getTableName()]: items }))
+      .catch(next)
   } else {
     pagination
       .paginate(models.userCurrency, req.query, defaultQuery)

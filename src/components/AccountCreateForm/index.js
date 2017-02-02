@@ -8,17 +8,33 @@ import {
   Button,
   FormControl
 } from 'react-bootstrap'
+import { fetchAppCurrenciesPageWithDependencies } from '../../actions'
 import { accountSchema } from '../../../common/validation'
-import { RenderField, RenderError, RenderFieldSelect, getValidate } from '../Common'
+import { RenderField, RenderError, WalletSelect, getValidate } from '../Common'
 
 const validate = values => getValidate(values, accountSchema)
 
 class AccountCreateForm extends Component {
+  prepareUserCurrenciesOptions = result => {
+    const options = result.userCurrencies
+      .map(userCurrency => {
+        const currency = result.currencies.filter(currency => currency.id === userCurrency.currencyId)[0]
+        if (userCurrency && currency) {
+          return { value: userCurrency.id, label: currency.name }
+        }
+      })
+      .filter(Boolean)
+    return { options }
+  }
+
+  loadUserCurrenciesOptions = (value) => {
+    const { dispatch } = this.props
+    return dispatch(fetchAppCurrenciesPageWithDependencies({ filter: { name: value } }))
+      .then(this.prepareUserCurrenciesOptions)
+  }
+
   render() {
     const {
-      currencies,
-      userCurrencies,
-      userCurrenciesPagination,
       error,
       handleSubmit,
       pristine,
@@ -26,19 +42,7 @@ class AccountCreateForm extends Component {
       submitting,
       invalid
     } = this.props
-    const userCurrenciesCurrentPageNumber = parseInt(userCurrenciesPagination.currentPage, 10)
-    const userCurrenciesPages = userCurrenciesPagination.pages || {}
-    const userCurrenciesCurrentPage = userCurrenciesPages[userCurrenciesCurrentPageNumber] || {}
-    const userCurrenciesPageIds = userCurrenciesCurrentPage.ids || []
-    const options = userCurrenciesPageIds
-      .map(userCurrencyId => {
-        const userCurrency = userCurrencies[userCurrencyId]
-        const currency = currencies[userCurrency.currencyId]
-        if (userCurrency && currency) {
-          return { id: userCurrencyId, name: currency.name }
-        }
-      })
-      .filter(Boolean)
+
     const validationState = error => (error && 'error') || null
     return (
       <Form horizontal
@@ -56,10 +60,9 @@ class AccountCreateForm extends Component {
                type="text" />
         <Field required={true}
                name="currencyId"
-               component={RenderFieldSelect}
+               component={WalletSelect}
                label="Currency"
-               type="select"
-               options={options} />
+               loadOptions={this.loadUserCurrenciesOptions} />
         <Field name="amount"
                component={RenderField}
                label="Amount"
@@ -95,15 +98,13 @@ class AccountCreateForm extends Component {
 }
 
 AccountCreateForm.propTypes = {
-  userCurrencies: PropTypes.object.isRequired,
-  userCurrenciesPagination: PropTypes.object.isRequired,
-  currencies: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   error: PropTypes.object,
   submitting: PropTypes.bool.isRequired,
   pristine: PropTypes.bool.isRequired,
   invalid: PropTypes.bool.isRequired,
-  reset: PropTypes.func.isRequired
+  reset: PropTypes.func.isRequired,
+  dispatch: PropTypes.func
 }
 
 export default reduxForm({

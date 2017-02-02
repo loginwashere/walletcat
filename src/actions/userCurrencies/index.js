@@ -70,14 +70,14 @@ export function receiveUserCurrencies(json) {
   }
 }
 
-const fetchUserCurrencies = ({ page, limit, ids, customQuery }) => dispatch => {
+const fetchUserCurrencies = ({ page, limit, ids, filter }) => dispatch => {
   dispatch(requestUserCurrencies());
-  (!ids || !ids.length) && dispatch(userCurrenciesPaginator.requestPage(page, limit))
+  ((!ids || !ids.length) && !filter) && dispatch(userCurrenciesPaginator.requestPage(page, limit))
   return api.userCurrencies
-    .fetchAll({ page, limit, ids, customQuery })
+    .fetchAll({ page, limit, ids, filter })
     .then(json => {
       dispatch(receiveUserCurrencies(json));
-      (!ids || !ids.length) && dispatch(
+      ((!ids || !ids.length) && !filter) && dispatch(
           userCurrenciesPaginator.receivePage(
             parseInt(json.data.meta.page, 10),
             parseInt(json.data.meta.limit, 10),
@@ -92,8 +92,8 @@ const fetchUserCurrencies = ({ page, limit, ids, customQuery }) => dispatch => {
 const shouldFetchUserCurrencies = ({
   userCurrencies: { isFetching, didInvalidate },
   pagination: { userCurrencies: { currentPage } }
-}, page, ids) => {
-  if (ids || currentPage !== page) {
+}, page, ids, filter) => {
+  if (ids || filter || currentPage !== page) {
     return true
   } else if (isFetching) {
     return false
@@ -102,9 +102,9 @@ const shouldFetchUserCurrencies = ({
   }
 }
 
-export const fetchUserCurrenciesIfNeeded = ({ page, limit, ids, customQuery }) => (dispatch, getState) => {
-  if (shouldFetchUserCurrencies(getState(), page, ids)) {
-    return dispatch(fetchUserCurrencies({ page, limit, ids, customQuery }))
+export const fetchUserCurrenciesIfNeeded = ({ page, limit, ids, filter }) => (dispatch, getState) => {
+  if (shouldFetchUserCurrencies(getState(), page, ids, filter)) {
+    return dispatch(fetchUserCurrencies({ page, limit, ids, filter }))
   } else {
     return Promise.resolve()
   }

@@ -2,8 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import AccountCreateForm from '../AccountCreateForm'
 import {
-  createAccount,
-  fetchUserCurrenciesPageWithDependencies
+  createAccount
 } from '../../actions'
 
 export class AccountCreate extends Component {
@@ -13,19 +12,12 @@ export class AccountCreate extends Component {
   }
 
   render() {
-    const { currencies, userCurrencies, userCurrenciesPagination } = this.props
-    return (
-      <AccountCreateForm currencies={currencies}
-                         userCurrencies={userCurrencies}
-                         userCurrenciesPagination={userCurrenciesPagination}
-                         onSubmit={this.handleSubmit}
-                         initialValues={{ amount: 0 }} />
-    )
-  }
-
-  componentDidMount() {
     const { dispatch } = this.props
-    dispatch(fetchUserCurrenciesPageWithDependencies({ page: 1 }))
+    return (
+      <AccountCreateForm onSubmit={this.handleSubmit}
+                         initialValues={{ amount: 0 }}
+                         dispatch={dispatch} />
+    )
   }
 }
 
@@ -36,19 +28,4 @@ AccountCreate.propTypes = {
   dispatch: PropTypes.func.isRequired
 }
 
-function mapStateToProps(state) {
-  const { items: currencies } = state.currencies || { items: {} }
-  const {
-    items: userCurrencies
-  } = state.userCurrencies || {
-    items: {}
-  }
-
-  return {
-    currencies,
-    userCurrencies,
-    userCurrenciesPagination: state.pagination.userCurrencies
-  }
-}
-
-export default  connect(mapStateToProps)(AccountCreate)
+export default  connect()(AccountCreate)

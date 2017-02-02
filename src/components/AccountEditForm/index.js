@@ -9,13 +9,32 @@ import {
   FormControl
 } from 'react-bootstrap'
 import { accountSchema } from '../../../common/validation'
-import { RenderField, RenderError, RenderFieldSelect, getValidate } from '../Common'
+import { fetchAppCurrenciesPageWithDependencies } from '../../actions'
+import { RenderField, RenderError, WalletSelect, getValidate } from '../Common'
 
 const validate = values => getValidate(values, accountSchema)
 
 class AccountEditForm extends Component {
+  prepareUserCurrenciesOptions = result => {
+    const options = result.userCurrencies
+      .map(userCurrency => {
+        const currency = result.currencies.filter(currency => currency.id === userCurrency.currencyId)[0]
+        if (userCurrency && currency) {
+          return { value: userCurrency.id, label: currency.name }
+        }
+      })
+      .filter(Boolean)
+    return { options }
+  }
+
+  loadUserCurrenciesOptions = (value) => {
+    const { dispatch } = this.props
+    return dispatch(fetchAppCurrenciesPageWithDependencies({ filter: { name: value } }))
+      .then(this.prepareUserCurrenciesOptions)
+  }
+
   render() {
-    const { error, handleSubmit, account, pristine, submitting, reset, invalid, currencyOptions } = this.props
+    const { error, handleSubmit, account, pristine, submitting, reset, invalid } = this.props
     const validationState = error => (error && 'error') || null
     return (
       <Form horizontal
@@ -34,10 +53,9 @@ class AccountEditForm extends Component {
                type="text" />
         <Field required={true}
                name="currencyId"
-               component={RenderFieldSelect}
+               component={WalletSelect}
                label="Currency"
-               type="select"
-               options={currencyOptions} />
+               loadOptions={this.loadUserCurrenciesOptions}  />
         <Field name="amount"
                component={RenderField}
                label="Amount"
@@ -83,7 +101,7 @@ AccountEditForm.propTypes = {
   account: PropTypes.shape({
     id: PropTypes.string.isRequired
   }).isRequired,
-  currencyOptions: PropTypes.array.isRequired,
+  dispatch: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   error: PropTypes.object,
   submitting: PropTypes.bool.isRequired,

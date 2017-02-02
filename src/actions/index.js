@@ -36,8 +36,16 @@ export function fetchAccountsAndAppAndUserCurrenciesIfNeeded() {
 
 const fetchCurrenciesCb = dispatch => data => {
   if (data && data.userCurrencies) {
+    const userCurrencies = data.userCurrencies
     const currenciesIds = data.userCurrencies.map(userCurrency => userCurrency.currencyId)
     return dispatch(fetchAppCurrenciesIfNeeded({ ids: currenciesIds }))
+      .then(data => {
+        const currencies = data.currencies
+        return Promise.resolve({
+          userCurrencies,
+          currencies
+        })
+      })
   }
   return Promise.resolve()
 }
@@ -55,17 +63,24 @@ export const fetchAccountsPageWithDependenies = ({ page, limit, ids } = {}) => d
   dispatch(fetchAccountsIfNeeded({ page, limit, ids }))
     .then(fetchUserCurrenciesCb(dispatch))
 
-export const fetchUserCurrenciesPageWithDependencies = ({ page, limit, ids } = {}) => dispatch =>
-  dispatch(fetchUserCurrenciesIfNeeded({ page, limit, ids }))
+export const fetchUserCurrenciesPageWithDependencies = ({ page, limit, ids, filter } = {}) => dispatch =>
+  dispatch(fetchUserCurrenciesIfNeeded({ page, limit, ids, filter }))
     .then(fetchCurrenciesCb(dispatch))
 
-export const fetchAppCurrenciesPageWithDependencies = ({ page, limit, ids } = {}) => dispatch =>
-  dispatch(fetchAppCurrenciesIfNeeded({ page, limit, ids }))
+export const fetchAppCurrenciesPageWithDependencies = ({ page, limit, ids, filter } = {}) => dispatch =>
+  dispatch(fetchAppCurrenciesIfNeeded({ page, limit, ids, filter }))
     .then(data => {
       if (data && data.currencies && data.currencies.length) {
+        const currencies = data.currencies
         const currenciesIds = data.currencies.map(currency => currency.id)
-        return dispatch(fetchUserCurrenciesIfNeeded({ customQuery: { currencyId: currenciesIds } }))
-          .then(fetchCurrenciesCb(dispatch))
+        return dispatch(fetchUserCurrenciesIfNeeded({ filter: { currencyId: currenciesIds } }))
+          .then(data => {
+            const userCurrencies = data.userCurrencies
+            return Promise.resolve({
+              userCurrencies,
+              currencies
+            })
+          })
       }
       return Promise.resolve()
     })
@@ -87,8 +102,8 @@ export const fetchTransactionsPageWithDependencies = ({ page, limit, ids } = {})
       return Promise.resolve()
     })
 
-export const fetchCategoriesPageWithDependencies = ({ page, limit, ids } = {}) => dispatch =>
-  dispatch(fetchCategoriesIfNeeded({ page, limit, ids }))
+export const fetchCategoriesPageWithDependencies = ({ page, limit, ids, filter } = {}) => dispatch =>
+  dispatch(fetchCategoriesIfNeeded({ page, limit, ids, filter }))
 
 export const fetchTransactionsPageDependencies = ({ accounts, categories }) => dispatch =>
   Promise.all([

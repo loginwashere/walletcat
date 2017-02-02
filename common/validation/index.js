@@ -49,7 +49,8 @@ const accountSchema = {
   currencyId: Joi.string().guid({ version: 'uuidv4' })
     .required(),
   description: Joi.string().max(255)
-    .empty(''),
+    .empty('')
+    .allow(null),
   amount: Joi.number().min(0)
     .precision(8)
     .max(99999999999)
@@ -93,7 +94,14 @@ const paginationSchema = {
   ids: Joi.array()
     .items(Joi.string().guid({ version: 'uuidv4' }))
     .empty(''),
-  customQuery: Joi.string().empty('')
+  filterName: Joi.string().empty(''),
+  filterValue: Joi.alternatives()
+    .try(
+      Joi.string().empty(''),
+      Joi.array()
+        .items(Joi.string())
+        .empty('')
+    )
 }
 
 module.exports = {
