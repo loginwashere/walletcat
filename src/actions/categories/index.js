@@ -30,15 +30,15 @@ export function receiveCategories(json) {
   }
 }
 
-function fetchCategories({ page, limit, ids }) {
+function fetchCategories({ page, limit, ids, filter }) {
   return dispatch => {
     dispatch(requestCategories());
-    (!ids || !ids.length) && dispatch(categoriesPaginator.requestPage(page, limit))
+    ((!ids || !ids.length) && !filter) && dispatch(categoriesPaginator.requestPage(page, limit))
     return api.categories
-      .fetchAll({ page, limit, ids })
+      .fetchAll({ page, limit, ids, filter })
       .then(json => {
         dispatch(receiveCategories(json));
-        (!ids || !ids.length) && dispatch(
+        ((!ids || !ids.length) && !filter) && dispatch(
             categoriesPaginator.receivePage(
               parseInt(json.data.meta.page, 10),
               parseInt(json.data.meta.limit, 10),
@@ -55,8 +55,8 @@ function fetchCategories({ page, limit, ids }) {
 const shouldFetchCategories = ({
   categories: { isFetching, didInvalidate },
   pagination: { categories: { currentPage } }
-}, page, ids) => {
-  if (ids || currentPage !== page) {
+}, page, ids, filter) => {
+  if (ids || filter || currentPage !== page) {
     return true
   } else if (isFetching) {
     return false
@@ -65,9 +65,9 @@ const shouldFetchCategories = ({
   }
 }
 
-export const fetchCategoriesIfNeeded = ({ page, limit, ids }) => (dispatch, getState) => {
-  if (shouldFetchCategories(getState(), page, ids)) {
-    return dispatch(fetchCategories({ page, limit, ids }))
+export const fetchCategoriesIfNeeded = ({ page, limit, ids, filter }) => (dispatch, getState) => {
+  if (shouldFetchCategories(getState(), page, ids, filter)) {
+    return dispatch(fetchCategories({ page, limit, ids, filter }))
   } else {
     return Promise.resolve()
   }

@@ -9,18 +9,17 @@ import {
   FormControl
 } from 'react-bootstrap'
 import { categorySchema } from '../../../common/validation'
-import { RenderField, RenderError, getValidate } from '../Common'
+import { RenderField, RenderError, getValidate, formValidationState } from '../Common'
 
 const validate = values => getValidate(values, categorySchema)
 
 export class CategoryCreateForm extends Component {
   render() {
     const { error, handleSubmit, pristine, reset, submitting, invalid } = this.props
-    const validationState = error => (error && 'error') || null
     return (
       <Form horizontal
             onSubmit={handleSubmit}>
-        <FormGroup validationState={validationState(error)}>
+        <FormGroup validationState={formValidationState(error)}>
           <h1 className="form-signin-heading">New Category</h1>
           <FormControl.Feedback />
           <RenderError error={error} />

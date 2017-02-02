@@ -8,18 +8,47 @@ import {
   Button,
   FormControl
 } from 'react-bootstrap'
+import {
+  fetchCategoriesPageWithDependencies,
+  fetchAccountsIfNeeded
+} from '../../actions'
 import { transactionSchema } from '../../../common/validation'
 import {
   RenderField,
-  RenderFieldSelect,
+  WalletSelect,
   RenderFieldDatetime,
   RenderError,
-  getValidate
+  getValidate,
+  formValidationState
 } from '../Common'
 
 const validate = values => getValidate(values, transactionSchema)
 
 export class TransactionCreateForm extends Component {
+  prepareAccountsOptions = result => {
+    const options = result.accounts
+      .map(account => ({ value: account.id, label: account.name }))
+    return { options }
+  }
+
+  loadAccountsOptions = (value) => {
+    const { dispatch } = this.props
+    return dispatch(fetchAccountsIfNeeded({ filter: { name: value } }))
+      .then(this.prepareAccountsOptions)
+  }
+
+  prepareCategoriesOptions = result => {
+    const options = result.categories
+      .map(category => ({ value: category.id, label: category.name }))
+    return { options }
+  }
+
+  loadCategoriesOptions = (value) => {
+    const { dispatch } = this.props
+    return dispatch(fetchCategoriesPageWithDependencies({ filter: { name: value } }))
+      .then(this.prepareCategoriesOptions)
+  }
+
   render() {
     const {
       error,
@@ -27,15 +56,12 @@ export class TransactionCreateForm extends Component {
       pristine,
       reset,
       submitting,
-      accountOptions,
-      categoryOptions,
       invalid
     } = this.props
-    const validationState = error => (error && 'error') || null
     return (
       <Form horizontal
             onSubmit={handleSubmit}>
-        <FormGroup validationState={validationState(error)}>
+        <FormGroup validationState={formValidationState(error)}>
           <h1 className="form-signin-heading">New Transaction</h1>
           <FormControl.Feedback />
           <RenderError error={error} />
@@ -43,16 +69,14 @@ export class TransactionCreateForm extends Component {
 
         <Field required={true}
                name="fromAccountId"
-               component={RenderFieldSelect}
+               component={WalletSelect}
                label="From Account"
-               type="select"
-               options={accountOptions} />
+               loadOptions={this.loadAccountsOptions} />
         <Field required={true}
                name="toAccountId"
-               component={RenderFieldSelect}
+               component={WalletSelect}
                label="To Account"
-               type="select"
-               options={accountOptions} />
+               loadOptions={this.loadAccountsOptions} />
         <Field required={true}
                name="fromAmount"
                component={RenderField}
@@ -80,10 +104,9 @@ export class TransactionCreateForm extends Component {
                type="text" />
         <Field required={true}
                name="categoryId"
-               component={RenderFieldSelect}
+               component={WalletSelect}
                label="Category"
-               type="select"
-               options={categoryOptions} />
+               loadOptions={this.loadCategoriesOptions} />
         <Field name="description"
                component={RenderField}
                label="Description"
@@ -115,8 +138,7 @@ export class TransactionCreateForm extends Component {
 }
 
 TransactionCreateForm.propTypes = {
-  accountOptions: PropTypes.array.isRequired,
-  categoryOptions: PropTypes.array.isRequired,
+  dispatch: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   error: PropTypes.object,
   submitting: PropTypes.bool.isRequired,

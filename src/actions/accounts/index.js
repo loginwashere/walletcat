@@ -24,14 +24,14 @@ export const receiveAccounts = (json) => ({
   receivedAt: Date.now()
 })
 
-const fetchAccounts = ({ page, limit, ids }) => dispatch => {
+const fetchAccounts = ({ page, limit, ids, filter }) => dispatch => {
   dispatch(requestAccounts());
-  (!ids || !ids.length) && dispatch(accountsPaginator.requestPage(page, limit))
+  ((!ids || !ids.length) && !filter) && dispatch(accountsPaginator.requestPage(page, limit))
   return api.accounts
-    .fetchAll({ page, limit, ids })
+    .fetchAll({ page, limit, ids, filter })
     .then(json => {
       dispatch(receiveAccounts(json));
-      (!ids || !ids.length) && dispatch(
+      ((!ids || !ids.length) && !filter) && dispatch(
         accountsPaginator.receivePage(
           parseInt(json.data.meta.page, 10),
           parseInt(json.data.meta.limit, 10),
@@ -47,8 +47,8 @@ const fetchAccounts = ({ page, limit, ids }) => dispatch => {
 const shouldFetchAccounts = ({
   accounts: { isFetching, didInvalidate },
   pagination: { accounts: { currentPage } }
-}, page, ids) => {
-  if (ids || currentPage !== page) {
+}, page, ids, filter) => {
+  if (ids || filter || currentPage !== page) {
     return true
   } else if (isFetching) {
     return false
@@ -57,9 +57,9 @@ const shouldFetchAccounts = ({
   }
 }
 
-export const fetchAccountsIfNeeded = ({ page, limit, ids }) => (dispatch, getState) => {
-  if (shouldFetchAccounts(getState(), page, ids)) {
-    return dispatch(fetchAccounts({ page, limit, ids }))
+export const fetchAccountsIfNeeded = ({ page, limit, ids, filter }) => (dispatch, getState) => {
+  if (shouldFetchAccounts(getState(), page, ids, filter)) {
+    return dispatch(fetchAccounts({ page, limit, ids, filter }))
   } else {
     return Promise.resolve()
   }

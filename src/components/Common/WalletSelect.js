@@ -7,10 +7,25 @@ import {
   HelpBlock
 } from 'react-bootstrap'
 import Select from 'react-select'
+import { validationState } from '.'
 
 import 'react-select/dist/react-select.css'
 
 class WalletSelect extends Component {
+  onChange = input => option => {
+    const value = option
+      ? option.value
+      : ''
+    input.onChange(value)
+  }
+
+  onBlur = input => () => {
+    const value = typeof input.value === 'object'
+      ? input.value.value
+      : input.value
+    input.onBlur(value)
+  }
+
   render() {
     const {
       input,
@@ -20,22 +35,17 @@ class WalletSelect extends Component {
       loadOptions,
       required,
       autoFocus,
-      disabled
+      disabled,
+      autoload
     } = this.props
-    const validationState = (touched, error, warning) => (touched && (
-        (error && 'error') ||
-        (warning && 'warning') ||
-        (!warning && valid && 'success'))) ||
-      null
     const Component = (options && !loadOptions)
       ? Select
       : Select.Async
     return (
       <FormGroup controlId="formHorizontalName"
-                validationState={validationState(touched, error, warning)}>
+                validationState={validationState(touched, error, warning, valid)}>
         <Col componentClass={ControlLabel} sm={2}>{label}</Col>
         <Col sm={10}>
-
           <Component
             name={input.name}
             value={input.value}
@@ -45,18 +55,9 @@ class WalletSelect extends Component {
             required={required}
             autoFocus={autoFocus}
             placeholder={label}
-            onChange={(option) => {
-              const value = option
-                ? option.value
-                : ''
-              input.onChange(value)
-            }}
-            onBlur={() => {
-              const value = typeof input.value === 'object'
-                ? input.value.value
-                : input.value
-              input.onBlur(value)
-            }}
+            autoload={autoload}
+            onChange={this.onChange(input)}
+            onBlur={this.onBlur(input)}
           />
           <FormControl.Feedback />
           {touched && (
@@ -84,7 +85,8 @@ WalletSelect.propTypes = {
   autoFocus: PropTypes.bool,
   options: PropTypes.array,
   loadOptions: PropTypes.func,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  autoload: PropTypes.bool
 }
 
 export default WalletSelect

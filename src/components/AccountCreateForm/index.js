@@ -10,7 +10,7 @@ import {
 } from 'react-bootstrap'
 import { fetchAppCurrenciesPageWithDependencies } from '../../actions'
 import { accountSchema } from '../../../common/validation'
-import { RenderField, RenderError, WalletSelect, getValidate } from '../Common'
+import { RenderField, RenderError, WalletSelect, getValidate, formValidationState } from '../Common'
 
 const validate = values => getValidate(values, accountSchema)
 
@@ -43,11 +43,10 @@ class AccountCreateForm extends Component {
       invalid
     } = this.props
 
-    const validationState = error => (error && 'error') || null
     return (
       <Form horizontal
             onSubmit={handleSubmit}>
-        <FormGroup validationState={validationState(error)}>
+        <FormGroup validationState={formValidationState(error)}>
           <h1 className="form-signin-heading">New Account</h1>
           <FormControl.Feedback />
           <RenderError error={error} />

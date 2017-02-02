@@ -10,12 +10,13 @@ import {
 } from 'react-bootstrap'
 import { accountSchema } from '../../../common/validation'
 import { fetchAppCurrenciesPageWithDependencies } from '../../actions'
-import { RenderField, RenderError, WalletSelect, getValidate } from '../Common'
+import { RenderField, RenderError, WalletSelect, getValidate, formValidationState } from '../Common'
 
 const validate = values => getValidate(values, accountSchema)
 
 class AccountEditForm extends Component {
   prepareUserCurrenciesOptions = result => {
+    const { customInitialValues } = this.props
     const options = result.userCurrencies
       .map(userCurrency => {
         const currency = result.currencies.filter(currency => currency.id === userCurrency.currencyId)[0]
@@ -24,38 +25,40 @@ class AccountEditForm extends Component {
         }
       })
       .filter(Boolean)
+      .filter(option => option.label !== customInitialValues.currencyId.label)
+      .concat(customInitialValues && customInitialValues.currencyId && [customInitialValues.currencyId])
+      .filter(Boolean)
     return { options }
   }
 
-  loadUserCurrenciesOptions = (value) => {
+  loadUserCurrenciesOptions = value => {
     const { dispatch } = this.props
     return dispatch(fetchAppCurrenciesPageWithDependencies({ filter: { name: value } }))
       .then(this.prepareUserCurrenciesOptions)
   }
 
   render() {
-    const { error, handleSubmit, account, pristine, submitting, reset, invalid } = this.props
-    const validationState = error => (error && 'error') || null
+    const { error, handleSubmit, account, pristine, submitting, reset, invalid, customInitialValues } = this.props
     return (
       <Form horizontal
             onSubmit={handleSubmit}>
-        <FormGroup validationState={validationState(error)}>
+        <FormGroup validationState={formValidationState(error)}>
           <h1 className="form-signin-heading truncate">Account {account.name}</h1>
           <FormControl.Feedback />
           <RenderError error={error} />
         </FormGroup>
 
-        <Field autoFocus={true}
-               required={true}
+        <Field required={true}
                name="name"
                component={RenderField}
                label="Name"
                type="text" />
-        <Field required={true}
+        {customInitialValues && <Field required={true}
                name="currencyId"
                component={WalletSelect}
                label="Currency"
-               loadOptions={this.loadUserCurrenciesOptions}  />
+               loadOptions={this.loadUserCurrenciesOptions}
+               autoload={true} />}
         <Field name="amount"
                component={RenderField}
                label="Amount"
@@ -98,6 +101,8 @@ class AccountEditForm extends Component {
 }
 
 AccountEditForm.propTypes = {
+  initialValues: PropTypes.object,
+  customInitialValues: PropTypes.object,
   account: PropTypes.shape({
     id: PropTypes.string.isRequired
   }).isRequired,

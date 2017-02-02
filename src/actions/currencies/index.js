@@ -28,7 +28,6 @@ const fetchAppCurrencies = ({ page, limit, ids, filter }) => dispatch => {
   return api.currencies
     .fetchAll({ page, limit, ids, filter })
     .then(json => {
-      console.log(filter)
       dispatch(receiveAppCurrencies(json));
       ((!ids || !ids.length) && !filter) && dispatch(
           currenciesPaginator.receivePage(

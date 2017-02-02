@@ -4,26 +4,24 @@ import {
   updateTransaction,
   fetchTransactionsPageWithDependencies
 } from '../../actions'
+import { selectEditProps } from '../../api/transactions'
 import TransactionEditForm from '../TransactionEditForm'
 
 class TransactionView extends Component {
   handleSubmit = (values) => {
-    const { dispatch, transaction: { id } } = this.props
-    return dispatch(updateTransaction(id, values))
+    const { dispatch, transactionId } = this.props
+    return dispatch(updateTransaction(transactionId, values))
   }
 
   render() {
-    const { transaction, initialValues, accountOptions, categoryOptions } = this.props
+    const { transaction, initialValues, customInitialValues } = this.props
     return (
-      (transaction &&
-      accountOptions.length &&
-      categoryOptions.length)
+      transaction
         ? <TransactionEditForm onSubmit={this.handleSubmit}
                             transaction={transaction}
                             initialValues={initialValues}
-                             enableReinitialize={true}
-                            accountOptions={accountOptions}
-                            categoryOptions={categoryOptions} />
+                            customInitialValues={customInitialValues}
+                            enableReinitialize={true} />
         : null
     )
   }
@@ -41,6 +39,7 @@ TransactionView.propTypes = {
     description: PropTypes.string
   }),
   initialValues: PropTypes.object,
+  customInitialValues: PropTypes.object,
   accountOptions: PropTypes.array,
   categoryOptions: PropTypes.array,
   dispatch: PropTypes.func.isRequired
@@ -49,19 +48,34 @@ TransactionView.propTypes = {
 function mapStateToProps(state, ownProps) {
   const transactionId = ownProps.params.transactionId
   const transaction = state.transactions.items[transactionId]
-
-  const { items: accounts, itemIds: accountIds } = state.accounts || { items: {}, itemIds: [] }
-  const { items: categories, itemIds: categoryIds } = state.categories || { items: {}, itemIds: [] }
-
-  const accountOptions = accountIds.map(id => accounts[id])
-  const categoryOptions = categoryIds.map(id => categories[id])
+  const fromAccount = transaction && state.accounts.items[transaction.fromAccountId]
+  const toAccount = transaction && state.accounts.items[transaction.toAccountId]
+  const category = transaction && state.categories.items[transaction.categoryId]
+  const initialValues = transaction && fromAccount && toAccount && category && transaction
+  const customInitialValues = initialValues && {
+    ...initialValues,
+    fromAccountId: {
+      value: fromAccount.id,
+      label: fromAccount.name,
+      clearableValue: false
+    },
+    toAccountId: {
+      value: toAccount.id,
+      label: toAccount.name,
+      clearableValue: false
+    },
+    categoryId: {
+      value: category.id,
+      label: category.name,
+      clearableValue: false
+    }
+  }
 
   return {
     transactionId,
     transaction,
-    initialValues: transaction,
-    accountOptions,
-    categoryOptions
+    initialValues: initialValues && selectEditProps(initialValues),
+    customInitialValues: customInitialValues && selectEditProps(customInitialValues)
   }
 }
 

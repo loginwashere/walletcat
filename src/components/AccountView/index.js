@@ -4,6 +4,7 @@ import {
   updateAccount,
   fetchAccountsPageWithDependenies
 } from '../../actions'
+import { selectEditProps } from '../../api/accounts'
 import AccountEditForm from '../AccountEditForm'
 
 class AccountView extends Component {
@@ -13,12 +14,13 @@ class AccountView extends Component {
   }
 
   render() {
-    const { account, initialValues, dispatch } = this.props
+    const { account, initialValues, customInitialValues, dispatch } = this.props
     return (
       account
         ? <AccountEditForm onSubmit={this.handleSubmit}
                            account={account}
                            initialValues={initialValues}
+                           customInitialValues={customInitialValues}
                            enableReinitialize={true}
                            dispatch={dispatch} />
         : null
@@ -39,6 +41,7 @@ AccountView.propTypes = {
     description: PropTypes.string
   }),
   initialValues: PropTypes.object,
+  customInitialValues: PropTypes.object,
   dispatch: PropTypes.func.isRequired
 }
 
@@ -47,19 +50,21 @@ function mapStateToProps(state, ownProps) {
   const account = state.accounts.items[accountId]
   const userCurrency = account && state.userCurrencies.items[account.currencyId]
   const currency = userCurrency && state.currencies.items[userCurrency.currencyId]
-  const initialValues = account && currency && {
-    ...account,
+  const initialValues = account && currency && account
+  const customInitialValues = initialValues && {
+    ...initialValues,
     currencyId: {
       value: account.currencyId,
-      label: currency.name
+      label: currency.name,
+      clearableValue: false
     }
   }
 
   return {
     accountId,
     account,
-    initialValues: account && currency && (({ name, currencyId, amount, description }) =>
-      ({ name, currencyId, amount, description }))(initialValues)
+    initialValues: initialValues && selectEditProps(initialValues),
+    customInitialValues: customInitialValues && selectEditProps(customInitialValues),
   }
 }
 

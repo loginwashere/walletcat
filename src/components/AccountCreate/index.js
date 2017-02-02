@@ -22,9 +22,6 @@ export class AccountCreate extends Component {
 }
 
 AccountCreate.propTypes = {
-  userCurrencies: PropTypes.object.isRequired,
-  currencies: PropTypes.object.isRequired,
-  userCurrenciesPagination: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired
 }
 

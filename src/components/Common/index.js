@@ -11,8 +11,20 @@ import WalletSelect from './WalletSelect'
 const getValidate = (values, schema) =>
   errorMessages(Joi.validate(values, schema, { abortEarly: false }))
 
+
+const validationState = (touched, error, warning, valid) => (touched && (
+    (error && 'error') ||
+    (warning && 'warning') ||
+    (!warning && valid && 'success'))) ||
+  null
+
+
+const formValidationState = error => (error && 'error') || null
+
 export {
   getValidate,
+  validationState,
+  formValidationState,
   RenderError,
   RenderField,
   RenderFieldDatetime,

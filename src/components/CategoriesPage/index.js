@@ -7,8 +7,9 @@ const CategoriesPage = ({ categoryIds, categories }) => (
     {categoryIds.map(id => {
       const category = categories[id]
       return (
-        <Category key={category.id}
-                  category={category} />
+        category &&
+          <Category key={category.id}
+                    category={category} />
       )
     })}
   </ListGroup>

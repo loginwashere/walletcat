@@ -13,8 +13,8 @@ import { deleteCategory, fetchCategoriesPageWithDependencies } from '../../actio
 export class CategoryDelete extends Component {
   handleSubmit = (e) => {
     e.preventDefault()
-    const { dispatch, category: { id } } = this.props
-    dispatch(deleteCategory(id))
+    const { dispatch, categoryId } = this.props
+    dispatch(deleteCategory(categoryId))
   }
 
   render() {
@@ -22,38 +22,39 @@ export class CategoryDelete extends Component {
     return (
       <div>
         <h1>Delete Category</h1>
-        <Form horizontal
-              onSubmit={this.handleSubmit}>
-          <Col sm={12}>
-            <Alert bsStyle="warning">
-              Are you  sure you want to delete category
-              {' '}
-              <strong>{category.name}</strong>?
-            </Alert>
-          </Col>
+        {category &&
+          <Form horizontal
+                onSubmit={this.handleSubmit}>
+            <Col sm={12}>
+              <Alert bsStyle="warning">
+                Are you  sure you want to delete category
+                {' '}
+                <strong>{category.name}</strong>?
+              </Alert>
+            </Col>
 
-          <FormGroup>
-            <Col smOffset={2} sm={2} xs={6}>
-              <LinkContainer to={`/categories/${category.id}`}>
+            <FormGroup>
+              <Col smOffset={2} sm={2} xs={6}>
+                <LinkContainer to={`/categories/${category.id}`}>
+                  <Button type="submit">
+                    Cancel
+                  </Button>
+                </LinkContainer>
+              </Col>
+              <Col sm={2} xs={6}>
                 <Button type="submit">
-                  Cancel
+                  Delete
                 </Button>
-              </LinkContainer>
-            </Col>
-            <Col sm={2} xs={6}>
-              <Button type="submit">
-                Delete
-              </Button>
-            </Col>
-          </FormGroup>
-        </Form>
+              </Col>
+            </FormGroup>
+          </Form>}
       </div>
     )
   }
 
   componentDidMount() {
-    const { dispatch, category } = this.props
-    dispatch(fetchCategoriesPageWithDependencies({ ids: [category.id] }))
+    const { dispatch, categoryId } = this.props
+    dispatch(fetchCategoriesPageWithDependencies({ ids: [categoryId] }))
   }
 }
 
@@ -63,12 +64,15 @@ CategoryDelete.propTypes = {
     name: PropTypes.string.isRequired,
     description: PropTypes.string
   }),
+  categoryId: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired
 }
 
 function mapStateToProps(state, ownProps) {
-  const category = state.categories.items[ownProps.params.categoryId] || {}
+  const categoryId = ownProps.params.categoryId
+  const category = state.categories.items[categoryId]
   return {
+    categoryId,
     category
   }
 }

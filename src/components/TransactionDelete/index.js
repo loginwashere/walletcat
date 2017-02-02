@@ -13,8 +13,8 @@ import { deleteTransaction, fetchTransactionsPageWithDependencies } from '../../
 export class TransactionDelete extends Component {
   handleSubmit = (e) => {
     e.preventDefault()
-    const { dispatch, transaction: { id } } = this.props
-    return dispatch(deleteTransaction(id))
+    const { dispatch, transactionId } = this.props
+    return dispatch(deleteTransaction(transactionId))
   }
 
   render() {

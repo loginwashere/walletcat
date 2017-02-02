@@ -59,8 +59,8 @@ const fetchUserCurrenciesCb = dispatch => data => {
   return Promise.resolve()
 }
 
-export const fetchAccountsPageWithDependenies = ({ page, limit, ids } = {}) => dispatch =>
-  dispatch(fetchAccountsIfNeeded({ page, limit, ids }))
+export const fetchAccountsPageWithDependenies = ({ page, limit, ids, filter } = {}) => dispatch =>
+  dispatch(fetchAccountsIfNeeded({ page, limit, ids, filter }))
     .then(fetchUserCurrenciesCb(dispatch))
 
 export const fetchUserCurrenciesPageWithDependencies = ({ page, limit, ids, filter } = {}) => dispatch =>

@@ -16,8 +16,8 @@ import {
 export class AccountDelete extends Component {
   handleSubmit = (e) => {
     e.preventDefault()
-    const { dispatch, account: { id } } = this.props
-    return dispatch(deleteAccount(id))
+    const { dispatch, accountId } = this.props
+    return dispatch(deleteAccount(accountId))
   }
 
   render() {
