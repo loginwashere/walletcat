@@ -6,40 +6,45 @@ import CategoryEditForm from '../CategoryEditForm'
 class CategoryView extends Component {
   handleSubmit = (values) => {
     const { dispatch, category: { id } } = this.props
-    dispatch(updateCategory(id, values))
+    return dispatch(updateCategory(id, values))
   }
 
   render() {
     const { category, initialValues } = this.props
     return (
-      <CategoryEditForm onSubmit={this.handleSubmit}
-                          category={category}
-                          initialValues={initialValues}
-                          enableReinitialize={true} />
+      category
+        ? <CategoryEditForm onSubmit={this.handleSubmit}
+                            category={category}
+                            initialValues={initialValues}
+                            enableReinitialize={true} />
+        : null
     )
   }
 
   componentDidMount() {
-    const { dispatch, category } = this.props
-    dispatch(fetchCategoriesPageWithDependencies({ ids: [category.id] }))
+    const { dispatch, categoryId } = this.props
+    dispatch(fetchCategoriesPageWithDependencies({ ids: [categoryId] }))
   }
 }
 
 CategoryView.propTypes = {
+  categoryId: PropTypes.string.isRequired,
   category: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     description: PropTypes.string
-  }).isRequired,
-  initialValues: PropTypes.object.isRequired,
+  }),
+  initialValues: PropTypes.object,
   dispatch: PropTypes.func.isRequired
 }
 
 function mapStateToProps(state, ownProps) {
-  const category = state.categories.items[ownProps.params.categoryId] || {}
+  const categoryId = ownProps.params.categoryId
+  const category = state.categories.items[categoryId]
 
   return {
     category,
+    categoryId,
     initialValues: category
   }
 }

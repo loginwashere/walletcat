@@ -39,7 +39,8 @@ const categorySchema = {
     .max(255)
     .required(),
   description: Joi.string().max(255)
-    .empty(''),
+    .empty('')
+    .allow(null),
 }
 
 const accountSchema = {
@@ -82,6 +83,7 @@ const transactionSchema = {
   date: Joi.date().required(),
   description: Joi.string().max(255)
     .empty('')
+    .allow(null)
 }
 
 const paginationSchema = {
