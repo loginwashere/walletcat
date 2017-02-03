@@ -57,7 +57,7 @@ export class AccountDelete extends Component {
 
   componentDidMount() {
     const { dispatch, accountId } = this.props
-    dispatch(fetchAccountsPageWithDependenies({ ids: [accountId] }))
+    dispatch(fetchAccountsPageWithDependenies({ filter: { id: [accountId] } }))
   }
 }
 

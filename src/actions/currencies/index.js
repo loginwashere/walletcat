@@ -22,14 +22,14 @@ export const receiveAppCurrencies = json => ({
   receivedAt: Date.now()
 })
 
-const fetchAppCurrencies = ({ page, limit, ids, filter }) => dispatch => {
-  dispatch(requestAppCurrencies());
-  ((!ids || !ids.length) && !filter) && dispatch(currenciesPaginator.requestPage(page, limit))
+const fetchAppCurrencies = ({ page, limit, filter }) => dispatch => {
+  dispatch(requestAppCurrencies())
+  !filter && dispatch(currenciesPaginator.requestPage(page, limit))
   return api.currencies
-    .fetchAll({ page, limit, ids, filter })
+    .fetchAll({ page, limit, filter })
     .then(json => {
-      dispatch(receiveAppCurrencies(json));
-      ((!ids || !ids.length) && !filter) && dispatch(
+      dispatch(receiveAppCurrencies(json))
+      !filter  && dispatch(
           currenciesPaginator.receivePage(
             parseInt(json.data.meta.page, 10),
             parseInt(json.data.meta.limit, 10),
@@ -45,8 +45,8 @@ const fetchAppCurrencies = ({ page, limit, ids, filter }) => dispatch => {
 const shouldFetchAppCurrencies = ({
   currencies: { isFetching, didInvalidate },
   pagination: { currencies: { currentPage } }
-}, page, ids, filter) => {
-  if (ids || filter || currentPage !== page) {
+}, page, filter) => {
+  if (filter || currentPage !== page) {
     return true
   } else if (isFetching) {
     return false
@@ -54,9 +54,9 @@ const shouldFetchAppCurrencies = ({
   return didInvalidate
 }
 
-export const fetchAppCurrenciesIfNeeded = ({ page, limit, ids, filter }) => (dispatch, getState) => {
-  if (shouldFetchAppCurrencies(getState(), page, ids, filter)) {
-    return dispatch(fetchAppCurrencies({ page, limit, ids, filter }))
+export const fetchAppCurrenciesIfNeeded = ({ page, limit, filter }) => (dispatch, getState) => {
+  if (shouldFetchAppCurrencies(getState(), page, filter)) {
+    return dispatch(fetchAppCurrencies({ page, limit, filter }))
   } else {
     return Promise.resolve()
   }

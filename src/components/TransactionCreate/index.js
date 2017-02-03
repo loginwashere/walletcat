@@ -1,10 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import TransactionCreateForm from '../TransactionCreateForm'
-import {
-  createTransaction,
-  fetchTransactionsPageDependencies
-} from '../../actions'
+import { createTransaction } from '../../actions'
 
 export class TransactionCreate extends Component {
   handleSubmit = (values) => {
@@ -18,14 +15,6 @@ export class TransactionCreate extends Component {
       <TransactionCreateForm onSubmit={this.handleSubmit}
                              dispatch={dispatch} />
     )
-  }
-
-  componentDidMount() {
-    const { dispatch } = this.props
-    dispatch(fetchTransactionsPageDependencies({
-      accounts: { page: 1 },
-      categories: { page: 1 }
-    }))
   }
 }
 

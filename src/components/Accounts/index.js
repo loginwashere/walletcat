@@ -69,7 +69,7 @@ export class Accounts extends Component {
   }
 
   componentDidMount() {
-    this.handlePageChange()
+    this.handlePageChange(this.props.page)
   }
 }
 

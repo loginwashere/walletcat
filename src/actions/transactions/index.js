@@ -30,14 +30,14 @@ function receiveTransactions(json) {
   }
 }
 
-const fetchTransactions = ({ page, limit, ids }) => dispatch => {
-  dispatch(requestTransactions());
-  (!ids || !ids.length) && dispatch(transactionsPaginator.requestPage(page, limit))
+const fetchTransactions = ({ page, limit, filter }) => dispatch => {
+  dispatch(requestTransactions())
+  !filter && dispatch(transactionsPaginator.requestPage(page, limit))
   return api.transactions
-    .fetchAll({ page, limit, ids })
+    .fetchAll({ page, limit, filter })
     .then(json => {
-      dispatch(receiveTransactions(json));
-      (!ids || !ids.length) && dispatch(
+      dispatch(receiveTransactions(json))
+      !filter && dispatch(
           transactionsPaginator.receivePage(
             parseInt(json.data.meta.page, 10),
             parseInt(json.data.meta.limit, 10),
@@ -53,8 +53,8 @@ const fetchTransactions = ({ page, limit, ids }) => dispatch => {
 function shouldFetchTransactions({
   transactions: { isFetching, didInvalidate },
   pagination: { transactions: { currentPage } }
-}, page, ids) {
-  if (ids || currentPage !== page) {
+}, page, filter) {
+  if (filter || currentPage !== page) {
     return true
   } else if (isFetching) {
     return false
@@ -63,9 +63,9 @@ function shouldFetchTransactions({
   }
 }
 
-export const fetchTransactionsIfNeeded = ({ page, limit, ids }) => (dispatch, getState) => {
-  if (shouldFetchTransactions(getState(), page, ids)) {
-    return dispatch(fetchTransactions({ page, limit, ids }))
+export const fetchTransactionsIfNeeded = ({ page, limit, filter }) => (dispatch, getState) => {
+  if (shouldFetchTransactions(getState(), page, filter)) {
+    return dispatch(fetchTransactions({ page, limit, filter }))
   } else {
     return Promise.resolve()
   }

@@ -22,17 +22,19 @@ const unique = arrArg => arrArg.filter(
 )
 
 export const resource = (url, formatParamsToSend) => ({
-  fetchAll: ({ page, limit, ids, filter }) => {
+  fetchAll: ({ page, limit, filter }) => {
     const filterName = filter && Object.keys(filter)[0]
-    const filterValue = filter && filterName && filter[filterName]
+    const filterValue = filterName && filter[filterName]
+    const uniqueFilterValue = filterName === 'id'
+      ? unique(filterValue)
+      : filterValue
     return axios
       .get(url, {
         params: {
           page,
           limit,
-          ids: ids && unique(ids),
           filterName,
-          filterValue
+          filterValue: uniqueFilterValue
         },
         headers: addCommonHeaders()
       })

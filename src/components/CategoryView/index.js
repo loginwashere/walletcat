@@ -23,7 +23,7 @@ class CategoryView extends Component {
 
   componentDidMount() {
     const { dispatch, categoryId } = this.props
-    dispatch(fetchCategoriesPageWithDependencies({ ids: [categoryId] }))
+    dispatch(fetchCategoriesPageWithDependencies({ filter: { id: [categoryId] } }))
   }
 }
 

@@ -34,6 +34,15 @@ const emailConfirmSchema = {
   emailConfirm: Joi.string().required()
 }
 
+const agentSchema = {
+  name: Joi.string().min(1)
+    .max(255)
+    .required(),
+  description: Joi.string().max(255)
+    .empty('')
+    .allow(null),
+}
+
 const categorySchema = {
   name: Joi.string().min(1)
     .max(255)
@@ -93,9 +102,6 @@ const paginationSchema = {
   page: Joi.number().positive()
     .max(1000)
     .empty(1),
-  ids: Joi.array()
-    .items(Joi.string().guid({ version: 'uuidv4' }))
-    .empty(''),
   filterName: Joi.string().empty(''),
   filterValue: Joi.alternatives()
     .try(
@@ -112,6 +118,7 @@ module.exports = {
   emailConfirmSchema,
   resendEmailConfirmSchema,
   categorySchema,
+  agentSchema,
   accountSchema,
   transactionSchema,
   paginationSchema

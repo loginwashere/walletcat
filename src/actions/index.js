@@ -38,7 +38,7 @@ const fetchCurrenciesCb = dispatch => data => {
   if (data && data.userCurrencies) {
     const userCurrencies = data.userCurrencies
     const currenciesIds = data.userCurrencies.map(userCurrency => userCurrency.currencyId)
-    return dispatch(fetchAppCurrenciesIfNeeded({ ids: currenciesIds }))
+    return dispatch(fetchAppCurrenciesIfNeeded({ filter: { id: currenciesIds } }))
       .then(data => {
         const currencies = data.currencies
         return Promise.resolve({
@@ -53,22 +53,22 @@ const fetchCurrenciesCb = dispatch => data => {
 const fetchUserCurrenciesCb = dispatch => data => {
   if (data && data.accounts && data.accounts.length) {
     const userCurrenciesIds = data.accounts.map(account => account.currencyId)
-    return dispatch(fetchUserCurrenciesIfNeeded({ ids: userCurrenciesIds }))
+    return dispatch(fetchUserCurrenciesIfNeeded({ filter: { id: userCurrenciesIds } }))
       .then(fetchCurrenciesCb(dispatch))
   }
   return Promise.resolve()
 }
 
-export const fetchAccountsPageWithDependenies = ({ page, limit, ids, filter } = {}) => dispatch =>
-  dispatch(fetchAccountsIfNeeded({ page, limit, ids, filter }))
+export const fetchAccountsPageWithDependenies = ({ page, limit, filter }) => dispatch =>
+  dispatch(fetchAccountsIfNeeded({ page, limit, filter }))
     .then(fetchUserCurrenciesCb(dispatch))
 
-export const fetchUserCurrenciesPageWithDependencies = ({ page, limit, ids, filter } = {}) => dispatch =>
-  dispatch(fetchUserCurrenciesIfNeeded({ page, limit, ids, filter }))
+export const fetchUserCurrenciesPageWithDependencies = ({ page, limit, filter }) => dispatch =>
+  dispatch(fetchUserCurrenciesIfNeeded({ page, limit, filter }))
     .then(fetchCurrenciesCb(dispatch))
 
-export const fetchAppCurrenciesPageWithDependencies = ({ page, limit, ids, filter } = {}) => dispatch =>
-  dispatch(fetchAppCurrenciesIfNeeded({ page, limit, ids, filter }))
+export const fetchAppCurrenciesPageWithDependencies = ({ page, limit, filter }) => dispatch =>
+  dispatch(fetchAppCurrenciesIfNeeded({ page, limit, filter }))
     .then(data => {
       if (data && data.currencies && data.currencies.length) {
         const currencies = data.currencies
@@ -85,8 +85,8 @@ export const fetchAppCurrenciesPageWithDependencies = ({ page, limit, ids, filte
       return Promise.resolve()
     })
 
-export const fetchTransactionsPageWithDependencies = ({ page, limit, ids } = {}) => dispatch =>
-  dispatch(fetchTransactionsIfNeeded({ page, limit, ids }))
+export const fetchTransactionsPageWithDependencies = ({ page, limit, filter }) => dispatch =>
+  dispatch(fetchTransactionsIfNeeded({ page, limit, filter }))
     .then(data => {
       console.log(data)
       if (data && data.transactions && data.transactions.length) {
@@ -94,16 +94,16 @@ export const fetchTransactionsPageWithDependencies = ({ page, limit, ids } = {})
           .concat(data.transactions.map(transaction => transaction.toAccountId))
         const categoriesIds = data.transactions.map(transaction => transaction.categoryId)
         return Promise.all([
-          dispatch(fetchAccountsIfNeeded({ ids: accountsIds }))
+          dispatch(fetchAccountsIfNeeded({ filter: { id: accountsIds } }))
             .then(fetchUserCurrenciesCb(dispatch)),
-          dispatch(fetchCategoriesIfNeeded({ ids: categoriesIds }))
+          dispatch(fetchCategoriesIfNeeded({ filter: { id: categoriesIds } }))
         ])
       }
       return Promise.resolve()
     })
 
-export const fetchCategoriesPageWithDependencies = ({ page, limit, ids, filter } = {}) => dispatch =>
-  dispatch(fetchCategoriesIfNeeded({ page, limit, ids, filter }))
+export const fetchCategoriesPageWithDependencies = ({ page, limit, filter }) => dispatch =>
+  dispatch(fetchCategoriesIfNeeded({ page, limit, filter }))
 
 export const fetchTransactionsPageDependencies = ({ accounts, categories }) => dispatch =>
   Promise.all([

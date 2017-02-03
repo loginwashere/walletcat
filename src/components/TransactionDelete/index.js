@@ -54,7 +54,7 @@ export class TransactionDelete extends Component {
 
   componentDidMount() {
     const { dispatch, transactionId } = this.props
-    dispatch(fetchTransactionsPageWithDependencies({ ids: [transactionId] }))
+    dispatch(fetchTransactionsPageWithDependencies({ filter: { id: [transactionId] } }))
   }
 }
 

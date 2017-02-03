@@ -46,7 +46,7 @@ export class UserCurrencies extends Component {
   }
 
   componentDidMount() {
-    this.handlePageChange()
+    this.handlePageChange(this.props.page)
   }
 }
 

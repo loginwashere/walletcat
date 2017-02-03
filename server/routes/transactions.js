@@ -19,12 +19,13 @@ router.get('/', validate.query(paginationSchema), (req, res, next) => {
       ['createdAt', 'DESC']
     ]
   }
-  if (req.query.ids) {
+  if (req.query.filterName && req.query.filterValue) {
+    const condition = Array.isArray(req.query.filterValue)
+      ? { $in: req.query.filterValue }
+      : { $iLike: `%${req.query.filterValue}%` }
     models.transaction
       .findAll(Object.assign({}, defaultQuery, {
-        where: Object.assign({}, defaultQuery.where, {
-          id: req.query.ids
-        })
+        where: Object.assign({}, defaultQuery.where, { [req.query.filterName]: condition })
       }))
       .then(items => res.json({ [models.transaction.getTableName()]: items }))
       .catch(next)

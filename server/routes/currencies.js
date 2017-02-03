@@ -12,16 +12,7 @@ router.get('/', validate.query(paginationSchema), (req, res, next) => {
       ['createdAt', 'ASC']
     ]
   }
-  if (req.query.ids) {
-    models.currency
-      .findAll(Object.assign({}, defaultQuery, {
-        where: Object.assign({}, defaultQuery.where, {
-          id: req.query.ids
-        })
-      }))
-      .then(items => res.json({ [models.currency.getTableName()]: items }))
-      .catch(next)
-  } else if (req.query.filterName && req.query.filterValue) {
+  if (req.query.filterName && req.query.filterValue) {
     const condition = Array.isArray(req.query.filterValue)
       ? { $in: req.query.filterValue }
       : { $iLike: `%${req.query.filterValue}%` }

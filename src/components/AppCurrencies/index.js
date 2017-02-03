@@ -46,7 +46,7 @@ export class AppCurrencies extends Component {
   }
 
   componentDidMount() {
-    this.handlePageChange()
+    this.handlePageChange(this.props.page)
   }
 }
 
