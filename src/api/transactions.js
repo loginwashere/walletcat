@@ -6,8 +6,6 @@ export const selectEditProps = ({
   fromAccountId, toAccountId, fromAmount, toAmount, fromRate, toRate, categoryId, date, description
 }) => ({ fromAccountId, toAccountId, fromAmount, toAmount, fromRate, toRate, categoryId, date, description })
 
-const formatParamsToSend = params => selectEditProps(params)
-
 export default {
-  ...resource(API_TRANSACTION_LIST_URL, formatParamsToSend)
+  ...resource(API_TRANSACTION_LIST_URL, selectEditProps)
 }

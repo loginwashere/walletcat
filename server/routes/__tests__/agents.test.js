@@ -5,15 +5,12 @@ const chaiHttp = require('chai-http')
 const models = require('../../models')
 const helpers = require('./helpers')
 const userSeeder = require('../../seeds/20170114212746-user')
-const currencySeeder = require('../../seeds/20170114214434-currency')
-const userCurrencySeeder = require('../../seeds/20170114214446-user-currency')
 const agentSeeder = require('../../seeds/20170114214456-agent')
-const accountSeeder = require('../../seeds/20170114214459-account')
 const NotFoundError = require('../../errors/not-found')
 
 chai.use(chaiHttp)
 
-describe('routes : accounts', () => {
+describe('routes : agents', () => {
   let token
   let server
 
@@ -23,15 +20,11 @@ describe('routes : accounts', () => {
 
   beforeEach('get token', function() {
     return helpers.all([
-      () => setTimeout(() => {}, 1000),
       () => models.sequelize.authenticate(),
       () => helpers.umzug.down({ to: 0 }),
       () => helpers.umzug.up(),
       () => userSeeder.up(models.sequelize.getQueryInterface(), models.Sequelize),
-      () => currencySeeder.up(models.sequelize.getQueryInterface(), models.Sequelize),
-      () => userCurrencySeeder.up(models.sequelize.getQueryInterface(), models.Sequelize),
       () => agentSeeder.up(models.sequelize.getQueryInterface(), models.Sequelize),
-      () => accountSeeder.up(models.sequelize.getQueryInterface(), models.Sequelize),
       () => helpers.getTokenByUsername('admin').then(t => token = t),
     ])
   })
@@ -40,41 +33,37 @@ describe('routes : accounts', () => {
     return helpers.umzug.down({ to: 0 })
   })
 
-  describe('GET /api/accounts', () => {
-    it('should respond with all accounts', (done) => {
+  describe('GET /api/agents', () => {
+    it('should respond with all agents', (done) => {
       chai.request(server)
-        .get('/api/accounts')
+        .get('/api/agents')
         .set('Authorization', `Bearer ${token.value}`)
         .end((err, res) => {
           should.not.exist(err)
           res.status.should.equal(200)
           res.type.should.equal('application/json')
-          res.body.accounts.length.should.eql(2)
-          Object.keys(res.body.accounts[0]).sort().should.eql([
+          res.body.agents.length.should.eql(2)
+          Object.keys(res.body.agents[0]).sort().should.eql([
             'id',
             'name',
             'description',
-            'agentId',
-            'amount',
             'createdAt',
             'updatedAt',
-            'userId',
-            'currencyId'
+            'userId'
           ].sort())
           done()
         })
     })
   })
 
-  describe('POST /api/accounts', () => {
-    it('should create new account when provide valid data', (done) => {
+  describe('POST /api/agents', () => {
+    it('should create agent if valid data sent', (done) => {
       chai.request(server)
-        .post('/api/accounts')
+        .post('/api/agents')
         .set('Authorization', `Bearer ${token.value}`)
         .send({
-          name: 'Cool Bank USD',
-          description: 'Account in Cool Bank in USD',
-          currencyId: userCurrencySeeder.items[0].id
+          name: 'John Doe',
+          description: 'Some agent'
         })
         .end((err, res) => {
           should.not.exist(err)
@@ -85,90 +74,75 @@ describe('routes : accounts', () => {
             'id',
             'name',
             'description',
-            'agentId',
-            'amount',
             'createdAt',
             'updatedAt',
-            'userId',
-            'currencyId'
-          ].sort())
-          done()
-        })
-    })
-  })
-
-  describe('PUT /api/accounts/:accountId', () => {
-    it('should update account when provide valid data', (done) => {
-      const accountId = accountSeeder.items[0].id
-      const name = 'Cool Bank 2 USD'
-      const description = 'Account in Cool Bank 2 in USD'
-      const currencyId = userCurrencySeeder.items[1].id
-      const amount = 10
-      chai.request(server)
-        .put(`/api/accounts/${accountId}`)
-        .set('Authorization', `Bearer ${token.value}`)
-        .send({
-          name,
-          description,
-          currencyId,
-          amount
-        })
-        .end((err, res) => {
-          should.not.exist(err)
-          res.status.should.equal(200)
-          res.type.should.equal('application/json')
-          res.body.should.be.a('object')
-          Object.keys(res.body).sort().should.eql([
-            'id',
-            'name',
-            'description',
-            'agentId',
-            'amount',
-            'createdAt',
-            'updatedAt',
-            'userId',
-            'currencyId'
+            'userId'
           ].sort())
           res.body.userId.should.equal(userSeeder.items[0].id)
-          res.body.id.should.equal(accountId)
-          res.body.name.should.equal(name)
-          res.body.description.should.equal(description)
-          res.body.currencyId.should.equal(currencyId)
-          res.body.amount.should.equal(amount)
+          done()
+        })
+    })
+  })
+
+  describe('PUT /api/agents/:categoryId', () => {
+    it('should update agent if valid data sent', (done) => {
+      const agentId = agentSeeder.items[0].id
+      const newName = `${agentSeeder.items[0].name} ${agentSeeder.items[0].name}`
+      const newDescription = newName
+      chai.request(server)
+        .put(`/api/agents/${agentId}`)
+        .set('Authorization', `Bearer ${token.value}`)
+        .send({
+          name: newName,
+          description: newDescription
+        })
+        .end((err, res) => {
+          should.not.exist(err)
+          res.status.should.equal(200)
+          res.type.should.equal('application/json')
+          res.body.should.be.a('object')
+          Object.keys(res.body).sort().should.eql([
+            'id',
+            'name',
+            'description',
+            'createdAt',
+            'updatedAt',
+            'userId'
+          ].sort())
+          res.body.userId.should.equal(userSeeder.items[0].id)
+          res.body.id.should.equal(agentId)
+          res.body.name.should.equal(newName)
+          res.body.description.should.equal(newDescription)
           done()
         })
     })
 
-    it('should return error when update not existing account', (done) => {
-      const notExistingAccountId = v4()
-      const name = 'Cool Bank 2 USD'
-      const description = 'Account in Cool Bank 2 in USD'
-      const currencyId = userCurrencySeeder.items[1].id
-      const amount = 10
+    it('should return not found error when update agent that does not exist', (done) => {
+      const notExistingCategoryId = v4()
+      const newName = `${agentSeeder.items[0].name} ${agentSeeder.items[0].name}`
+      const newDescription = newName
       chai.request(server)
-        .put(`/api/accounts/${notExistingAccountId}`)
+        .put(`/api/agents/${notExistingCategoryId}`)
         .set('Authorization', `Bearer ${token.value}`)
         .send({
-          name,
-          description,
-          currencyId,
-          amount
+          name: newName,
+          description: newDescription
         })
         .end((err, res) => {
           should.exist(err)
           res.status.should.equal(404)
           res.type.should.equal('application/json')
-          res.body.should.eql(new NotFoundError('Account not found'))
+          res.body.should.eql(new NotFoundError('Agent not found'))
           done()
         })
     })
   })
 
-  describe('DELETE /api/accounts/:accountId', () => {
-    it('should delete account when provide valid data', (done) => {
-      const accountId = accountSeeder.items[0].id
+  describe('DELETE /api/agents/:agentId', () => {
+    it('should delete agent if valid data sent', (done) => {
+      const agentId = agentSeeder.items[0].id
       chai.request(server)
-        .delete(`/api/accounts/${accountId}`)
+        .delete(`/api/agents/${agentId}`)
         .set('Authorization', `Bearer ${token.value}`)
         .end((err, res) => {
           should.not.exist(err)
@@ -180,16 +154,16 @@ describe('routes : accounts', () => {
         })
     })
 
-    it('should return error when delete not exisiting account', (done) => {
-      const notExistingAccountId = v4()
+    it('should return not found error when delete agent that does not exist', (done) => {
+      const notExistingAgentId = v4()
       chai.request(server)
-        .delete(`/api/accounts/${notExistingAccountId}`)
+        .delete(`/api/agents/${notExistingAgentId}`)
         .set('Authorization', `Bearer ${token.value}`)
         .end((err, res) => {
           should.exist(err)
           res.status.should.equal(404)
           res.type.should.equal('application/json')
-          res.body.should.eql(new NotFoundError('Account not found'))
+          res.body.should.eql(new NotFoundError('Agent not found'))
           done()
         })
     })

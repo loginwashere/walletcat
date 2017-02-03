@@ -61,6 +61,7 @@ module.exports = () => {
     app.use(staticMiddleware.unless({ method: 'OPTIONS' }))
   }
 
+  const agentsRouter = require('./routes/agents')
   const accountsRouter = require('./routes/accounts')
   const authRouter = require('./routes/auth')
   const currenciesRouter = require('./routes/currencies')
@@ -70,6 +71,7 @@ module.exports = () => {
   const usersRouter = require('./routes/users')
   const oauthRouter = require('./routes/oauth')
 
+  app.use('/api/agents', agentsRouter)
   app.use('/api/accounts', accountsRouter)
   app.use('/api/auth', authRouter)
   app.use('/api/currencies', currenciesRouter)

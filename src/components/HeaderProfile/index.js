@@ -1,19 +1,33 @@
 import React, { Component, PropTypes } from 'react'
-import { NavItem, Image } from 'react-bootstrap'
+import { NavDropdown, MenuItem, Image } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
+import Logout from '../Logout'
 
 import './style.less'
 
 export class HeaderProfile extends Component {
   render() {
-    const { user, onSelect } = this.props
+    const { user, dispatch } = this.props
+
+    const Profile = ({ username, avatar }) => (
+      <span>
+        <Image src={avatar} circle />
+        <span className={'profile-username'}>{username}</span>
+      </span>
+    )
     return (
-      <LinkContainer to="/profile">
-        <NavItem  onSelect={onSelect} className={'profile'} eventKey={9} >
-          <Image src={user.avatar} circle />
-          <span className={'profile-username'}>{user.username}</span>
-        </NavItem>
-      </LinkContainer>
+      <NavDropdown eventKey={9}
+                   title={Profile(user)}
+                   className="profile dropdown"
+                   id="profile-menu-item-dropdown">
+        <LinkContainer to="/profile">
+          <MenuItem eventKey={9.1}>Profile</MenuItem>
+        </LinkContainer>
+        <MenuItem divider />
+        <LinkContainer to="/logout">
+          <Logout eventKey={9.2} dispatch={dispatch} />
+        </LinkContainer>
+      </NavDropdown>
     )
   }
 }
@@ -25,7 +39,8 @@ HeaderProfile.propTypes = {
     avatar: PropTypes.string
   }).isRequired,
   onSelect: PropTypes.func,
-  eventKey: PropTypes.number.isRequired
+  eventKey: PropTypes.number.isRequired,
+  dispatch: PropTypes.func.isRequired
 }
 
 export default HeaderProfile

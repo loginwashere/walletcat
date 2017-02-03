@@ -5,8 +5,8 @@ import CategoryEditForm from '../CategoryEditForm'
 
 class CategoryView extends Component {
   handleSubmit = (values) => {
-    const { dispatch, category: { id } } = this.props
-    return dispatch(updateCategory(id, values))
+    const { dispatch, categoryId } = this.props
+    return dispatch(updateCategory(categoryId, values))
   }
 
   render() {

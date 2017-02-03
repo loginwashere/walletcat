@@ -35,6 +35,10 @@ import TermsAndConditions from './components/TermsAndConditions'
 import Landing from './components/Landing'
 import EmailConfirm from './components/EmailConfirm'
 import EnsureLoggedInContainer from './components/EnsureLoggedInContainer'
+import Agents from './components/Agents'
+import AgentCreate from './components/AgentCreate'
+import AgentView from './components/AgentView'
+import AgentDelete from './components/AgentDelete'
 
 const routes = () => (
   <Route path="/" component={App}>
@@ -42,6 +46,11 @@ const routes = () => (
 
     <Route component={EnsureLoggedInContainer}>
       <Route path="home" component={Home}/>
+
+      <Route path="agents" component={Agents}/>
+      <Route path="agents/create" component={AgentCreate}/>
+      <Route path="agents/:agentId" component={AgentView}/>
+      <Route path="agents/:agentId/delete" component={AgentDelete}/>
 
       <Route path="accounts" component={Accounts}/>
       <Route path="accounts/create" component={AccountCreate}/>

@@ -5,6 +5,7 @@ import currencies from './currencies'
 import transactions from './transactions'
 import userCurrencies from './userCurrencies'
 import users from './users'
+import agents from './agents'
 
 export default {
   accounts,
@@ -13,5 +14,6 @@ export default {
   currencies,
   transactions,
   userCurrencies,
-  users
+  users,
+  agents
 }

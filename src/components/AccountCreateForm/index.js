@@ -8,7 +8,10 @@ import {
   Button,
   FormControl
 } from 'react-bootstrap'
-import { fetchAppCurrenciesPageWithDependencies } from '../../actions'
+import {
+  fetchAppCurrenciesPageWithDependencies,
+  fetchAgentsPageWithDependencies
+} from '../../actions'
 import { accountSchema } from '../../../common/validation'
 import { RenderField, RenderError, WalletSelect, getValidate, formValidationState } from '../Common'
 
@@ -31,6 +34,19 @@ class AccountCreateForm extends Component {
     const { dispatch } = this.props
     return dispatch(fetchAppCurrenciesPageWithDependencies({ filter: { name: value } }))
       .then(this.prepareUserCurrenciesOptions)
+  }
+
+  prepareAgentsOptions = result => {
+    const options = result.agents
+      .map(agent => ({ value: agent.id, label: agent.name }))
+      .filter(Boolean)
+    return { options }
+  }
+
+  loadAgentsOptions = (value) => {
+    const { dispatch } = this.props
+    return dispatch(fetchAgentsPageWithDependencies({ filter: { name: value } }))
+      .then(this.prepareAgentsOptions)
   }
 
   render() {
@@ -62,6 +78,11 @@ class AccountCreateForm extends Component {
                component={WalletSelect}
                label="Currency"
                loadOptions={this.loadUserCurrenciesOptions} />
+        <Field required={true}
+               name="agentId"
+               component={WalletSelect}
+               label="Agent"
+               loadOptions={this.loadAgentsOptions} />
         <Field name="amount"
                component={RenderField}
                label="Amount"

@@ -8,6 +8,7 @@ import alerts from './alerts'
 import userCurrencies, { userCurrenciesPaginator } from './userCurrencies'
 import categories, { categoriesPaginator } from './categories'
 import accounts, { accountsPaginator } from './accounts'
+import agents, { agentsPaginator } from './agents'
 
 export default combineReducers({
   alerts,
@@ -16,6 +17,7 @@ export default combineReducers({
   userCurrencies,
   categories,
   accounts,
+  agents,
   transactions,
   routing: routerReducer,
   form: formReducer,
@@ -24,6 +26,7 @@ export default combineReducers({
     userCurrencies: userCurrenciesPaginator.reducer,
     categories: categoriesPaginator.reducer,
     accounts: accountsPaginator.reducer,
+    agents: agentsPaginator.reducer,
     transactions: transactionsPaginator.reducer,
   })
 })

@@ -9,7 +9,10 @@ import {
   FormControl
 } from 'react-bootstrap'
 import { accountSchema } from '../../../common/validation'
-import { fetchAppCurrenciesPageWithDependencies } from '../../actions'
+import {
+  fetchAppCurrenciesPageWithDependencies,
+  fetchAgentsPageWithDependencies
+} from '../../actions'
 import { RenderField, RenderError, WalletSelect, getValidate, formValidationState } from '../Common'
 
 const validate = values => getValidate(values, accountSchema)
@@ -37,6 +40,19 @@ class AccountEditForm extends Component {
       .then(this.prepareUserCurrenciesOptions)
   }
 
+  prepareAgentsOptions = result => {
+    const options = result.agents
+      .map(agent => ({ value: agent.id, label: agent.name }))
+      .filter(Boolean)
+    return { options }
+  }
+
+  loadAgentsOptions = (value) => {
+    const { dispatch } = this.props
+    return dispatch(fetchAgentsPageWithDependencies({ filter: { name: value } }))
+      .then(this.prepareAgentsOptions)
+  }
+
   render() {
     const { error, handleSubmit, account, pristine, submitting, reset, invalid, customInitialValues } = this.props
     return (
@@ -58,6 +74,12 @@ class AccountEditForm extends Component {
                component={WalletSelect}
                label="Currency"
                loadOptions={this.loadUserCurrenciesOptions}
+               autoload={true} />}
+        {customInitialValues && <Field required={true}
+               name="agentId"
+               component={WalletSelect}
+               label="Agent"
+               loadOptions={this.loadAgentsOptions}
                autoload={true} />}
         <Field name="amount"
                component={RenderField}

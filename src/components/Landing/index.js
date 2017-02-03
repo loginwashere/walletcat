@@ -10,7 +10,7 @@ import {
 } from 'react-bootstrap'
 import HeaderBrandLink from '../HeaderBrandLink'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Logout, HeaderProfile } from '..'
+import { HeaderProfile } from '..'
 
 import image from './img/demo-screen1.png'
 
@@ -54,23 +54,25 @@ export class Landing extends Component {
                 id="mainNav"
                 className={`navbar navbar-default navbar-fixed-top ${fixNavClass}`}>
           <Navbar.Header>
-              <HeaderBrandLink to="page-top" scroll={true} duration={1500} delay={100} smooth={true} />
+              <HeaderBrandLink to="/home" />
             <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav pullRight>
+              {fixNav && <NavItem onClick={() => scrollTo('page-top')}>
+                To Page Top
+              </NavItem>}
               <NavItem onClick={() => scrollTo('features')}>
                 Features
               </NavItem>
               <NavItem onClick={() => scrollTo('contact')}>
                 Contact
               </NavItem>
-              {isAuthenticated && <HeaderProfile eventKey={9} user={user} />}
+              {isAuthenticated && <HeaderProfile eventKey={9}
+                                                 user={user}
+                                                 dispatch={dispatch } />}
               {!isAuthenticated && <LinkContainer to="/sign-in">
                 <NavItem eventKey={10} href="#">Sign in</NavItem>
-              </LinkContainer>}
-              {isAuthenticated && <LinkContainer to="/logout">
-                <Logout eventKey={11} dispatch={dispatch} />
               </LinkContainer>}
               {!isAuthenticated && <LinkContainer to="/register">
                 <NavItem eventKey={12} href="#">Create an account</NavItem>

@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const account = sequelize.define('account', {
+  const agent = sequelize.define('agent', {
     id: {
       type: Sequelize.UUID,
       primaryKey: true
@@ -10,20 +10,13 @@ module.exports = (sequelize, Sequelize) => {
     description: {
       type: Sequelize.TEXT
     },
-    amount: {
-      type: Sequelize.DECIMAL(19, 8),
-      allowNull: false,
-      defaultValue: 0
-    },
   }, {
     classMethods: {
-      associate: models => {
-        account.belongsTo(models.user)
-        account.belongsTo(models.userCurrency, { as: 'currency' })
-        account.belongsTo(models.agent)
+      associate: function(models) {
+        agent.belongsTo(models.user)
       }
     },
-    tableName: 'accounts',
+    tableName: 'agents',
     paranoid: true,
     instanceMethods: {
       toJSON: function() {
@@ -39,5 +32,5 @@ module.exports = (sequelize, Sequelize) => {
       }
     ]
   })
-  return account
+  return agent
 }

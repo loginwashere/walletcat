@@ -58,6 +58,8 @@ const accountSchema = {
     .required(),
   currencyId: Joi.string().guid({ version: 'uuidv4' })
     .required(),
+  agentId: Joi.string().guid({ version: 'uuidv4' })
+    .required(),
   description: Joi.string().max(255)
     .empty('')
     .allow(null),

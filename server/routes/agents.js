@@ -5,7 +5,7 @@ const format = require('date-fns/format')
 const v4 = require('uuid/v4')
 const NotFoundError = require('../errors/not-found')
 const validate = require('../middleware/validate')
-const accountSchema = require('../../common/validation').accountSchema
+const agentSchema = require('../../common/validation').agentSchema
 const paginationSchema = require('../../common/validation').paginationSchema
 const pagination = require('../utils/pagination')
 
@@ -22,22 +22,22 @@ router.get('/', validate.query(paginationSchema), (req, res, next) => {
     const condition = Array.isArray(req.query.filterValue)
       ? { $in: req.query.filterValue }
       : { $iLike: `%${req.query.filterValue}%` }
-    models.account
+    models.agent
       .findAll(Object.assign({}, defaultQuery, {
         where: Object.assign({}, defaultQuery.where, { [req.query.filterName]: condition })
       }))
-      .then(items => res.json({ [models.account.getTableName()]: items }))
+      .then(items => res.json({ [models.agent.getTableName()]: items }))
       .catch(next)
   } else {
     pagination
-      .paginate(models.account, req.query, defaultQuery)
+      .paginate(models.agent, req.query, defaultQuery)
       .then(res.json.bind(res))
       .catch(next)
   }
 })
 
-router.post('/', validate.body(accountSchema), (req, res, next) => {
-  models.account
+router.post('/', validate.body(agentSchema), (req, res, next) => {
+  models.agent
     .findOne({
       where: {
         userId: req.user.sub,
@@ -45,28 +45,25 @@ router.post('/', validate.body(accountSchema), (req, res, next) => {
       },
       paranoid: false
     })
-    .then(account => {
-      if (account) {
-        return account.restore()
+    .then(agent => {
+      if (agent) {
+        return agent.restore()
       }
-      return models.account
-        .create({
-          id: v4(),
-          userId: req.user.sub,
-          name: req.body.name,
-          currencyId: req.body.currencyId,
-          agentId: req.body.agentId,
-          description: req.body.description,
-          createdAt: format(new Date()),
-          updatedAt: format(new Date())
-        })
+      return models.agent.create({
+        id: v4(),
+        userId: req.user.sub,
+        name: req.body.name,
+        description: req.body.description,
+        createdAt: format(new Date()),
+        updatedAt: format(new Date())
+      })
     })
     .then(res.json.bind(res))
     .catch(next)
 })
 
-router.put('/:id', validate.body(accountSchema), (req, res, next) => {
-  models.account
+router.put('/:id', validate.body(agentSchema), (req, res, next) => {
+  models.agent
     .findOne({
       where: {
         $and: [
@@ -75,26 +72,23 @@ router.put('/:id', validate.body(accountSchema), (req, res, next) => {
         ]
       }
     })
-    .then(account => {
-      if (!account) {
-        return next(new NotFoundError('Account not found'))
+    .then(agent => {
+      if (!agent) {
+        return next(new NotFoundError('Agent not found'))
       }
-      return account
+      return agent
         .update({
           name: req.body.name,
           description: req.body.description,
-          amount: req.body.amount,
-          currencyId: req.body.currencyId,
-          agentId: req.body.agentId,
           updatedAt: format(new Date())
         })
-        .then(account => res.json(account))
+        .then(agent => res.json(agent))
     })
     .catch(next)
 })
 
 router.delete('/:id', (req, res, next) => {
-  models.account
+  models.agent
     .findOne({
       where: {
         $and: [
@@ -103,13 +97,13 @@ router.delete('/:id', (req, res, next) => {
         ]
       }
     })
-    .then(account => {
-      if (!account) {
-        return next(new NotFoundError('Account not found'))
+    .then(agent => {
+      if (!agent) {
+        return next(new NotFoundError('Agent not found'))
       }
-      return models.account
+      return models.agent
         .destroy({
-          where: { id: account.id }
+          where: { id: agent.id }
         })
         .then(() => res.status(204).json())
     })

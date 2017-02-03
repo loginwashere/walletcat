@@ -14,16 +14,16 @@ export class Footer extends Component {
         <Navbar.Collapse>
           <Nav>
             <LinkContainer to="/about">
-              <NavItem eventKey={7} href="#">About</NavItem>
+              <NavItem eventKey={20} href="#">About</NavItem>
             </LinkContainer>
             <LinkContainer to="/contact-us">
-              <NavItem eventKey={8} href="#">Contact Us</NavItem>
+              <NavItem eventKey={21} href="#">Contact Us</NavItem>
             </LinkContainer>
             <LinkContainer to="/privacy-policy">
-              <NavItem eventKey={20} href="#">Privacy Policy</NavItem>
+              <NavItem eventKey={22} href="#">Privacy Policy</NavItem>
             </LinkContainer>
             <LinkContainer to="/terms-and-conditions">
-              <NavItem eventKey={21} href="#">Terms and conditions</NavItem>
+              <NavItem eventKey={23} href="#">Terms and conditions</NavItem>
             </LinkContainer>
           </Nav>
         </Navbar.Collapse>
