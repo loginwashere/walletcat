@@ -98,6 +98,7 @@ export function createAgent(params) {
       .create(params)
       .then(json => {
         dispatch(receiveAgentCreate(json))
+        dispatch(invalidateAgents())
         dispatch(push('/agents'))
       })
       .catch(error => {
@@ -131,6 +132,7 @@ export function deleteAgent(id) {
       .del(id)
       .then(() => {
         dispatch(receiveAgentDelete(id))
+        dispatch(invalidateAgents())
         dispatch(push('/agents'))
       })
       .catch(error => dispatch(alertAdd(error)))

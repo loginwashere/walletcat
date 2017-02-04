@@ -14,7 +14,10 @@
     "src/.eslintrc.js/*",
     "src/configureStore.json",
     "src/index.js",
-    "src/routes.js"
+    "src/routes.js",
+    "umzug.json",
+    "sequelize-data.json",
+    "coverage-client/*"
   ],
   "execMap": {
     "js": "node"

@@ -95,6 +95,7 @@ export function createTransaction(params) {
       .create(params)
       .then(json => {
         dispatch(receiveTransactionCreate(json))
+        dispatch(invalidateTransactions())
         dispatch(push('/transactions'))
       })
       .catch(error => {
@@ -128,6 +129,7 @@ export function deleteTransaction(id) {
       .del(id)
       .then(() => {
         dispatch(receiveTransactionDelete(id))
+        dispatch(invalidateTransactions())
         dispatch(push('/transactions'))
       })
       .catch(error => dispatch(alertAdd(error)))

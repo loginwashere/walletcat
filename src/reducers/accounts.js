@@ -100,6 +100,12 @@ export default function accounts(state = initialState, action) {
     case LOGOUT_SUCCESS:
       return initialState
     default:
-      return accountsPaginator.itemsReducer(state, action)
+      return {
+        ...state,
+        items: {
+          ...state.items,
+          ...accountsPaginator.itemsReducer(state.items, action)
+        }
+      }
   }
 }

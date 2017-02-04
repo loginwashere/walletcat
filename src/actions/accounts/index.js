@@ -85,6 +85,7 @@ export const createAccount = params => dispatch => {
     .create(params)
     .then(json => {
       dispatch(accountCreateReceive(json))
+      dispatch(invalidateAccounts())
       dispatch(push('/accounts'))
     })
     .catch(error => {
@@ -112,6 +113,7 @@ export const deleteAccount = id => dispatch => {
     .del(id)
     .then(() => {
       dispatch(receiveAccountDelete(id))
+      dispatch(invalidateAccounts())
       dispatch(push('/accounts'))
     })
     .catch(error => dispatch(alertAdd(error)))

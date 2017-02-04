@@ -98,6 +98,7 @@ export function createCategory(params) {
       .create(params)
       .then(json => {
         dispatch(receiveCategoryCreate(json))
+        dispatch(invalidateCategories())
         dispatch(push('/categories'))
       })
       .catch(error => {
@@ -131,6 +132,7 @@ export function deleteCategory(id) {
       .del(id)
       .then(() => {
         dispatch(receiveCategoryDelete(id))
+        dispatch(invalidateCategories())
         dispatch(push('/categories'))
       })
       .catch(error => dispatch(alertAdd(error)))

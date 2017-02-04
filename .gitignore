@@ -4,7 +4,9 @@
 node_modules
 
 # testing
+.nyc_output
 coverage
+coverage-client
 
 # production
 build

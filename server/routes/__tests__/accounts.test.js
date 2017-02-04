@@ -74,7 +74,8 @@ describe('routes : accounts', () => {
         .send({
           name: 'Cool Bank USD',
           description: 'Account in Cool Bank in USD',
-          currencyId: userCurrencySeeder.items[0].id
+          currencyId: userCurrencySeeder.items[0].id,
+          agentId: agentSeeder.items[0].id
         })
         .end((err, res) => {
           should.not.exist(err)
@@ -103,6 +104,7 @@ describe('routes : accounts', () => {
       const name = 'Cool Bank 2 USD'
       const description = 'Account in Cool Bank 2 in USD'
       const currencyId = userCurrencySeeder.items[1].id
+      const agentId = agentSeeder.items[0].id
       const amount = 10
       chai.request(server)
         .put(`/api/accounts/${accountId}`)
@@ -111,6 +113,7 @@ describe('routes : accounts', () => {
           name,
           description,
           currencyId,
+          agentId,
           amount
         })
         .end((err, res) => {
@@ -144,6 +147,7 @@ describe('routes : accounts', () => {
       const name = 'Cool Bank 2 USD'
       const description = 'Account in Cool Bank 2 in USD'
       const currencyId = userCurrencySeeder.items[1].id
+      const agentId = agentSeeder.items[0].id
       const amount = 10
       chai.request(server)
         .put(`/api/accounts/${notExistingAccountId}`)
@@ -152,6 +156,7 @@ describe('routes : accounts', () => {
           name,
           description,
           currencyId,
+          agentId,
           amount
         })
         .end((err, res) => {
