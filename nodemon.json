@@ -1,0 +1,27 @@
+{
+  "verbose": true,
+  "ignore": [
+    "*__tests__/*",
+    "*.test.js",
+    ".docker/*",
+    "scripts/*",
+    "build/*",
+    "src/actions/*",
+    "src/components/*",
+    "src/middleware/*",
+    "src/reducers/*",
+    "src/utils/*",
+    "src/.eslintrc.js/*",
+    "src/configureStore.json",
+    "src/index.js",
+    "src/routes.js"
+  ],
+  "execMap": {
+    "js": "node"
+  },
+  "env": {
+    "DEBUG": "*",
+    "NODE_ENV": "development"
+  },
+  "ext": "js json"
+}
