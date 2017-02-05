@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV === 'production') {
+  require('newrelic')
+}
+
 const fs = require('fs')
 const config = require('./config')
 const server = require('./server')

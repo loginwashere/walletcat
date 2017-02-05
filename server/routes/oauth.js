@@ -66,7 +66,7 @@ router.get('/callback/:provider', (req, res, next) => {
                       })
                       .then(user => {
                         const token = generateToken(user.id)
-                        return res.redirect(`${config.publicUrl}home?token=${token.value}&id=${token.id}`)
+                        return res.redirect(`${config.publicUrl}sign-in?token=${token.value}&id=${token.id}`)
                       })
                   }
                   if (
@@ -82,11 +82,11 @@ router.get('/callback/:provider', (req, res, next) => {
                       })
                       .then(user => {
                         const token = generateToken(user.id)
-                        return res.redirect(`${config.publicUrl}home?token=${token.value}&id=${token.id}`)
+                        return res.redirect(`${config.publicUrl}sign-in?token=${token.value}&id=${token.id}`)
                       })
                   }
                   const token = generateToken(user.id)
-                  return res.redirect(`${config.publicUrl}home?token=${token.value}&id=${token.id}`)
+                  return res.redirect(`${config.publicUrl}sign-in?token=${token.value}&id=${token.id}`)
                 })
             })
         })
