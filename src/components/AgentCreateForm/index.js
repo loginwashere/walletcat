@@ -1,65 +1,36 @@
-import React, { Component, PropTypes } from 'react'
-import { Field, reduxForm } from 'redux-form'
-import { LinkContainer } from 'react-router-bootstrap'
-import {
-  Form,
-  FormGroup,
-  Col,
-  Button,
-  FormControl
-} from 'react-bootstrap'
+import React, { PropTypes } from 'react'
+import { reduxForm } from 'redux-form'
+import { Form } from 'react-bootstrap'
 import { agentSchema } from '../../../common/validation'
-import { RenderField, RenderError, getValidate, formValidationState } from '../Common'
+import {
+  CreateFormButtonsGroup,
+  WalletFormHeader,
+  getValidate
+} from '../Common'
+import AgentFormFields from '../AgentFormFields'
 
-const validate = values => getValidate(values, agentSchema)
+export const AgentCreateForm = ({
+  error,
+  handleSubmit,
+  pristine,
+  reset,
+  submitting,
+  invalid
+}) => (
+  <Form horizontal
+        onSubmit={handleSubmit}>
+    <WalletFormHeader error={error}>New Agent</WalletFormHeader>
 
-export class AgentCreateForm extends Component {
-  render() {
-    const { error, handleSubmit, pristine, reset, submitting, invalid } = this.props
-    return (
-      <Form horizontal
-            onSubmit={handleSubmit}>
-        <FormGroup validationState={formValidationState(error)}>
-          <h1 className="form-signin-heading">New Agent</h1>
-          <FormControl.Feedback />
-          <RenderError error={error} />
-        </FormGroup>
+    <AgentFormFields />
 
-        <Field required={true}
-               name="name"
-               component={RenderField}
-               label="Name"
-               type="text" />
-
-        <Field name="description"
-               component={RenderField}
-               label="Description"
-               type="text" />
-
-        <FormGroup>
-          <Col smOffset={2} sm={2} xs={4}>
-            <LinkContainer to="/agents">
-              <Button disabled={submitting}>
-                Cancel
-              </Button>
-            </LinkContainer>
-          </Col>
-          <Col sm={2} xs={4}>
-            <Button type="submit" disabled={submitting || (!error && invalid)}>
-              Create
-            </Button>
-          </Col>
-          <Col sm={2} xs={4}>
-            <Button disabled={pristine || submitting}
-                    onClick={reset}>
-              Clear
-            </Button>
-          </Col>
-        </FormGroup>
-      </Form>
-    )
-  }
-}
+    <CreateFormButtonsGroup cancelTo="/agents"
+                            submitting={submitting}
+                            pristine={pristine}
+                            reset={reset}
+                            invalid={invalid}
+                            error={error} />
+  </Form>
+)
 
 AgentCreateForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
@@ -72,5 +43,5 @@ AgentCreateForm.propTypes = {
 
 export default reduxForm({
   form: 'agentCreate',
-  validate
+  validate: values => getValidate(values, agentSchema)
 })(AgentCreateForm)

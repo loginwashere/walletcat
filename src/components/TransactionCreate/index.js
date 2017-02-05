@@ -11,7 +11,10 @@ export class TransactionCreate extends Component {
   }
 
   render() {
-    const { dispatch, initialValues } = this.props
+    const { dispatch } = this.props
+    const initialValues = {
+      date: format(new Date())
+    }
     return (
       <TransactionCreateForm onSubmit={this.handleSubmit}
                              initialValues={initialValues}
@@ -21,17 +24,7 @@ export class TransactionCreate extends Component {
 }
 
 TransactionCreate.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  initialValues: PropTypes.object
+  dispatch: PropTypes.func.isRequired
 }
 
-function mapStateToProps(state) {
-  const initialValues = {
-    date: format(new Date())
-  }
-  return {
-    initialValues
-  }
-}
-
-export default connect(mapStateToProps)(TransactionCreate)
+export default connect()(TransactionCreate)

@@ -36,7 +36,7 @@ export class TransactionDelete extends Component {
             <FormGroup>
               <Col smOffset={2} sm={2} xs={6}>
                 <LinkContainer to={`/transactions/${transaction.id}`}>
-                  <Button type="submit">
+                  <Button>
                     Cancel
                   </Button>
                 </LinkContainer>

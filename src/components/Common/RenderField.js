@@ -1,46 +1,26 @@
 import React, { PropTypes } from 'react'
-import {
-  FormGroup,
-  Col,
-  ControlLabel,
-  FormControl
-} from 'react-bootstrap'
-import RenderError from './RenderError'
-import { validationState } from '.'
+import { FormControl } from 'react-bootstrap'
+import WalletFormGroup from './WalletFormGroup'
 
 const RenderField = ({
-  input, label, type, meta: { touched, error, warning, valid }, required, autoFocus
+  input, label, type, meta, required, autoFocus
 }) => (
-  <FormGroup controlId="formHorizontalName"
-              validationState={validationState(touched, error, warning, valid)}>
-    <Col componentClass={ControlLabel} sm={2}>{label}</Col>
-    <Col sm={10}>
+  <WalletFormGroup name={input.name}
+                   label={label}
+                   meta={meta}>
       <FormControl {...input}
                     required={required}
                     autoFocus={autoFocus}
                     type={type}
                     placeholder={label} />
-      <FormControl.Feedback />
-      {touched && (
-        (error && <RenderError error={error} />) ||
-        (warning && <RenderError error={warning} />))}
-    </Col>
-  </FormGroup>
+  </WalletFormGroup>
 )
 
 RenderField.propTypes = {
   input: PropTypes.object,
   label: PropTypes.string,
   type: PropTypes.string,
-  meta: PropTypes.shape({
-    touched: PropTypes.bool,
-    valid: PropTypes.bool,
-    error: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.string),
-      PropTypes.string
-    ]),
-    warning: PropTypes.string
-  }),
+  meta: PropTypes.object,
   required: PropTypes.bool,
   autoFocus: PropTypes.bool
 }

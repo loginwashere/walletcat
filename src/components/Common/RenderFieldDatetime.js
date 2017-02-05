@@ -1,54 +1,33 @@
 
 import React, { PropTypes } from 'react'
 import Flatpickr from 'react-flatpickr'
-import {
-  FormGroup,
-  Col,
-  ControlLabel,
-  FormControl,
-  HelpBlock
-} from 'react-bootstrap'
-import { validationState } from '.'
+import WalletFormGroup from './WalletFormGroup'
 
 import '../../../node_modules/flatpickr/dist/flatpickr.min.css'
 
 const handleOnChange = onChange => v => onChange(v[0])
 
 const RenderFieldDatetime = ({
-  input: { onChange, value },
+  input: { name, onChange, value },
   label,
-  meta: { touched, error, warning, valid }
+  meta
 }) => (
-  <FormGroup controlId="formHorizontalName"
-              validationState={validationState(touched, error, warning, valid)}>
-    <Col componentClass={ControlLabel} sm={2}>{label}</Col>
-    <Col sm={10}>
+  <WalletFormGroup name={name}
+                   label={label}
+                   meta={meta}>
       <Flatpickr className={'form-control'}
                   data-enable-time
                   data-week-numbers
                   data-minute-increment={1}
                   onChange={handleOnChange(onChange)}
                   value={value} />
-      <FormControl.Feedback />
-      {touched && (
-        (error && <HelpBlock>{error}</HelpBlock>) ||
-        (warning && <HelpBlock>{warning}</HelpBlock>))}
-    </Col>
-  </FormGroup>
+  </WalletFormGroup>
 )
 
 RenderFieldDatetime.propTypes = {
   input: PropTypes.object,
   label: PropTypes.string,
-  meta: PropTypes.shape({
-    touched: PropTypes.bool,
-    valid: PropTypes.bool,
-    error: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.string),
-      PropTypes.string
-    ]),
-    warning: PropTypes.string
-  })
+  meta: PropTypes.object
 }
 
 export default RenderFieldDatetime

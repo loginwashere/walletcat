@@ -24,8 +24,8 @@ export class RegisterForm extends Component {
             className="register__form">
 
         <FormGroup validationState={validationState(error)}>
-          <h1 className="form-signin-heading">Please</h1>
-          <h2 className="form-signin-heading">Create an account</h2>
+          <h1>Please</h1>
+          <h2>Create an account</h2>
           <FormControl.Feedback />
           <RenderError error={error} />
         </FormGroup>

@@ -2,12 +2,10 @@ import React, { Component, PropTypes } from 'react'
 import { Field, reduxForm } from 'redux-form'
 import {
   Form,
-  FormGroup,
-  FormControl,
   Button
 } from 'react-bootstrap'
 import { loginSchema } from '../../../common/validation'
-import { RenderFieldWithoutCol, RenderError, getValidate } from '../Common'
+import { RenderFieldWithoutCol, WalletFormHeader, getValidate } from '../Common'
 import OAuthSignInButton from '../OAuthSignInButton'
 
 import './style.less'
@@ -17,17 +15,11 @@ const validate = values => getValidate(values, loginSchema)
 export class LoginForm extends Component {
   render() {
     const { error, handleSubmit, pristine, submitting, invalid } = this.props
-    const validationState = error => (error && 'error') || null
     return (
       <Form horizontal
             onSubmit={handleSubmit}
             className="login__form">
-
-        <FormGroup validationState={validationState(error)}>
-          <h1 className="form-signin-heading">Please sign in</h1>
-          <FormControl.Feedback />
-          <RenderError error={error} />
-        </FormGroup>
+        <WalletFormHeader error={error}>Please sign in</WalletFormHeader>
 
         <Field required={true}
                name="login"

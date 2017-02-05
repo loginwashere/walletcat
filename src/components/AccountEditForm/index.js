@@ -1,21 +1,17 @@
 import React, { Component, PropTypes } from 'react'
-import { Field, reduxForm } from 'redux-form'
-import { LinkContainer } from 'react-router-bootstrap'
-import {
-  Form,
-  FormGroup,
-  Col,
-  Button,
-  FormControl
-} from 'react-bootstrap'
+import { reduxForm } from 'redux-form'
+import { Form } from 'react-bootstrap'
 import { accountSchema } from '../../../common/validation'
 import {
   fetchAppCurrenciesPageWithDependencies,
   fetchAgentsPageWithDependencies
 } from '../../actions'
-import { RenderField, RenderError, WalletSelect, getValidate, formValidationState } from '../Common'
-
-const validate = values => getValidate(values, accountSchema)
+import {
+  WalletFormHeader,
+  EditFormButtonsGroup,
+  getValidate
+} from '../Common'
+import AccountFormFields from '../AccountFormFields'
 
 class AccountEditForm extends Component {
   prepareUserCurrenciesOptions = result => {
@@ -54,69 +50,33 @@ class AccountEditForm extends Component {
   }
 
   render() {
-    const { error, handleSubmit, account, pristine, submitting, reset, invalid, customInitialValues } = this.props
+    const {
+      error,
+      handleSubmit,
+      account,
+      pristine,
+      submitting,
+      reset,
+      invalid,
+      customInitialValues
+    } = this.props
     return (
       <Form horizontal
             onSubmit={handleSubmit}>
-        <FormGroup validationState={formValidationState(error)}>
-          <h1 className="form-signin-heading truncate">Account {account.name}</h1>
-          <FormControl.Feedback />
-          <RenderError error={error} />
-        </FormGroup>
+        <WalletFormHeader error={error}>Account {account.name}</WalletFormHeader>
 
-        <Field required={true}
-               name="name"
-               component={RenderField}
-               label="Name"
-               type="text" />
-        {customInitialValues && <Field required={true}
-               name="currencyId"
-               component={WalletSelect}
-               label="Currency"
-               loadOptions={this.loadUserCurrenciesOptions}
-               autoload={true} />}
-        {customInitialValues && <Field required={true}
-               name="agentId"
-               component={WalletSelect}
-               label="Agent"
-               loadOptions={this.loadAgentsOptions}
-               autoload={true} />}
-        <Field name="amount"
-               component={RenderField}
-               label="Amount"
-               type="number" />
-        <Field name="description"
-               component={RenderField}
-               label="Description"
-               type="text" />
+        <AccountFormFields type="edit"
+                           customInitialValues={customInitialValues}
+                           loadUserCurrenciesOptions={this.loadUserCurrenciesOptions}
+                           loadAgentsOptions={this.loadAgentsOptions}/>
 
-        <FormGroup>
-          <Col smOffset={2} sm={2} xs={3}>
-            <LinkContainer to="/accounts">
-              <Button>
-                Cancel
-              </Button>
-            </LinkContainer>
-          </Col>
-          <Col sm={2} xs={3}>
-            <LinkContainer to={`/accounts/${account.id}/delete`}>
-              <Button>
-                Delete
-              </Button>
-            </LinkContainer>
-          </Col>
-          <Col sm={2} xs={3}>
-            <Button type="submit" disabled={submitting || (!error && invalid)}>
-              Edit
-            </Button>
-          </Col>
-          <Col sm={2} xs={3}>
-            <Button disabled={pristine || submitting}
-                    onClick={reset}>
-              Clear
-            </Button>
-          </Col>
-        </FormGroup>
+        <EditFormButtonsGroup cancelTo="/accounts"
+                              deleteTo={`/accounts/${account.id}/delete`}
+                              submitting={submitting}
+                              pristine={pristine}
+                              reset={reset}
+                              invalid={invalid}
+                              error={error}/>
       </Form>
     )
   }
@@ -138,5 +98,5 @@ AccountEditForm.propTypes = {
 }
 export default reduxForm({
   form: 'accountEdit',
-  validate
+  validate: values => getValidate(values, accountSchema)
 })(AccountEditForm)

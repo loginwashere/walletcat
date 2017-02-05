@@ -1,21 +1,17 @@
 import React, { Component, PropTypes } from 'react'
-import { Field, reduxForm } from 'redux-form'
-import { LinkContainer } from 'react-router-bootstrap'
-import {
-  Form,
-  FormGroup,
-  Col,
-  Button,
-  FormControl
-} from 'react-bootstrap'
+import { reduxForm } from 'redux-form'
+import { Form } from 'react-bootstrap'
 import {
   fetchAppCurrenciesPageWithDependencies,
   fetchAgentsPageWithDependencies
 } from '../../actions'
 import { accountSchema } from '../../../common/validation'
-import { RenderField, RenderError, WalletSelect, getValidate, formValidationState } from '../Common'
-
-const validate = values => getValidate(values, accountSchema)
+import {
+  WalletFormHeader,
+  CreateFormButtonsGroup,
+  getValidate
+} from '../Common'
+import AccountFormFields from '../AccountFormFields'
 
 class AccountCreateForm extends Component {
   prepareUserCurrenciesOptions = result => {
@@ -30,7 +26,7 @@ class AccountCreateForm extends Component {
     return { options }
   }
 
-  loadUserCurrenciesOptions = (value) => {
+  loadUserCurrenciesOptions = value => {
     const { dispatch } = this.props
     return dispatch(fetchAppCurrenciesPageWithDependencies({ filter: { name: value } }))
       .then(this.prepareUserCurrenciesOptions)
@@ -43,7 +39,7 @@ class AccountCreateForm extends Component {
     return { options }
   }
 
-  loadAgentsOptions = (value) => {
+  loadAgentsOptions = value => {
     const { dispatch } = this.props
     return dispatch(fetchAgentsPageWithDependencies({ filter: { name: value } }))
       .then(this.prepareAgentsOptions)
@@ -62,56 +58,18 @@ class AccountCreateForm extends Component {
     return (
       <Form horizontal
             onSubmit={handleSubmit}>
-        <FormGroup validationState={formValidationState(error)}>
-          <h1 className="form-signin-heading">New Account</h1>
-          <FormControl.Feedback />
-          <RenderError error={error} />
-        </FormGroup>
+        <WalletFormHeader error={error}>New Account</WalletFormHeader>
 
-        <Field required={true}
-               name="name"
-               component={RenderField}
-               label="Name"
-               type="text" />
-        <Field required={true}
-               name="currencyId"
-               component={WalletSelect}
-               label="Currency"
-               loadOptions={this.loadUserCurrenciesOptions} />
-        <Field required={true}
-               name="agentId"
-               component={WalletSelect}
-               label="Agent"
-               loadOptions={this.loadAgentsOptions} />
-        <Field name="amount"
-               component={RenderField}
-               label="Amount"
-               type="number" />
-        <Field name="description"
-               component={RenderField}
-               label="Description"
-               type="text" />
+        <AccountFormFields type="create"
+                           loadUserCurrenciesOptions={this.loadUserCurrenciesOptions}
+                           loadAgentsOptions={this.loadAgentsOptions}/>
 
-        <FormGroup>
-          <Col smOffset={2} sm={2} xs={4}>
-            <LinkContainer to="/accounts">
-              <Button disabled={submitting}>
-                Cancel
-              </Button>
-            </LinkContainer>
-          </Col>
-          <Col sm={2} xs={4}>
-            <Button type="submit" disabled={submitting || (!error && invalid)}>
-              Create
-            </Button>
-          </Col>
-          <Col sm={2} xs={4}>
-            <Button disabled={pristine || submitting}
-                    onClick={reset}>
-              Clear
-            </Button>
-          </Col>
-        </FormGroup>
+        <CreateFormButtonsGroup cancelTo="/accounts"
+                                submitting={submitting}
+                                pristine={pristine}
+                                reset={reset}
+                                invalid={invalid}
+                                error={error} />
       </Form>
     )
   }
@@ -129,5 +87,5 @@ AccountCreateForm.propTypes = {
 
 export default reduxForm({
   form: 'accountCreate',
-  validate
+  validate: values => getValidate(values, accountSchema)
 })(AccountCreateForm)

@@ -7,6 +7,11 @@ import RenderFieldSelect from './RenderFieldSelect'
 import RenderFieldWithoutCol from './RenderFieldWithoutCol'
 import WalletPager from './WalletPager'
 import WalletSelect from './WalletSelect'
+import WalletFormGroupSelect from './WalletFormGroupSelect'
+import WalletFormGroup from './WalletFormGroup'
+import WalletFormHeader from './WalletFormHeader'
+import CreateFormButtonsGroup from './CreateFormButtonsGroup'
+import EditFormButtonsGroup from './EditFormButtonsGroup'
 
 const getValidate = (values, schema) =>
   errorMessages(Joi.validate(values, schema, { abortEarly: false }))
@@ -31,5 +36,10 @@ export {
   RenderFieldSelect,
   RenderFieldWithoutCol,
   WalletPager,
-  WalletSelect
+  WalletSelect,
+  WalletFormGroupSelect,
+  WalletFormGroup,
+  WalletFormHeader,
+  CreateFormButtonsGroup,
+  EditFormButtonsGroup
 }

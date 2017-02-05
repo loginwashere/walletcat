@@ -1,28 +1,17 @@
 import React, { Component, PropTypes } from 'react'
-import { Field, reduxForm } from 'redux-form'
-import { LinkContainer } from 'react-router-bootstrap'
-import {
-  Form,
-  FormGroup,
-  Col,
-  Button,
-  FormControl
-} from 'react-bootstrap'
+import { reduxForm } from 'redux-form'
+import { Form } from 'react-bootstrap'
 import {
   fetchCategoriesPageWithDependencies,
   fetchAccountsIfNeeded
 } from '../../actions'
 import { transactionSchema } from '../../../common/validation'
 import {
-  RenderField,
-  WalletSelect,
-  RenderFieldDatetime,
-  RenderError,
-  getValidate,
-  formValidationState
+  CreateFormButtonsGroup,
+  WalletFormHeader,
+  getValidate
 } from '../Common'
-
-const validate = values => getValidate(values, transactionSchema)
+import TransactionFormFields from '../TransactionFormFields'
 
 export class TransactionCreateForm extends Component {
   prepareAccountsOptions = result => {
@@ -61,77 +50,19 @@ export class TransactionCreateForm extends Component {
     return (
       <Form horizontal
             onSubmit={handleSubmit}>
-        <FormGroup validationState={formValidationState(error)}>
-          <h1 className="form-signin-heading">New Transaction</h1>
-          <FormControl.Feedback />
-          <RenderError error={error} />
-        </FormGroup>
+        <WalletFormHeader error={error}>New Transaction</WalletFormHeader>
 
-        <Field required={true}
-               name="fromAccountId"
-               component={WalletSelect}
-               label="From Account"
-               loadOptions={this.loadAccountsOptions} />
-        <Field required={true}
-               name="toAccountId"
-               component={WalletSelect}
-               label="To Account"
-               loadOptions={this.loadAccountsOptions} />
-        <Field required={true}
-               name="fromAmount"
-               component={RenderField}
-               label="From Amount"
-               type="number" />
-        <Field required={true}
-               name="toAmount"
-               component={RenderField}
-               label="To Amount"
-               type="number" />
-        <Field required={true}
-               name="fromRate"
-               component={RenderField}
-               label="From Rate"
-               type="number" />
-        <Field required={true}
-               name="toRate"
-               component={RenderField}
-               label="To Rate"
-               type="number" />
-        <Field required={true}
-               name="date"
-               component={RenderFieldDatetime}
-               label="Date"
-               type="text" />
-        <Field required={true}
-               name="categoryId"
-               component={WalletSelect}
-               label="Category"
-               loadOptions={this.loadCategoriesOptions} />
-        <Field name="description"
-               component={RenderField}
-               label="Description"
-               type="text" />
+        <TransactionFormFields type="create"
+                               loadFromAccountOptions={this.loadAccountsOptions}
+                               loadToAccountOptions={this.loadAccountsOptions}
+                               loadCategoriesOptions={this.loadCategoriesOptions}/>
 
-        <FormGroup>
-          <Col smOffset={2} sm={2} xs={4}>
-            <LinkContainer to="/transactions">
-              <Button disabled={submitting}>
-                Cancel
-              </Button>
-            </LinkContainer>
-          </Col>
-          <Col sm={2} xs={4}>
-            <Button type="submit" disabled={submitting || (!error && invalid)}>
-              Create
-            </Button>
-          </Col>
-          <Col sm={2} xs={4}>
-            <Button disabled={pristine || submitting}
-                    onClick={reset}>
-              Clear
-            </Button>
-          </Col>
-        </FormGroup>
+        <CreateFormButtonsGroup cancelTo="/categories"
+                                submitting={submitting}
+                                pristine={pristine}
+                                reset={reset}
+                                invalid={invalid}
+                                error={error} />
       </Form>
     )
   }
@@ -149,5 +80,5 @@ TransactionCreateForm.propTypes = {
 
 export default reduxForm({
   form: 'transactionCreate',
-  validate
+  validate: values => getValidate(values, transactionSchema)
 })(TransactionCreateForm)
