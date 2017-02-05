@@ -11,13 +11,22 @@ const ServerError = require('./errors/server-error')
 module.exports = () => {
   const app = express()
 
-  app.use((req, res, next) => {
-    debug("req.header('origin')", req.header('origin'))
-    res.setHeader('Access-Control-Allow-Headers', 'accept, authorization, content-type, x-requested-with')
-    res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE')
-    res.setHeader('Access-Control-Allow-Origin', '*')
-    next()
-  })
+  if (process.env.NODE_ENV === 'development') {
+    app.use((req, res, next) => {
+      debug("req.header('origin')", req.header('origin'))
+      res.setHeader('Access-Control-Allow-Headers', 'accept, authorization, content-type, x-requested-with')
+      res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE')
+      res.setHeader('Access-Control-Allow-Origin', '*')
+      next()
+    })
+  }
+
+  // Express only serves static assets in production
+  if (process.env.NODE_ENV === 'production') {
+    const staticMiddleware = express.static('build')
+    staticMiddleware.unless = unless
+    app.use(staticMiddleware.unless({ method: 'OPTIONS' }))
+  }
 
   const jwtMiddleware = expressJwt({
     secret: config.JWT_SECRET
@@ -53,13 +62,6 @@ module.exports = () => {
 
   app.use(bodyParser.json())
   app.use('/api/*', jwtMiddleware)
-
-  // Express only serves static assets in production
-  if (process.env.NODE_ENV === 'production') {
-    const staticMiddleware = express.static('build')
-    staticMiddleware.unless = unless
-    app.use(staticMiddleware.unless({ method: 'OPTIONS' }))
-  }
 
   const agentsRouter = require('./routes/agents')
   const accountsRouter = require('./routes/accounts')
