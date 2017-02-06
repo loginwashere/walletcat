@@ -1,0 +1,111 @@
+exports[`components:AgentEditForm: renders without crashing 1`] = `
+<form
+  className="form-horizontal"
+  onSubmit={[Function]}>
+  <div
+    className="form-group has-feedback">
+    <h1
+      className="truncate">
+      Agent 
+      Default agent (Me)
+    </h1>
+    <div />
+  </div>
+  <div>
+    <div
+      className="form-group has-feedback">
+      <label
+        className="col-sm-2 control-label"
+        htmlFor="form-horizontal-name">
+        Name
+      </label>
+      <div
+        className="col-sm-10">
+        <input
+          autoFocus={undefined}
+          className="form-control"
+          id="form-horizontal-name"
+          name="name"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onDragStart={[Function]}
+          onDrop={[Function]}
+          onFocus={[Function]}
+          placeholder="Name"
+          required={true}
+          type="text"
+          value="" />
+      </div>
+    </div>
+    <div
+      className="form-group has-feedback">
+      <label
+        className="col-sm-2 control-label"
+        htmlFor="form-horizontal-description">
+        Description
+      </label>
+      <div
+        className="col-sm-10">
+        <input
+          autoFocus={undefined}
+          className="form-control"
+          id="form-horizontal-description"
+          name="description"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onDragStart={[Function]}
+          onDrop={[Function]}
+          onFocus={[Function]}
+          placeholder="Description"
+          required={undefined}
+          type="text"
+          value="" />
+      </div>
+    </div>
+  </div>
+  <div
+    className="form-group">
+    <div
+      className="col-sm-2 col-sm-offset-2 col-xs-3">
+      <button
+        action="push"
+        className="btn btn-default"
+        disabled={false}
+        onClick={[Function]}
+        type="button">
+        Cancel
+      </button>
+    </div>
+    <div
+      className="col-sm-2 col-xs-3">
+      <button
+        action="push"
+        className="btn btn-default"
+        disabled={false}
+        onClick={[Function]}
+        type="button">
+        Delete
+      </button>
+    </div>
+    <div
+      className="col-sm-2 col-xs-3">
+      <button
+        className="btn btn-default"
+        disabled={false}
+        type="submit">
+        Edit
+      </button>
+    </div>
+    <div
+      className="col-sm-2 col-xs-3">
+      <button
+        className="btn btn-default"
+        disabled={true}
+        onClick={[Function]}
+        type="button">
+        Clear
+      </button>
+    </div>
+  </div>
+</form>
+`;

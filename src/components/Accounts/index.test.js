@@ -2,10 +2,9 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { v4 } from 'uuid'
 import { Accounts } from '.'
-import configureStore from '../../configureStore'
 
 it('renders without crashing', () => {
-  const store = configureStore()
+  const dispatch = jest.fn()
   const currency = {
     id: v4(),
     name: 'USD'
@@ -36,5 +35,7 @@ it('renders without crashing', () => {
                             accountIds={accountIds}
                             currencies={currencies}
                             userCurrencies={userCurrencies}
-                            dispatch={store.dispatch} />, div)
+                            dispatch={dispatch} />, div)
+
+  expect(dispatch.mock.calls.length).toBe(1)
 })

@@ -1,0 +1,7 @@
+exports[`components:AgentDelete: renders without crashing 1`] = `
+<div>
+  <h1>
+    Delete Category
+  </h1>
+</div>
+`;

@@ -2,16 +2,21 @@ import React from 'react'
 import ReactTestUtils from 'react-addons-test-utils'
 import { AccountCreateForm } from '.'
 
-const shallowRenderer = ReactTestUtils.createRenderer()
-const spy = jest.fn()
+describe('components:AccountCreateForm:', () => {
+  const shallowRenderer = ReactTestUtils.createRenderer()
 
-it('renders without crashing', () => {
-  shallowRenderer.render(
-    <AccountCreateForm dispatch={spy}
-                       handleSubmit={spy}
-                       submitting={false}
-                       pristine={true}
-                       invalid={false}
-                       reset={spy} />
-  )
+  const dispatch = jest.fn()
+  const handleSubmit = jest.fn()
+  const reset = jest.fn()
+
+  it('renders without crashing', () => {
+    shallowRenderer.render(
+      <AccountCreateForm dispatch={dispatch}
+                         handleSubmit={handleSubmit}
+                         submitting={false}
+                         pristine={true}
+                         invalid={false}
+                         reset={reset} />
+    )
+  })
 })

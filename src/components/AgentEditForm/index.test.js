@@ -1,17 +1,21 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import renderer from 'react-test-renderer'
+import { reduxForm } from 'redux-form'
 import { Provider } from 'react-redux'
-import AgentEditForm from '.'
+import { AgentEditForm } from '.'
 import { agentSeeder } from '../../../server/seeds'
 import configureStore from '../../configureStore'
 
-it('renders without crashing', () => {
-  const div = document.createElement('div')
-  const store = configureStore()
-  ReactDOM.render(
-    <Provider store={store}>
-      <AgentEditForm agent={agentSeeder.items[0]} />
-    </Provider>,
-    div
-  )
+describe('components:AgentEditForm:', () => {
+  const AgentEditFormDecorated = reduxForm({ form: 'test-form' })(AgentEditForm)
+
+  it('renders without crashing', () => {
+    const store = configureStore()
+    const tree = renderer.create(
+      <Provider store={store} >
+        <AgentEditFormDecorated agent={agentSeeder.items[0]} />
+      </Provider>
+    ).toJSON()
+    expect(tree).toMatchSnapshot()
+  })
 })

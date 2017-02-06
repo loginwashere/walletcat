@@ -27,5 +27,5 @@ process.stdout.write = function(chunk, encoding, callback) {
   return realWrite.call(this, chunk, encoding, callback);
 };
 
-
+console.log(argv)
 jest.run(argv);

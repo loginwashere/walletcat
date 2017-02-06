@@ -1,0 +1,21 @@
+exports[`components:Account: renders without crashing 1`] = `
+<a
+  className="list-group-item"
+  onClick={[Function]}
+  style={Object {}}>
+  <span
+    className="badge badge-danger pull-right">
+    0.00000000
+     
+    AED
+  </span>
+  <h4
+    className="list-group-item-heading truncate">
+    Wallet
+  </h4>
+  <p
+    className="list-group-item-text truncate">
+    My Wallet
+  </p>
+</a>
+`;

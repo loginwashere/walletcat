@@ -1,12 +1,17 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import renderer from 'react-test-renderer'
 import { AgentDelete } from '.'
-import configureStore from '../../configureStore'
 import { agentSeeder } from '../../../server/seeds'
 
-it('renders without crashing', () => {
-  const div = document.createElement('div')
-  const store = configureStore()
-  ReactDOM.render(<AgentDelete dispatch={store.dispatch}
-                               agentId={agentSeeder.items[0].id} />, div)
+describe('components:AgentDelete:', () => {
+  const dispatch = jest.fn()
+  const agentId = agentSeeder.items[0].id
+  it('renders without crashing', () => {
+    const tree = renderer.create(
+      <AgentDelete dispatch={dispatch}
+                   agentId={agentId} />
+    ).toJSON()
+    expect(tree).toMatchSnapshot()
+    expect(dispatch.mock.calls.length).toBe(1)
+  })
 })

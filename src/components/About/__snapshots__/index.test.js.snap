@@ -1,0 +1,5 @@
+exports[`components:About: renders without crashing 1`] = `
+<h1>
+  About
+</h1>
+`;

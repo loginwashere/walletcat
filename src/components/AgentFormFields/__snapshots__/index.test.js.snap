@@ -1,4 +1,4 @@
-exports[`test renders without crashing 1`] = `
+exports[`components:AgentFormFields: renders without crashing 1`] = `
 <div>
   <div
     className="form-group has-feedback">
