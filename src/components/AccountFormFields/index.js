@@ -5,7 +5,7 @@ import {
   WalletFormGroupSelect
 } from '../Common'
 
-const AccountFormFields = ({
+export const AccountFormFields = ({
   type,
   customInitialValues,
   loadUserCurrenciesOptions,

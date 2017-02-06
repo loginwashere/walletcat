@@ -13,5 +13,6 @@ it('renders without crashing', () => {
   }
   const div = document.createElement('div')
   ReactDOM.render(<CategoryDelete category={category}
+                                  categoryId={category.id}
                                   dispatch={store.dispatch} />, div)
 })

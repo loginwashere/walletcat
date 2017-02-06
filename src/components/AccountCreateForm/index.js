@@ -13,7 +13,7 @@ import {
 } from '../Common'
 import AccountFormFields from '../AccountFormFields'
 
-class AccountCreateForm extends Component {
+export class AccountCreateForm extends Component {
   prepareUserCurrenciesOptions = result => {
     const options = result.userCurrencies
       .map(userCurrency => {

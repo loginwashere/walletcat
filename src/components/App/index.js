@@ -38,7 +38,7 @@ App.propTypes = {
   ]),
   location: PropTypes.shape({
     pathname: PropTypes.string
-  }),
+  }).isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired,
   redirectUrl: PropTypes.string

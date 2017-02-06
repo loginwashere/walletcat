@@ -1,15 +1,16 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
+import AgentCreate from '.'
 import { Provider } from 'react-redux'
 import configureStore from '../../configureStore'
-import renderer from 'react-test-renderer'
-import { Login } from '.'
 
 it('renders without crashing', () => {
   const store = configureStore()
-  const tree = renderer.create(
+  const div = document.createElement('div')
+  ReactDOM.render(
     <Provider store={store}>
-      <Login dispatch={store.dispatch} />
-    </Provider>
-  ).toJSON()
-  expect(tree).toMatchSnapshot()
+      <AgentCreate />
+    </Provider>,
+    div
+  )
 })

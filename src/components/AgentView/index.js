@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { updateAgent, fetchAgentsPageWithDependencies } from '../../actions'
 import AgentEditForm from '../AgentEditForm'
 
-class AgentView extends Component {
+export class AgentView extends Component {
   handleSubmit = (values) => {
     const { dispatch, agentId } = this.props
     return dispatch(updateAgent(agentId, values))

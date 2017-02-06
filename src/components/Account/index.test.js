@@ -1,20 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { v4 } from 'uuid'
 import Account from '.'
+import { accountSeeder, userCurrencySeeder, currencySeeder } from '../../../server/seeds'
 
 it('renders without crashing', () => {
-  const accountCurrency = {
-    id: v4(),
-    name: 'USD'
-  }
-  const account = {
-    id: v4(),
-    name: 'Wallet',
-    amount: 0,
-    currencyId: accountCurrency.id
-  }
+  const account = accountSeeder.items[0]
+  const userCurrency = userCurrencySeeder.items.filter(item => item.id === account.currencyId)[0]
+  const currency = currencySeeder.items.filter(item => item.id === userCurrency.currencyId)[0]
   const div = document.createElement('div')
   ReactDOM.render(<Account account={account}
-                           accountCurrency={accountCurrency} />, div)
+                           accountCurrency={currency} />, div)
 })

@@ -2,8 +2,9 @@ import configureMockStore from 'redux-mock-store'
 import moxios from 'moxios'
 import sinon from 'sinon'
 import thunk from 'redux-thunk'
-import { v4 } from 'uuid'
+import { accountSeeder } from '../../../server/seeds'
 import * as actions from '.'
+import { accountsPaginator } from '../../reducers/accounts'
 
 const middlewares = [ thunk ]
 const mockStore = configureMockStore(middlewares)
@@ -32,23 +33,56 @@ describe('async actions', () => {
   })
 
   it(`creates ${actions.REQUEST_ACCOUNT_LIST} when fetching accounts has been done`, () => {
-    const accountId = v4()
+    const account = accountSeeder.items[0]
+    const page = accountsPaginator.DEFAULT_PAGE
+    const limit = accountsPaginator.DEFAULT_LIMIT
     moxios.stubRequest(/.*api\/accounts.*/, {
       status: 200,
-      response: { accounts: [{ id: accountId, name: 'Wallet' }] }
+      response: { accounts: [account], meta: { page, limit, hasNext: false } }
     })
 
     const expectedActions = [
       { type: actions.REQUEST_ACCOUNT_LIST },
       {
+        meta:  {
+          endpoint: '/accounts/',
+          resultKey: 'accounts',
+        },
+        payload:  {
+          limit,
+          page,
+        },
+        type: accountsPaginator.REQUEST_PAGE,
+      },
+      {
         type: actions.RECEIVE_ACCOUNT_LIST,
-        accounts: [{ id: accountId, name: 'Wallet' }],
+        accounts: [account],
         receivedAt: 1317416400000,
+      },
+      {
+        meta: {
+          endpoint: '/accounts/',
+          resultKey: 'accounts'
+        },
+        payload:  {
+          hasNextPage: false,
+          limit,
+          page,
+          results:  [account]
+        },
+        type: accountsPaginator.RECEIVE_PAGE,
       }
     ]
-    const store = mockStore({ accounts: { items: {}, itemIds: [] } })
+    const store = mockStore({
+      accounts: { items: {}, itemIds: [] },
+      pagination: {
+        accounts: {
+          pages: {}
+        }
+      }
+    })
 
-    return store.dispatch(actions.fetchAccountsIfNeeded())
+    return store.dispatch(actions.fetchAccountsIfNeeded({ page, limit }))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions)
       })

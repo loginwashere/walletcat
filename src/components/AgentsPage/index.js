@@ -15,6 +15,10 @@ const AgentsPage = ({ agentIds, agents }) => (
   </ListGroup>
 )
 
+AgentsPage.defaultProps = {
+  agentIds: []
+}
+
 AgentsPage.propTypes = {
   agentIds: PropTypes.array.isRequired,
   agents: PropTypes.object.isRequired

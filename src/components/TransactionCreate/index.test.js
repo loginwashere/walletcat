@@ -1,10 +1,14 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import { TransactionCreate } from '.'
+import ReactTestUtils from 'react-addons-test-utils'
+import { Provider } from 'react-redux'
 import configureStore from '../../configureStore'
+import { TransactionCreate } from '.'
 
 it('renders without crashing', () => {
   const store = configureStore()
-  const div = document.createElement('div')
-  ReactDOM.render(<TransactionCreate dispatch={store.dispatch} />, div)
+  ReactTestUtils.renderIntoDocument(
+    <Provider store={store}>
+      <TransactionCreate dispatch={store.dispatch} />
+    </Provider>
+  )
 })

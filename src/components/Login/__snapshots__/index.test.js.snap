@@ -1,0 +1,71 @@
+exports[`test renders without crashing 1`] = `
+<form
+  className="login__form form-horizontal"
+  onSubmit={[Function]}>
+  <div
+    className="form-group has-feedback">
+    <h1
+      className="truncate">
+      Please sign in
+    </h1>
+    <div />
+  </div>
+  <div
+    className="form-group has-feedback">
+    <label
+      className="sr-only control-label"
+      htmlFor={undefined}>
+      Username or Email
+    </label>
+    <input
+      autoFocus={undefined}
+      className="form-control"
+      id={undefined}
+      name="login"
+      onBlur={[Function]}
+      onChange={[Function]}
+      onDragStart={[Function]}
+      onDrop={[Function]}
+      onFocus={[Function]}
+      placeholder="Username or Email"
+      required={true}
+      type="text"
+      value="" />
+  </div>
+  <div
+    className="form-group has-feedback">
+    <label
+      className="sr-only control-label"
+      htmlFor={undefined}>
+      Password
+    </label>
+    <input
+      autoFocus={undefined}
+      className="form-control"
+      id={undefined}
+      name="password"
+      onBlur={[Function]}
+      onChange={[Function]}
+      onDragStart={[Function]}
+      onDrop={[Function]}
+      onFocus={[Function]}
+      placeholder="Password"
+      required={true}
+      type="password"
+      value="" />
+  </div>
+  <button
+    className="btn btn-lg btn-primary btn-block btn btn-default"
+    disabled={true}
+    type="submit">
+    Sign in
+  </button>
+  <button
+    className="btn btn-lg btn-block btn btn-default"
+    disabled={false}
+    onClick={[Function]}
+    type="button">
+    Sign In using Facebook
+  </button>
+</form>
+`;

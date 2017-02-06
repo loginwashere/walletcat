@@ -1,0 +1,158 @@
+exports[`test renders without crashing 1`] = `
+<div>
+  <nav
+    className="navbar navbar-default navbar-fixed-top">
+    <div
+      className="container">
+      <div
+        className="navbar-header">
+        <a
+          className="header__brand__link navbar-brand"
+          onClick={[Function]}
+          style={Object {}}>
+          <img
+            className="header__brand__image"
+            height={50}
+            src="/safari-pinned-tab.svg"
+            width={50} />
+          <span
+            className="header__brand__name">
+            Wallet Cat
+          </span>
+        </a>
+        <button
+          className="navbar-toggle collapsed"
+          onClick={[Function]}
+          type="button">
+          <span
+            className="sr-only">
+            Toggle navigation
+          </span>
+          <span
+            className="icon-bar" />
+          <span
+            className="icon-bar" />
+          <span
+            className="icon-bar" />
+        </button>
+      </div>
+      <div
+        aria-expanded={null}
+        className="navbar-collapse collapse">
+        <ul
+          className="nav navbar-nav"
+          role={null} />
+        <ul
+          className="nav navbar-nav navbar-right"
+          role={null}>
+          <li
+            className=""
+            role="presentation"
+            style={undefined}>
+            <a
+              action="push"
+              href="#"
+              onClick={[Function]}
+              role="button">
+              Sign in
+            </a>
+          </li>
+          <li
+            className=""
+            role="presentation"
+            style={undefined}>
+            <a
+              action="push"
+              href="#"
+              onClick={[Function]}
+              role="button">
+              Create an account
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div
+    className="appContent container">
+    <div />
+  </div>
+  <nav
+    className="navbar navbar-default navbar-fixed-bottom">
+    <div
+      className="container">
+      <button
+        className="navbar-toggle collapsed"
+        onClick={[Function]}
+        type="button">
+        <span
+          className="sr-only">
+          Toggle navigation
+        </span>
+        <span
+          className="icon-bar" />
+        <span
+          className="icon-bar" />
+        <span
+          className="icon-bar" />
+      </button>
+      <div
+        aria-expanded={null}
+        className="navbar-collapse collapse">
+        <ul
+          className="nav navbar-nav"
+          role={null}>
+          <li
+            className=""
+            role="presentation"
+            style={undefined}>
+            <a
+              action="push"
+              href="#"
+              onClick={[Function]}
+              role="button">
+              About
+            </a>
+          </li>
+          <li
+            className=""
+            role="presentation"
+            style={undefined}>
+            <a
+              action="push"
+              href="#"
+              onClick={[Function]}
+              role="button">
+              Contact Us
+            </a>
+          </li>
+          <li
+            className=""
+            role="presentation"
+            style={undefined}>
+            <a
+              action="push"
+              href="#"
+              onClick={[Function]}
+              role="button">
+              Privacy Policy
+            </a>
+          </li>
+          <li
+            className=""
+            role="presentation"
+            style={undefined}>
+            <a
+              action="push"
+              href="#"
+              onClick={[Function]}
+              role="button">
+              Terms and conditions
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>
+`;

@@ -9,7 +9,7 @@ import {
 } from '../Common'
 import CategoryFormFields from '../CategoryFormFields'
 
-const CategoryCreateForm = ({
+export const CategoryCreateForm = ({
   error,
   handleSubmit,
   pristine,

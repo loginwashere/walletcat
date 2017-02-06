@@ -13,7 +13,7 @@ import {
 } from '../Common'
 import AccountFormFields from '../AccountFormFields'
 
-class AccountEditForm extends Component {
+export class AccountEditForm extends Component {
   prepareUserCurrenciesOptions = result => {
     const { customInitialValues } = this.props
     const options = result.userCurrencies
@@ -86,7 +86,8 @@ AccountEditForm.propTypes = {
   initialValues: PropTypes.object,
   customInitialValues: PropTypes.object,
   account: PropTypes.shape({
-    id: PropTypes.string.isRequired
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,

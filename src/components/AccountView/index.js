@@ -7,7 +7,7 @@ import {
 import { selectEditProps } from '../../api/accounts'
 import AccountEditForm from '../AccountEditForm'
 
-class AccountView extends Component {
+export class AccountView extends Component {
   handleSubmit = (values) => {
     const { dispatch, account: { id } } = this.props
     return dispatch(updateAccount(id, values))

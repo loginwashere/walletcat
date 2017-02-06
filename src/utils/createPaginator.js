@@ -94,6 +94,10 @@ const createPaginator = (endpoint, resultKey) => {
   )
 
   return {
+    REQUEST_PAGE,
+    RECEIVE_PAGE,
+    DEFAULT_PAGE,
+    DEFAULT_LIMIT,
     requestPage,
     receivePage,
     reducer,

@@ -12,7 +12,7 @@ const accounts = [
     agentId: agentSeederItems[0].id,
     name: 'Wallet',
     description: 'My Wallet',
-    amount: 0,
+    amount: '0.00000000',
     createdAt: format(new Date()),
     updatedAt: format(new Date())
   },
@@ -23,7 +23,7 @@ const accounts = [
     agentId: agentSeederItems[0].id,
     name: 'Stash',
     description: 'My Stash',
-    amount: 0,
+    amount: '0.00000000',
     createdAt: format(new Date()),
     updatedAt: format(new Date())
   }

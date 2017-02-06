@@ -1,0 +1,95 @@
+exports[`test renders without crashing 1`] = `
+<form
+  className="register__form form-horizontal"
+  onSubmit={[Function]}>
+  <div
+    className="form-group has-feedback">
+    <h1>
+      Please
+    </h1>
+    <h2>
+      Create an account
+    </h2>
+    <div />
+  </div>
+  <div
+    className="form-group has-feedback">
+    <label
+      className="sr-only control-label"
+      htmlFor={undefined}>
+      Email
+    </label>
+    <input
+      autoFocus={undefined}
+      className="form-control"
+      id={undefined}
+      name="email"
+      onBlur={[Function]}
+      onChange={[Function]}
+      onDragStart={[Function]}
+      onDrop={[Function]}
+      onFocus={[Function]}
+      placeholder="Email"
+      required={true}
+      type="email"
+      value="" />
+  </div>
+  <div
+    className="form-group has-feedback">
+    <label
+      className="sr-only control-label"
+      htmlFor={undefined}>
+      Username
+    </label>
+    <input
+      autoFocus={undefined}
+      className="form-control"
+      id={undefined}
+      name="username"
+      onBlur={[Function]}
+      onChange={[Function]}
+      onDragStart={[Function]}
+      onDrop={[Function]}
+      onFocus={[Function]}
+      placeholder="Username"
+      required={true}
+      type="text"
+      value="" />
+  </div>
+  <div
+    className="form-group has-feedback">
+    <label
+      className="sr-only control-label"
+      htmlFor={undefined}>
+      Password
+    </label>
+    <input
+      autoFocus={undefined}
+      className="form-control"
+      id={undefined}
+      name="password"
+      onBlur={[Function]}
+      onChange={[Function]}
+      onDragStart={[Function]}
+      onDrop={[Function]}
+      onFocus={[Function]}
+      placeholder="Password"
+      required={true}
+      type="password"
+      value="" />
+  </div>
+  <button
+    className="btn btn-lg btn-primary btn-block btn btn-default"
+    disabled={true}
+    type="submit">
+    Create an account
+  </button>
+  <button
+    className="btn btn-lg btn-block btn btn-default"
+    disabled={false}
+    onClick={[Function]}
+    type="button">
+    Sign Up using Facebook
+  </button>
+</form>
+`;

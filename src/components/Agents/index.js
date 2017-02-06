@@ -6,7 +6,7 @@ import AgentsPage from '../AgentsPage'
 import { WalletPager } from '../Common'
 import { fetchAgentsPageWithDependencies } from '../../actions'
 
-export class Categories extends Component {
+export class Agents extends Component {
   handlePageChange = (page = 1) => {
     const { dispatch } = this.props
     dispatch(fetchAgentsPageWithDependencies({ page }))
@@ -48,7 +48,7 @@ export class Categories extends Component {
   }
 }
 
-Categories.propTypes = {
+Agents.propTypes = {
   pages: PropTypes.object,
   agents: PropTypes.object.isRequired,
   page: PropTypes.number,
@@ -72,4 +72,4 @@ function mapStateToProps(state, ownProps) {
   }
 }
 
-export default connect(mapStateToProps)(Categories)
+export default connect(mapStateToProps)(Agents)

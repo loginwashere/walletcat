@@ -9,7 +9,7 @@ import {
 } from '../Common'
 import AgentFormFields from '../AgentFormFields'
 
-const AgentEditForm = ({
+export const AgentEditForm = ({
   agent,
   error,
   handleSubmit,
@@ -36,7 +36,8 @@ const AgentEditForm = ({
 
 AgentEditForm.propTypes = {
   agent: PropTypes.shape({
-    id: PropTypes.string.isRequired
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired
   }).isRequired,
   handleSubmit: PropTypes.func.isRequired,
   error: PropTypes.object,

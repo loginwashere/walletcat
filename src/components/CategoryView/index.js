@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { updateCategory, fetchCategoriesPageWithDependencies } from '../../actions'
 import CategoryEditForm from '../CategoryEditForm'
 
-class CategoryView extends Component {
+export class CategoryView extends Component {
   handleSubmit = (values) => {
     const { dispatch, categoryId } = this.props
     return dispatch(updateCategory(categoryId, values))
