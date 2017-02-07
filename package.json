@@ -136,7 +136,7 @@
       "<rootDir>/config/jest/localStorageMock.js"
     ],
     "testPathIgnorePatterns": [
-      "<rootDir>[/\\\\](build|docs|node_modules)[/\\\\]"
+      "<rootDir>[/\\\\](build|docs|node_modules|server)[/\\\\]"
     ],
     "testEnvironment": "node",
     "testURL": "http://localhost",
