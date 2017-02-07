@@ -1,9 +1,15 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import renderer from 'react-test-renderer'
 import Agent from '.'
 import { agentSeeder } from '../../../server/seeds'
 
-it('renders without crashing', () => {
-  const div = document.createElement('div')
-  ReactDOM.render(<Agent agent={agentSeeder.items[0]} />, div)
+describe('components:Agent:', () => {
+  const agent = agentSeeder.items[0]
+
+  it('renders without crashing', () => {
+    const tree = renderer.create(
+      <Agent agent={agent} />
+    ).toJSON()
+    expect(tree).toMatchSnapshot()
+  })
 })

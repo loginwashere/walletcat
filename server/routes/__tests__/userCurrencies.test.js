@@ -4,9 +4,9 @@ const should = chai.should()
 const chaiHttp = require('chai-http')
 const models = require('../../models')
 const helpers = require('./helpers')
-const userSeeder = require('../../seeds/20170114212746-user')
-const currencySeeder = require('../../seeds/20170114214434-currency')
-const userCurrencySeeder = require('../../seeds/20170114214446-user-currency')
+const userSeeder = require('../../seeds').userSeeder
+const currencySeeder = require('../../seeds').currencySeeder
+const userCurrencySeeder = require('../../seeds').userCurrencySeeder
 const NotFoundError = require('../../errors/not-found')
 
 chai.use(chaiHttp)

@@ -1,0 +1,5 @@
+exports[`components:ContactUs: renders without crashing 1`] = `
+<h1>
+  Contact Us
+</h1>
+`;

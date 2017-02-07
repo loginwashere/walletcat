@@ -1,18 +1,25 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
-import AccountEditForm from '.'
+import ReactTestUtils from 'react-addons-test-utils'
 import { accountSeeder } from '../../../server/seeds'
-import configureStore from '../../configureStore'
+import { AccountEditForm } from '.'
 
-it('renders without crashing', () => {
-  const div = document.createElement('div')
-  const store = configureStore()
-  ReactDOM.render(
-    <Provider store={store}>
-      <AccountEditForm account={accountSeeder.items[0]} />
-    </Provider>,
-    div
-  )
+describe('components:AccountEditForm:', () => {
+  const shallowRenderer = ReactTestUtils.createRenderer()
+
+  const dispatch = jest.fn()
+  const handleSubmit = jest.fn()
+  const reset = jest.fn()
+  const account = accountSeeder.items[0]
+
+  it('renders without crashing', () => {
+    shallowRenderer.render(
+      <AccountEditForm account={account}
+                       dispatch={dispatch}
+                       handleSubmit={handleSubmit}
+                       submitting={false}
+                       pristine={true}
+                       invalid={false}
+                       reset={reset} />
+    )
+  })
 })
-

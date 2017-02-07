@@ -1,10 +1,9 @@
 const format = require('date-fns/format')
-const v4 = require('uuid/v4')
 const userSeederItems = require('./20170114212746-user').items
 
 const categories = [
   {
-    id: v4(),
+    id: '00000000-5a23-4ef3-0003-000000000000',
     userId: userSeederItems[0].id,
     name: 'Fast food',
     description: 'Some fast food',
@@ -12,7 +11,7 @@ const categories = [
     updatedAt: format(new Date())
   },
   {
-    id: v4(),
+    id: '00000000-5a23-4ef3-0003-000000000001',
     userId: userSeederItems[0].id,
     name: 'Payment',
     description: 'Receive funds for work',

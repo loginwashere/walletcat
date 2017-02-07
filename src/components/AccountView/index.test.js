@@ -1,12 +1,20 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import ReactTestUtils from 'react-addons-test-utils'
 import { AccountView } from '.'
-import configureStore from '../../configureStore'
 import { accountSeeder } from '../../../server/seeds'
 
-it('renders without crashing', () => {
-  const div = document.createElement('div')
-  const store = configureStore()
-  ReactDOM.render(<AccountView dispatch={store.dispatch}
-                               accountId={accountSeeder.items[0].id} />, div)
+describe('components:AccountView:', () => {
+  const shallowRenderer = ReactTestUtils.createRenderer()
+
+  const dispatch = jest.fn()
+  const account = accountSeeder.items[0]
+
+  it('renders without crashing', () => {
+    shallowRenderer.render(
+      <AccountView dispatch={dispatch}
+                   accountId={account.id}
+                   account={account} />
+    )
+  })
 })
+

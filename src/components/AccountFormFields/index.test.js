@@ -3,7 +3,7 @@ import ReactTestUtils from 'react-addons-test-utils'
 import { reduxForm } from 'redux-form'
 import { Provider } from 'react-redux'
 import configureStore from '../../configureStore'
-import { AccountFormFields } from '.'
+import AccountFormFields from '.'
 
 const spy = jest.fn()
 const AccountFormFieldsDecorated = reduxForm({ form: 'test-form' })(AccountFormFields)

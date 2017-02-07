@@ -1,13 +1,18 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import renderer from 'react-test-renderer'
 import { AccountDelete } from '.'
-import configureStore from '../../configureStore'
 import { accountSeeder } from '../../../server/seeds'
 
-it('renders without crashing', () => {
-  const div = document.createElement('div')
-  const store = configureStore()
+describe('components:AccountDelete:', () => {
+  const dispatch = jest.fn()
   const accountId = accountSeeder.items[0].id
-  ReactDOM.render(<AccountDelete dispatch={store.dispatch}
-                                 accountId={accountId} />, div)
+
+  it('renders without crashing', () => {
+    const tree = renderer.create(
+      <AccountDelete dispatch={dispatch}
+                     accountId={accountId} />
+    ).toJSON()
+    expect(tree).toMatchSnapshot()
+    expect(dispatch.mock.calls.length).toBe(1)
+  })
 })

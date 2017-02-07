@@ -1,0 +1,110 @@
+exports[`components:AppCurrencies: renders without crashing and with data 1`] = `
+<div>
+  <h1>
+    App Currencies
+  </h1>
+  <div
+    className="list-group">
+    <li
+      className="list-group-item">
+      <button
+        className="pull-right btn btn-xs btn-default"
+        disabled={false}
+        onClick={[Function]}
+        type="button">
+        Remove from My Currencies
+      </button>
+      <h4
+        className="list-group-item-heading">
+        AED
+      </h4>
+      <p
+        className="list-group-item-text">
+        United Arab Emirates Dirham
+      </p>
+    </li>
+  </div>
+  <ul
+    className="pager">
+    <li
+      className="disabled previous"
+      style={undefined}>
+      <a
+        action="push"
+        href="#"
+        onClick={[Function]}
+        role="button"
+        style={
+          Object {
+            "pointerEvents": "none",
+          }
+        }
+        tabIndex={-1}>
+        Previous Page
+      </a>
+    </li>
+    <li
+      className="disabled next"
+      style={undefined}>
+      <a
+        action="push"
+        href="#"
+        onClick={[Function]}
+        role="button"
+        style={
+          Object {
+            "pointerEvents": "none",
+          }
+        }
+        tabIndex={-1}>
+        Next Page
+      </a>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`components:AppCurrencies: renders without crashing and without data 1`] = `
+<div>
+  <h1>
+    App Currencies
+  </h1>
+  <ul
+    className="pager">
+    <li
+      className="disabled previous"
+      style={undefined}>
+      <a
+        action="push"
+        href="#"
+        onClick={[Function]}
+        role="button"
+        style={
+          Object {
+            "pointerEvents": "none",
+          }
+        }
+        tabIndex={-1}>
+        Previous Page
+      </a>
+    </li>
+    <li
+      className="disabled next"
+      style={undefined}>
+      <a
+        action="push"
+        href="#"
+        onClick={[Function]}
+        role="button"
+        style={
+          Object {
+            "pointerEvents": "none",
+          }
+        }
+        tabIndex={-1}>
+        Next Page
+      </a>
+    </li>
+  </ul>
+</div>
+`;

@@ -1,0 +1,7 @@
+exports[`components:AccountDelete: renders without crashing 1`] = `
+<div>
+  <h1>
+    Delete Account
+  </h1>
+</div>
+`;

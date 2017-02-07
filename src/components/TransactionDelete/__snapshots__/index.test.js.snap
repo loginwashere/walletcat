@@ -1,0 +1,55 @@
+exports[`components:Login: renders without crashing and with transaction data 1`] = `
+<div>
+  <h1>
+    Delete Transaction
+  </h1>
+  <form
+    className="form-horizontal"
+    onSubmit={[Function]}>
+    <div
+      className="col-sm-12">
+      <div
+        className="alert alert-warning"
+        role="alert">
+        Are you  sure you want to delete transaction
+         
+        <strong>
+          00000000-5a23-4ef3-0006-000000000000
+        </strong>
+        ?
+      </div>
+    </div>
+    <div
+      className="form-group">
+      <div
+        className="col-sm-2 col-sm-offset-2 col-xs-6">
+        <button
+          action="push"
+          className="btn btn-default"
+          disabled={false}
+          onClick={[Function]}
+          type="button">
+          Cancel
+        </button>
+      </div>
+      <div
+        className="col-sm-2 col-xs-6">
+        <button
+          className="btn btn-default"
+          disabled={false}
+          type="submit">
+          Delete
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+`;
+
+exports[`components:Login: renders without crashing and without transaction data 1`] = `
+<div>
+  <h1>
+    Delete Transaction
+  </h1>
+</div>
+`;

@@ -1,0 +1,28 @@
+exports[`components:Login: renders without crashing and with required data 1`] = `
+<div
+  className="list-group">
+  <li
+    className="list-group-item">
+    <button
+      className="pull-right btn btn-xs btn-default"
+      disabled={false}
+      onClick={[Function]}
+      type="button">
+      Remove from My Currencies
+    </button>
+    <h4
+      className="list-group-item-heading">
+      AED
+    </h4>
+    <p
+      className="list-group-item-text">
+      United Arab Emirates Dirham
+    </p>
+  </li>
+</div>
+`;
+
+exports[`components:Login: renders without crashing and without required data 1`] = `
+<ul
+  className="list-group" />
+`;

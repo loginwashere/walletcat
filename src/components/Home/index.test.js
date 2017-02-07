@@ -1,8 +1,13 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import renderer from 'react-test-renderer'
 import Home from '.'
 
-it('renders without crashing', () => {
-  const div = document.createElement('div')
-  ReactDOM.render(<Home />, div)
+describe('components:Home:', () => {
+  it('renders without crashing', () => {
+    const tree = renderer.create(
+      <Home />
+    ).toJSON()
+    expect(tree).toMatchSnapshot()
+  })
 })
+

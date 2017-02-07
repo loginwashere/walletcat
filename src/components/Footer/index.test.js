@@ -1,8 +1,12 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import { Footer } from '.'
+import renderer from 'react-test-renderer'
+import Footer from '.'
 
-it('renders without crashing', () => {
-  const div = document.createElement('div')
-  ReactDOM.render(<Footer />, div)
+describe('components:Footer:', () => {
+  it('renders without crashing', () => {
+    const tree = renderer.create(
+      <Footer />
+    ).toJSON()
+    expect(tree).toMatchSnapshot()
+  })
 })

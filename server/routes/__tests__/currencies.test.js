@@ -2,8 +2,8 @@ const chai = require('chai')
 const should = chai.should()
 const chaiHttp = require('chai-http')
 const models = require('../../models')
-const userSeeder = require('../../seeds/20170114212746-user')
-const currencySeeder = require('../../seeds/20170114214434-currency')
+const userSeeder = require('../../seeds').userSeeder
+const currencySeeder = require('../../seeds').currencySeeder
 const helpers = require('./helpers')
 
 chai.use(chaiHttp)

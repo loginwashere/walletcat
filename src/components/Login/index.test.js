@@ -4,12 +4,14 @@ import configureStore from '../../configureStore'
 import renderer from 'react-test-renderer'
 import { Login } from '.'
 
-it('renders without crashing', () => {
-  const store = configureStore()
-  const tree = renderer.create(
-    <Provider store={store}>
-      <Login dispatch={store.dispatch} />
-    </Provider>
-  ).toJSON()
-  expect(tree).toMatchSnapshot()
+describe('components:Login:', () => {
+  it('renders without crashing', () => {
+    const store = configureStore()
+    const tree = renderer.create(
+      <Provider store={store}>
+        <Login dispatch={store.dispatch} />
+      </Provider>
+    ).toJSON()
+    expect(tree).toMatchSnapshot()
+  })
 })

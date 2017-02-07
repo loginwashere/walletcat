@@ -1,0 +1,74 @@
+exports[`components:Accounts: renders without crashing 1`] = `
+<div>
+  <h1>
+    Accounts
+    <button
+      action="push"
+      className="pull-right btn btn-default"
+      disabled={false}
+      onClick={[Function]}
+      type="button">
+      Create
+    </button>
+  </h1>
+  <div
+    className="list-group">
+    <a
+      className="list-group-item"
+      onClick={[Function]}
+      style={Object {}}>
+      <span
+        className="badge badge-danger pull-right">
+        0.00000000
+         
+        AED
+      </span>
+      <h4
+        className="list-group-item-heading truncate">
+        Wallet
+      </h4>
+      <p
+        className="list-group-item-text truncate">
+        My Wallet
+      </p>
+    </a>
+  </div>
+  <ul
+    className="pager">
+    <li
+      className="disabled previous"
+      style={undefined}>
+      <a
+        action="push"
+        href="#"
+        onClick={[Function]}
+        role="button"
+        style={
+          Object {
+            "pointerEvents": "none",
+          }
+        }
+        tabIndex={-1}>
+        Previous Page
+      </a>
+    </li>
+    <li
+      className="disabled next"
+      style={undefined}>
+      <a
+        action="push"
+        href="#"
+        onClick={[Function]}
+        role="button"
+        style={
+          Object {
+            "pointerEvents": "none",
+          }
+        }
+        tabIndex={-1}>
+        Next Page
+      </a>
+    </li>
+  </ul>
+</div>
+`;

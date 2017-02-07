@@ -19,6 +19,10 @@ const UserCurrenciesPage = ({ userCurrencyIds, currencies, userCurrencies, dispa
   </ListGroup>
 )
 
+UserCurrenciesPage.defaultProps = {
+  userCurrencyIds: []
+}
+
 UserCurrenciesPage.propTypes = {
   userCurrencyIds: PropTypes.array.isRequired,
   currencies: PropTypes.object.isRequired,

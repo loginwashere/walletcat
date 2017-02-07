@@ -27,7 +27,7 @@ export class TransactionDelete extends Component {
                 onSubmit={this.handleSubmit}>
             <Col sm={12}>
               <Alert bsStyle="warning">
-                Are you  sure you want to delete category
+                Are you  sure you want to delete transaction
                 {' '}
                 <strong>{transaction.id}</strong>?
               </Alert>

@@ -1,19 +1,13 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
-import AccountCreate from '.'
-import configureStore from '../../configureStore'
+import ReactTestUtils from 'react-addons-test-utils'
+import { AccountCreate } from '.'
 
 describe('components:AccountCreate:', () => {
+  const shallowRenderer = ReactTestUtils.createRenderer()
   const dispatch = jest.fn()
   it('renders without crashing', () => {
-    const store = configureStore()
-    const div = document.createElement('div')
-    ReactDOM.render(
-      <Provider store={store}>
-        <AccountCreate dispatch={dispatch} />
-      </Provider>,
-      div
+    shallowRenderer.render(
+      <AccountCreate dispatch={dispatch} />
     )
   })
 })

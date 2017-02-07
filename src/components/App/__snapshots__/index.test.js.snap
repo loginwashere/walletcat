@@ -1,4 +1,4 @@
-exports[`test renders without crashing 1`] = `
+exports[`components:App: renders without crashing 1`] = `
 <div>
   <nav
     className="navbar navbar-default navbar-fixed-top">

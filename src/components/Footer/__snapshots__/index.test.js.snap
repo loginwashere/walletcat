@@ -1,0 +1,79 @@
+exports[`components:Footer: renders without crashing 1`] = `
+<nav
+  className="navbar navbar-default navbar-fixed-bottom">
+  <div
+    className="container">
+    <button
+      className="navbar-toggle collapsed"
+      onClick={[Function]}
+      type="button">
+      <span
+        className="sr-only">
+        Toggle navigation
+      </span>
+      <span
+        className="icon-bar" />
+      <span
+        className="icon-bar" />
+      <span
+        className="icon-bar" />
+    </button>
+    <div
+      aria-expanded={null}
+      className="navbar-collapse collapse">
+      <ul
+        className="nav navbar-nav"
+        role={null}>
+        <li
+          className=""
+          role="presentation"
+          style={undefined}>
+          <a
+            action="push"
+            href="#"
+            onClick={[Function]}
+            role="button">
+            About
+          </a>
+        </li>
+        <li
+          className=""
+          role="presentation"
+          style={undefined}>
+          <a
+            action="push"
+            href="#"
+            onClick={[Function]}
+            role="button">
+            Contact Us
+          </a>
+        </li>
+        <li
+          className=""
+          role="presentation"
+          style={undefined}>
+          <a
+            action="push"
+            href="#"
+            onClick={[Function]}
+            role="button">
+            Privacy Policy
+          </a>
+        </li>
+        <li
+          className=""
+          role="presentation"
+          style={undefined}>
+          <a
+            action="push"
+            href="#"
+            onClick={[Function]}
+            role="button">
+            Terms and conditions
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+`;

@@ -39,30 +39,32 @@ export class EmailConfirm extends Component {
   }
 
   componentDidMount() {
-    const { dispatch, params, isEmailConfirmed } = this.props
+    const { dispatch, code, isEmailConfirmed } = this.props
     if (!isEmailConfirmed) {
-      dispatch(confirmEmail(params.code))
+      dispatch(confirmEmail(code))
     }
   }
 }
 
 EmailConfirm.propTypes = {
-  params: PropTypes.object.isRequired,
+  code: PropTypes.string.isRequired,
   isEmailConfirmed: PropTypes.bool.isRequired,
   isEmailConfirmResent: PropTypes.bool.isRequired,
   isFetching: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   const user = state.auth.user || {}
   const isEmailConfirmed = user.emailConfirmed || false
   const isEmailConfirmResent = state.auth.isEmailConfirmResent
   const isFetching = state.auth.isFetching || true
+  const code = ownProps.params.code
   return {
     isEmailConfirmed,
     isEmailConfirmResent,
-    isFetching
+    isFetching,
+    code
   }
 }
 

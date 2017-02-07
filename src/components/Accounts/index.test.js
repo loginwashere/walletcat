@@ -1,41 +1,32 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import { v4 } from 'uuid'
+import renderer from 'react-test-renderer'
+import {
+  accountSeeder,
+  userCurrencySeeder,
+  currencySeeder
+} from '../../../server/seeds'
 import { Accounts } from '.'
 
-it('renders without crashing', () => {
+describe('components:Accounts:', () => {
   const dispatch = jest.fn()
-  const currency = {
-    id: v4(),
-    name: 'USD'
-  }
-  const currencies = {
-    [currency.id]: currency
-  }
-  const userCurrency = {
-    id: v4(),
-    currencyId: currency.id,
-    userId: v4()
-  }
-  const userCurrencies = {
-    [userCurrency.id]: userCurrency
-  }
-  const account = {
-    id: v4(),
-    name: 'Wallet',
-    currencyId: userCurrency.id,
-    amount: 0
-  }
-  const accounts = {
-    [account.id]: account
-  }
-  const accountIds = [account.id]
-  const div = document.createElement('div')
-  ReactDOM.render(<Accounts accounts={accounts}
-                            accountIds={accountIds}
-                            currencies={currencies}
-                            userCurrencies={userCurrencies}
-                            dispatch={dispatch} />, div)
+  const page = 1
+  const account = accountSeeder.items[0]
+  const accounts = { [account.id]: account }
+  const pages = { [page]: { ids: [account.id] } }
+  const userCurrencies = userCurrencySeeder.items
+    .reduce((result, current) => ({ ...result, [current.id]: current }), {})
+  const currencies = currencySeeder.items
+    .reduce((result, current) => ({ ...result, [current.id]: current }), {})
 
-  expect(dispatch.mock.calls.length).toBe(1)
+  it('renders without crashing', () => {
+    const tree = renderer.create(
+      <Accounts accounts={accounts}
+                pages={pages}
+                page={page}
+                currencies={currencies}
+                userCurrencies={userCurrencies}
+                dispatch={dispatch} />
+    ).toJSON()
+    expect(tree).toMatchSnapshot()
+  })
 })

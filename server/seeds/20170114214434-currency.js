@@ -1,5 +1,5 @@
 const format = require('date-fns/format')
-const v4 = require('uuid/v4')
+const leftpad = require('../utils/leftpad')
 
 /**
  * openexchangerates currencies
@@ -13,8 +13,8 @@ const v4 = require('uuid/v4')
  */
 const openexchangeratesCurrencies = require('./files/currencies/openexchangerates_with_experimental')
 
-const currencies = Object.keys(openexchangeratesCurrencies).map(name => ({
-  id: v4(),
+const currencies = Object.keys(openexchangeratesCurrencies).map((name, index) => ({
+  id: `00000000-5a23-4ef3-0001-000000000${leftpad(index, 3, '0')}`,
   name: name,
   description: openexchangeratesCurrencies[name],
   createdAt: format(new Date()),

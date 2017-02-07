@@ -1,8 +1,12 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import renderer from 'react-test-renderer'
 import ContactUs from '.'
 
-it('renders without crashing', () => {
-  const div = document.createElement('div')
-  ReactDOM.render(<ContactUs />, div)
+describe('components:ContactUs:', () => {
+  it('renders without crashing', () => {
+    const tree = renderer.create(
+      <ContactUs />
+    ).toJSON()
+    expect(tree).toMatchSnapshot()
+  })
 })

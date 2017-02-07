@@ -5,13 +5,13 @@ const chaiHttp = require('chai-http')
 const models = require('../../models')
 const helpers = require('./helpers')
 const format = require('date-fns/format')
-const userSeeder = require('../../seeds/20170114212746-user')
-const currencySeeder = require('../../seeds/20170114214434-currency')
-const userCurrencySeeder = require('../../seeds/20170114214446-user-currency')
-const agentSeeder = require('../../seeds/20170114214456-agent')
-const accountSeeder = require('../../seeds/20170114214459-account')
-const categorySeeder = require('../../seeds/20170114214453-category')
-const transactionSeeder = require('../../seeds/20170114214507-transaction')
+const userSeeder = require('../../seeds').userSeeder
+const currencySeeder = require('../../seeds').currencySeeder
+const userCurrencySeeder = require('../../seeds').userCurrencySeeder
+const agentSeeder = require('../../seeds').agentSeeder
+const accountSeeder = require('../../seeds').accountSeeder
+const categorySeeder = require('../../seeds').categorySeeder
+const transactionSeeder = require('../../seeds').transactionSeeder
 const NotFoundError = require('../../errors/not-found')
 
 chai.use(chaiHttp)

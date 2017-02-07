@@ -1,5 +1,4 @@
 const format = require('date-fns/format')
-const v4 = require('uuid/v4')
 const hashPassword = require('../utils').hashPassword
 const generateAvatarUrl = require('../utils').generateAvatarUrl
 
@@ -7,7 +6,7 @@ const DEFAULT_PASSWORD = 'qwerty'
 
 const users = [
   {
-    id: v4(),
+    id: '00000000-5a23-4ef3-0000-000000000000',
     email: 'admin@mail.com',
     username: 'admin',
     avatar: generateAvatarUrl('admin@mail.com'),

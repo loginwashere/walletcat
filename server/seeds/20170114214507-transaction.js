@@ -1,12 +1,11 @@
 const format = require('date-fns/format')
-const v4 = require('uuid/v4')
 const userSeederItems = require('./20170114212746-user').items
 const accountSeederItems = require('./20170114214459-account').items
 const categorySeederItems = require('./20170114214453-category').items
 
 const transactions = [
   {
-    id: v4(),
+    id: '00000000-5a23-4ef3-0006-000000000000',
     userId: userSeederItems[0].id,
     fromAccountId: accountSeederItems[0].id,
     toAccountId: accountSeederItems[1].id,

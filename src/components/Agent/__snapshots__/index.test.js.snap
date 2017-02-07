@@ -1,0 +1,15 @@
+exports[`components:Agent: renders without crashing 1`] = `
+<a
+  className="list-group-item"
+  onClick={[Function]}
+  style={Object {}}>
+  <h4
+    className="list-group-item-heading truncate">
+    Default agent (Me)
+  </h4>
+  <p
+    className="list-group-item-text truncate">
+    Yeap, that\'s me
+  </p>
+</a>
+`;

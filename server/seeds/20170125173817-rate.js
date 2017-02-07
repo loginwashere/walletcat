@@ -1,5 +1,5 @@
 const format = require('date-fns/format')
-const v4 = require('uuid/v4')
+const leftpad = require('../utils/leftpad')
 
 /**
  * openexchangerates currencies
@@ -15,8 +15,8 @@ const openexchangeratesRates = require('./files/rates/openexchangerates_with_exp
 const currencies = require('./20170114214434-currency').items
 const currenciesByName = currencies.reduce((obj, item) => Object.assign({}, obj, { [item.name]: item }), {})
 
-const rates = Object.keys(openexchangeratesRates.rates).map(name => ({
-  id: v4(),
+const rates = Object.keys(openexchangeratesRates.rates).map((name, index) => ({
+  id: `00000000-5a23-4ef3-0007-000000000${leftpad(index, 3, 0)}`,
   baseId: currenciesByName[openexchangeratesRates.base].id,
   currencyId: currenciesByName[name].id,
   date: format(new Date(openexchangeratesRates.timestamp * 1000)),
