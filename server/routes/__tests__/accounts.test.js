@@ -23,7 +23,6 @@ describe('routes : accounts', () => {
 
   beforeEach('get token', function() {
     return helpers.all([
-      () => setTimeout(() => {}, 1000),
       () => models.sequelize.authenticate(),
       () => helpers.umzug.down({ to: 0 }),
       () => helpers.umzug.up(),
