@@ -1,9 +1,11 @@
 const Umzug = require('umzug')
+const debug = require('debug')('routes:tests:helpers')
 
 const models = require('../../models')
 const generateToken = require('../../utils').generateToken
 
 const umzug = new Umzug({
+  logging: debug,
   migrations: {
     params: [models.sequelize.getQueryInterface(), models.Sequelize, function() {
       throw new Error(
