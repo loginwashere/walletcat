@@ -24,7 +24,7 @@ module.exports = (sequelize, Sequelize) => sequelize.define('user', {
     allowNull: true
   },
   fbUserId: {
-    type: Sequelize.BIGINT.UNSIGNED,
+    type: Sequelize.BIGINT,
     allowNull: true
   },
   fbAccessToken: {
