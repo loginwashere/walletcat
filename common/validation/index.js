@@ -69,26 +69,27 @@ const accountSchema = {
 }
 
 const transactionSchema = {
-  fromAccountId: Joi.string().guid({ version: 'uuidv4' })
-    .required(),
-  toAccountId: Joi.string().guid({ version: 'uuidv4' })
-    .required(),
-  fromAmount: Joi.number().positive()
-    .precision(8)
-    .max(99999999999)
-    .required(),
-  toAmount: Joi.number().positive()
-    .precision(8)
-    .max(99999999999)
-    .required(),
-  fromRate: Joi.number().positive()
-    .precision(8)
-    .max(99999999999)
-    .required(),
-  toRate: Joi.number().positive()
-    .precision(8)
-    .max(99999999999)
-    .required(),
+  transactionItems: Joi.array()
+    .min(2)
+    .items(Joi.object({
+      id: Joi.alternatives()
+      .try(
+        Joi.string().empty('')
+          .allow(null),
+        Joi.string().guid({ version: 'uuidv4' })
+      ),
+      accountId: Joi.string().guid({ version: 'uuidv4' })
+        .required(),
+      amount: Joi.number().min(0)
+        .precision(8)
+        .max(99999999999)
+        .required(),
+      rate: Joi.number().positive()
+        .precision(8)
+        .max(99999999999)
+        .required(),
+      type: Joi.any().valid(['debit', 'credit'])
+    })),
   categoryId: Joi.string().guid({ version: 'uuidv4' })
     .required(),
   date: Joi.date().required(),

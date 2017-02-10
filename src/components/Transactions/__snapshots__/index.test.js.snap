@@ -1,0 +1,292 @@
+exports[`components:Transactions: renders without crashing and with transaction data 1`] = `
+<div>
+  <h1>
+    Transactions
+    <button
+      action="push"
+      className="pull-right btn btn-default"
+      disabled={false}
+      onClick={[Function]}
+      type="button">
+      Create
+    </button>
+  </h1>
+  <div
+    className="list-group">
+    <a
+      className="list-group-item"
+      onClick={[Function]}
+      style={Object {}}>
+      <div
+        className="list-group-item-text truncate">
+        <div
+          className="row">
+          <div
+            className="col-sm-1 col-xs-3">
+            From
+          </div>
+          <div
+            className="col-sm-9 col-sm-offset-0 col-xs-7 col-xs-offset-9">
+            <b>
+              Wallet
+            </b>
+          </div>
+          <div
+            className="col-sm-2 col-xs-2">
+            <span
+              className="badge badge-danger pull-right">
+              100.00000000
+               
+              AED
+            </span>
+          </div>
+        </div>
+      </div>
+      <div
+        className="list-group-item-text truncate">
+        <div
+          className="row">
+          <div
+            className="col-sm-1 col-xs-3">
+            To
+          </div>
+          <div
+            className="col-sm-9 col-sm-offset-0 col-xs-7 col-xs-offset-9">
+            <b>
+              Stash
+            </b>
+          </div>
+          <div
+            className="col-sm-2 col-xs-2">
+            <span
+              className="badge badge-success pull-right">
+              100.00000000
+               
+              AED
+            </span>
+          </div>
+        </div>
+      </div>
+      <div
+        className="list-group-item-text truncate">
+        <div
+          className="row">
+          <div
+            className="col-sm-1 col-xs-3">
+            Category
+          </div>
+          <div
+            className="col-sm-9 col-xs-6">
+            <b>
+              Fast food
+            </b>
+          </div>
+          <div
+            className="col-sm-2 col-xs-3">
+            <span
+              className="badge pull-right">
+              1995-02-10 20:45:43
+            </span>
+          </div>
+        </div>
+      </div>
+      <div
+        className="list-group-item-text truncate">
+        <div
+          className="row">
+          <div
+            className="col-sm-1 col-xs-12">
+            Description
+          </div>
+          <div
+            className="col-sm-11 col-xs-12">
+            description
+          </div>
+        </div>
+      </div>
+    </a>
+    <a
+      className="list-group-item"
+      onClick={[Function]}
+      style={Object {}}>
+      <div
+        className="list-group-item-text truncate">
+        <div
+          className="row">
+          <div
+            className="col-sm-1 col-xs-3">
+            From
+          </div>
+          <div
+            className="col-sm-9 col-sm-offset-0 col-xs-7 col-xs-offset-9">
+            <b>
+              Wallet
+            </b>
+          </div>
+          <div
+            className="col-sm-2 col-xs-2">
+            <span
+              className="badge badge-danger pull-right">
+              1000.00000000
+               
+              AED
+            </span>
+          </div>
+        </div>
+      </div>
+      <div
+        className="list-group-item-text truncate">
+        <div
+          className="row">
+          <div
+            className="col-sm-1 col-xs-3">
+            To
+          </div>
+          <div
+            className="col-sm-9 col-sm-offset-0 col-xs-7 col-xs-offset-9">
+            <b>
+              Stash
+            </b>
+          </div>
+          <div
+            className="col-sm-2 col-xs-2">
+            <span
+              className="badge badge-success pull-right">
+              1000.00000000
+               
+              AED
+            </span>
+          </div>
+        </div>
+      </div>
+      <div
+        className="list-group-item-text truncate">
+        <div
+          className="row">
+          <div
+            className="col-sm-1 col-xs-3">
+            Category
+          </div>
+          <div
+            className="col-sm-9 col-xs-6">
+            <b>
+              Fast food
+            </b>
+          </div>
+          <div
+            className="col-sm-2 col-xs-3">
+            <span
+              className="badge pull-right">
+              1995-02-10 20:45:43
+            </span>
+          </div>
+        </div>
+      </div>
+      <div
+        className="list-group-item-text truncate">
+        <div
+          className="row">
+          <div
+            className="col-sm-1 col-xs-12">
+            Description
+          </div>
+          <div
+            className="col-sm-11 col-xs-12">
+            description description
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+  <ul
+    className="pager">
+    <li
+      className="disabled previous"
+      style={undefined}>
+      <a
+        action="push"
+        href="#"
+        onClick={[Function]}
+        role="button"
+        style={
+          Object {
+            "pointerEvents": "none",
+          }
+        }
+        tabIndex={-1}>
+        Previous Page
+      </a>
+    </li>
+    <li
+      className="disabled next"
+      style={undefined}>
+      <a
+        action="push"
+        href="#"
+        onClick={[Function]}
+        role="button"
+        style={
+          Object {
+            "pointerEvents": "none",
+          }
+        }
+        tabIndex={-1}>
+        Next Page
+      </a>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`components:Transactions: renders without crashing and without transaction data 1`] = `
+<div>
+  <h1>
+    Transactions
+    <button
+      action="push"
+      className="pull-right btn btn-default"
+      disabled={false}
+      onClick={[Function]}
+      type="button">
+      Create
+    </button>
+  </h1>
+  <ul
+    className="pager">
+    <li
+      className="disabled previous"
+      style={undefined}>
+      <a
+        action="push"
+        href="#"
+        onClick={[Function]}
+        role="button"
+        style={
+          Object {
+            "pointerEvents": "none",
+          }
+        }
+        tabIndex={-1}>
+        Previous Page
+      </a>
+    </li>
+    <li
+      className="disabled next"
+      style={undefined}>
+      <a
+        action="push"
+        href="#"
+        onClick={[Function]}
+        role="button"
+        style={
+          Object {
+            "pointerEvents": "none",
+          }
+        }
+        tabIndex={-1}>
+        Next Page
+      </a>
+    </li>
+  </ul>
+</div>
+`;

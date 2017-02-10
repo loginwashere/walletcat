@@ -1,4 +1,4 @@
-exports[`test renders without crashing 1`] = `
+exports[`components:CategoryCreateForm: renders without crashing 1`] = `
 <form
   className="form-horizontal"
   onSubmit={[Function]}>

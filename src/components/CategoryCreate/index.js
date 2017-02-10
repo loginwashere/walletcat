@@ -10,14 +10,24 @@ export class CategoryCreate extends Component {
   }
 
   render() {
+    const { currentPage } = this.props
     return (
-      <CategoryCreateForm onSubmit={this.handleSubmit} />
+      <CategoryCreateForm onSubmit={this.handleSubmit}
+                          currentPage={currentPage} />
     )
   }
 }
 
 CategoryCreate.propTypes = {
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  currentPage: PropTypes.number.isRequired
 }
 
-export default connect()(CategoryCreate)
+function mapStateToProps(state) {
+  const currentPage = state.pagination.categories.currentPage || 1
+  return {
+    currentPage
+  }
+}
+
+export default connect(mapStateToProps)(CategoryCreate)

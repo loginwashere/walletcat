@@ -10,13 +10,14 @@ export class AgentView extends Component {
   }
 
   render() {
-    const { agent, initialValues } = this.props
+    const { agent, initialValues, currentPage } = this.props
     return (
       agent
         ? <AgentEditForm onSubmit={this.handleSubmit}
                          agent={agent}
                          initialValues={initialValues}
-                         enableReinitialize={true} />
+                         enableReinitialize={true}
+                         currentPage={currentPage} />
         : null
     )
   }
@@ -35,14 +36,17 @@ AgentView.propTypes = {
     description: PropTypes.string
   }),
   initialValues: PropTypes.object,
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  currentPage: PropTypes.number.isRequired
 }
 
 function mapStateToProps(state, ownProps) {
   const agentId = ownProps.params.agentId
   const agent = state.agents.items[agentId]
+  const currentPage = state.pagination.agents.currentPage || 1
 
   return {
+    currentPage,
     agent,
     agentId,
     initialValues: agent

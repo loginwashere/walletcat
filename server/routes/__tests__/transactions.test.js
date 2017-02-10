@@ -12,6 +12,7 @@ const agentSeeder = require('../../seeds').agentSeeder
 const accountSeeder = require('../../seeds').accountSeeder
 const categorySeeder = require('../../seeds').categorySeeder
 const transactionSeeder = require('../../seeds').transactionSeeder
+const transactionItemSeeder = require('../../seeds').transactionItemSeeder
 const NotFoundError = require('../../errors/not-found')
 
 chai.use(chaiHttp)
@@ -36,6 +37,7 @@ describe('routes : transactions', () => {
       () => accountSeeder.up(models.sequelize.getQueryInterface(), models.Sequelize),
       () => categorySeeder.up(models.sequelize.getQueryInterface(), models.Sequelize),
       () => transactionSeeder.up(models.sequelize.getQueryInterface(), models.Sequelize),
+      () => transactionItemSeeder.up(models.sequelize.getQueryInterface(), models.Sequelize),
       () => helpers.getTokenByUsername('admin').then(t => token = t),
     ])
   })
@@ -57,17 +59,34 @@ describe('routes : transactions', () => {
           Object.keys(res.body.transactions[0]).sort().should.eql([
             'id',
             'description',
-            'fromAmount',
-            'toAmount',
-            'fromRate',
-            'toRate',
+            'transactionItems',
             'date',
             'createdAt',
             'updatedAt',
             'categoryId',
             'userId',
-            'fromAccountId',
-            'toAccountId'
+          ].sort())
+          res.body.transactions[0].transactionItems.should.be.a('array')
+          res.body.transactions[0].transactionItems.length.should.equal(2)
+          Object.keys(res.body.transactions[0].transactionItems[0]).sort().should.eql([
+            'id',
+            'transactionId',
+            'accountId',
+            'amount',
+            'rate',
+            'type',
+            'createdAt',
+            'updatedAt',
+          ].sort())
+          Object.keys(res.body.transactions[0].transactionItems[1]).sort().should.eql([
+            'id',
+            'transactionId',
+            'accountId',
+            'amount',
+            'rate',
+            'type',
+            'createdAt',
+            'updatedAt',
           ].sort())
           done()
         })
@@ -81,12 +100,20 @@ describe('routes : transactions', () => {
         .set('Authorization', `Bearer ${token.value}`)
         .send({
           categoryId: categorySeeder.items[0].id,
-          fromAccountId: accountSeeder.items[0].id,
-          fromAmount: 1000,
-          toAccountId: accountSeeder.items[1].id,
-          toAmount: 1000,
-          fromRate: 1,
-          toRate: 1,
+          transactionItems: [
+            {
+              accountId: accountSeeder.items[0].id,
+              amount: 1000,
+              rate: 1,
+              type: 'credit',
+            },
+            {
+              accountId: accountSeeder.items[1].id,
+              amount: 1000,
+              rate: 1,
+              type: 'debit',
+            }
+          ],
           description: 'test',
           date: format(new Date()),
         })
@@ -98,17 +125,34 @@ describe('routes : transactions', () => {
           Object.keys(res.body).sort().should.eql([
             'id',
             'description',
-            'fromAmount',
-            'toAmount',
-            'fromRate',
-            'toRate',
+            'transactionItems',
             'date',
             'createdAt',
             'updatedAt',
             'categoryId',
             'userId',
-            'fromAccountId',
-            'toAccountId'
+          ].sort())
+          res.body.transactionItems.should.be.a('array')
+          res.body.transactionItems.length.should.equal(2)
+          Object.keys(res.body.transactionItems[0]).sort().should.eql([
+            'id',
+            'transactionId',
+            'accountId',
+            'amount',
+            'rate',
+            'type',
+            'createdAt',
+            'updatedAt',
+          ].sort())
+          Object.keys(res.body.transactionItems[1]).sort().should.eql([
+            'id',
+            'transactionId',
+            'accountId',
+            'amount',
+            'rate',
+            'type',
+            'createdAt',
+            'updatedAt',
           ].sort())
           res.body.userId.should.equal(userSeeder.items[0].id)
           done()
@@ -124,12 +168,20 @@ describe('routes : transactions', () => {
         .set('Authorization', `Bearer ${token.value}`)
         .send({
           categoryId: categorySeeder.items[0].id,
-          fromAccountId: accountSeeder.items[1].id,
-          fromAmount: 100,
-          toAccountId: accountSeeder.items[0].id,
-          toAmount: 100,
-          fromRate: 2,
-          toRate: 2,
+          transactionItems: [
+            {
+              accountId: accountSeeder.items[1].id,
+              amount: 10000,
+              rate: 1,
+              type: 'credit',
+            },
+            {
+              accountId: accountSeeder.items[0].id,
+              amount: 10000,
+              rate: 1,
+              type: 'debit',
+            }
+          ],
           description: 'new test',
           date: format(new Date()),
         })
@@ -141,17 +193,34 @@ describe('routes : transactions', () => {
           Object.keys(res.body).sort().should.eql([
             'id',
             'description',
-            'fromAmount',
-            'toAmount',
-            'fromRate',
-            'toRate',
+            'transactionItems',
             'date',
             'createdAt',
             'updatedAt',
             'categoryId',
             'userId',
-            'fromAccountId',
-            'toAccountId'
+          ].sort())
+          res.body.transactionItems.should.be.a('array')
+          res.body.transactionItems.length.should.equal(2)
+          Object.keys(res.body.transactionItems[0]).sort().should.eql([
+            'id',
+            'transactionId',
+            'accountId',
+            'amount',
+            'rate',
+            'type',
+            'createdAt',
+            'updatedAt',
+          ].sort())
+          Object.keys(res.body.transactionItems[1]).sort().should.eql([
+            'id',
+            'transactionId',
+            'accountId',
+            'amount',
+            'rate',
+            'type',
+            'createdAt',
+            'updatedAt',
           ].sort())
           res.body.userId.should.equal(userSeeder.items[0].id)
           done()
@@ -165,12 +234,20 @@ describe('routes : transactions', () => {
         .set('Authorization', `Bearer ${token.value}`)
         .send({
           categoryId: categorySeeder.items[0].id,
-          fromAccountId: accountSeeder.items[1].id,
-          fromAmount: 100,
-          toAccountId: accountSeeder.items[0].id,
-          toAmount: 100,
-          fromRate: 2,
-          toRate: 2,
+          transactionItems: [
+            {
+              accountId: accountSeeder.items[1].id,
+              amount: 10000,
+              rate: 1,
+              type: 'credit',
+            },
+            {
+              accountId: accountSeeder.items[0].id,
+              amount: 10000,
+              rate: 1,
+              type: 'debit',
+            }
+          ],
           description: 'new test',
           date: format(new Date()),
         })

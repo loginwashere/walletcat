@@ -10,13 +10,14 @@ export class CategoryView extends Component {
   }
 
   render() {
-    const { category, initialValues } = this.props
+    const { category, initialValues, currentPage } = this.props
     return (
       category
         ? <CategoryEditForm onSubmit={this.handleSubmit}
                             category={category}
                             initialValues={initialValues}
-                            enableReinitialize={true} />
+                            enableReinitialize={true}
+                            currentPage={currentPage} />
         : null
     )
   }
@@ -35,17 +36,20 @@ CategoryView.propTypes = {
     description: PropTypes.string
   }),
   initialValues: PropTypes.object,
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  currentPage: PropTypes.number.isRequired
 }
 
 function mapStateToProps(state, ownProps) {
   const categoryId = ownProps.params.categoryId
   const category = state.categories.items[categoryId]
+  const currentPage = state.pagination.categories.currentPage || 1
 
   return {
     category,
     categoryId,
-    initialValues: category
+    initialValues: category,
+    currentPage
   }
 }
 

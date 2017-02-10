@@ -1,0 +1,94 @@
+exports[`components:Transaction: renders without crashing 1`] = `
+<a
+  className="list-group-item"
+  onClick={[Function]}
+  style={Object {}}>
+  <div
+    className="list-group-item-text truncate">
+    <div
+      className="row">
+      <div
+        className="col-sm-1 col-xs-3">
+        From
+      </div>
+      <div
+        className="col-sm-9 col-sm-offset-0 col-xs-7 col-xs-offset-9">
+        <b>
+          Wallet
+        </b>
+      </div>
+      <div
+        className="col-sm-2 col-xs-2">
+        <span
+          className="badge badge-danger pull-right">
+          100.00000000
+           
+          AED
+        </span>
+      </div>
+    </div>
+  </div>
+  <div
+    className="list-group-item-text truncate">
+    <div
+      className="row">
+      <div
+        className="col-sm-1 col-xs-3">
+        To
+      </div>
+      <div
+        className="col-sm-9 col-sm-offset-0 col-xs-7 col-xs-offset-9">
+        <b>
+          Stash
+        </b>
+      </div>
+      <div
+        className="col-sm-2 col-xs-2">
+        <span
+          className="badge badge-success pull-right">
+          100.00000000
+           
+          AED
+        </span>
+      </div>
+    </div>
+  </div>
+  <div
+    className="list-group-item-text truncate">
+    <div
+      className="row">
+      <div
+        className="col-sm-1 col-xs-3">
+        Category
+      </div>
+      <div
+        className="col-sm-9 col-xs-6">
+        <b>
+          Fast food
+        </b>
+      </div>
+      <div
+        className="col-sm-2 col-xs-3">
+        <span
+          className="badge pull-right">
+          1995-02-10 20:45:43
+        </span>
+      </div>
+    </div>
+  </div>
+  <div
+    className="list-group-item-text truncate">
+    <div
+      className="row">
+      <div
+        className="col-sm-1 col-xs-12">
+        Description
+      </div>
+      <div
+        className="col-sm-11 col-xs-12">
+        description
+      </div>
+    </div>
+  </div>
+</a>
+`;

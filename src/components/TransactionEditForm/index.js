@@ -14,38 +14,24 @@ import {
 import TransactionFormFields from '../TransactionFormFields'
 
 class TransactionEditForm extends Component {
-  prepareFromAccountOptions = result => {
+  prepareAccountOptions = result => {
     const { customInitialValues } = this.props
+    const accountLabels = customInitialValues.transactionItems.map(transactionItem => transactionItem.accountId.label)
     const options = result.accounts
       .map(account => ({ value: account.id, label: account.name }))
       .filter(Boolean)
-      .filter(option => option.label !== customInitialValues.fromAccountId.label)
-      .concat(customInitialValues && customInitialValues.fromAccountId && [customInitialValues.fromAccountId])
+      .filter(option => accountLabels.indexOf(option.label) === -1)
+      .concat(customInitialValues &&
+        customInitialValues.transactionItems &&
+        customInitialValues.transactionItems.map(transactionItem => transactionItem.accountId))
       .filter(Boolean)
     return { options }
   }
 
-  loadFromAccountOptions = (value) => {
+  loadAccountOptions = (value) => {
     const { dispatch } = this.props
     return dispatch(fetchAccountsIfNeeded({ filter: { name: value } }))
-      .then(this.prepareFromAccountOptions)
-  }
-
-  prepareToAccountOptions = result => {
-    const { customInitialValues } = this.props
-    const options = result.accounts
-      .map(account => ({ value: account.id, label: account.name }))
-      .filter(Boolean)
-      .filter(option => option.label !== customInitialValues.toAccountId.label)
-      .concat(customInitialValues && customInitialValues.toAccountId && [customInitialValues.toAccountId])
-      .filter(Boolean)
-    return { options }
-  }
-
-  loadToAccountOptions = (value) => {
-    const { dispatch } = this.props
-    return dispatch(fetchAccountsIfNeeded({ filter: { name: value } }))
-      .then(this.prepareToAccountOptions)
+      .then(this.prepareAccountOptions)
   }
 
   prepareCategoriesOptions = result => {
@@ -74,7 +60,8 @@ class TransactionEditForm extends Component {
       pristine,
       reset,
       invalid,
-      customInitialValues
+      customInitialValues,
+      currentPage
     } = this.props
     return (
       <Form horizontal
@@ -83,11 +70,10 @@ class TransactionEditForm extends Component {
 
         <TransactionFormFields type="edit"
                                customInitialValues={customInitialValues}
-                               loadFromAccountOptions={this.loadFromAccountOptions}
-                               loadToAccountOptions={this.loadToAccountOptions}
+                               loadAccountOptions={this.loadAccountOptions}
                                loadCategoriesOptions={this.loadCategoriesOptions}/>
 
-        <EditFormButtonsGroup cancelTo="/transactions"
+        <EditFormButtonsGroup cancelTo={{ pathname: '/transactions', query: { page: currentPage } }}
                               deleteTo={`/transactions/${transaction.id}/delete`}
                               submitting={submitting}
                               pristine={pristine}
@@ -111,7 +97,8 @@ TransactionEditForm.propTypes = {
   pristine: PropTypes.bool.isRequired,
   invalid: PropTypes.bool.isRequired,
   reset: PropTypes.func.isRequired,
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  currentPage: PropTypes.number.isRequired
 }
 
 export default reduxForm({

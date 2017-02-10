@@ -10,11 +10,15 @@ const WalletFormGroupSelect = ({
   required,
   autoFocus,
   disabled,
-  autoload
+  autoload,
+  labelColProps,
+  valueColProps
 }) => (
   <WalletFormGroup name={input.name}
                    label={label}
-                   meta={meta}>
+                   meta={meta}
+                   labelColProps={labelColProps}
+                   valueColProps={valueColProps} >
     <WalletSelect
       input={input}
       label={label}
@@ -36,7 +40,9 @@ WalletFormGroupSelect.propTypes = {
   autoFocus: PropTypes.bool,
   loadOptions: PropTypes.func,
   disabled: PropTypes.bool,
-  autoload: PropTypes.bool
+  autoload: PropTypes.bool,
+  labelColProps: PropTypes.object,
+  valueColProps: PropTypes.object
 }
 
 export default WalletFormGroupSelect

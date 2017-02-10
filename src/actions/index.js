@@ -94,10 +94,12 @@ export const fetchAppCurrenciesPageWithDependencies = ({ page, limit, filter }) 
 export const fetchTransactionsPageWithDependencies = ({ page, limit, filter }) => dispatch =>
   dispatch(fetchTransactionsIfNeeded({ page, limit, filter }))
     .then(data => {
-      console.log(data)
+      console.log('fetchTransactionsPageWithDependencies', data)
       if (data && data.transactions && data.transactions.length) {
-        const accountsIds = data.transactions.map(transaction => transaction.fromAccountId)
-          .concat(data.transactions.map(transaction => transaction.toAccountId))
+        const accountsIds = data.transactions
+          .map(transaction => transaction.transactionItems)
+          .reduce((result, current) => result.concat(current), [])
+          .map(transactionItem => transactionItem.accountId)
         const categoriesIds = data.transactions.map(transaction => transaction.categoryId)
         return Promise.all([
           dispatch(fetchAccountsIfNeeded({ filter: { id: accountsIds } }))

@@ -12,17 +12,26 @@ export class AccountCreate extends Component {
   }
 
   render() {
-    const { dispatch } = this.props
+    const { dispatch, currentPage } = this.props
     return (
       <AccountCreateForm onSubmit={this.handleSubmit}
                          initialValues={{ amount: 0 }}
-                         dispatch={dispatch} />
+                         dispatch={dispatch}
+                         currentPage={currentPage} />
     )
   }
 }
 
 AccountCreate.propTypes = {
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  currentPage: PropTypes.number.isRequired
 }
 
-export default  connect()(AccountCreate)
+function mapStateToProps(state) {
+  const currentPage = state.pagination.accounts.currentPage || 1
+  return {
+    currentPage
+  }
+}
+
+export default  connect(mapStateToProps)(AccountCreate)

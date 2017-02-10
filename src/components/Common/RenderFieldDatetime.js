@@ -10,11 +10,15 @@ const handleOnChange = onChange => v => onChange(v[0])
 const RenderFieldDatetime = ({
   input: { name, onChange, value },
   label,
-  meta
+  meta,
+  labelColProps,
+  valueColProps
 }) => (
   <WalletFormGroup name={name}
                    label={label}
-                   meta={meta}>
+                   meta={meta}
+                   labelColProps={labelColProps}
+                   valueColProps={valueColProps}>
       <Flatpickr className={'form-control'}
                   data-enable-time
                   data-week-numbers
@@ -27,7 +31,9 @@ const RenderFieldDatetime = ({
 RenderFieldDatetime.propTypes = {
   input: PropTypes.object,
   label: PropTypes.string,
-  meta: PropTypes.object
+  meta: PropTypes.object,
+  labelColProps: PropTypes.object,
+  valueColProps: PropTypes.object
 }
 
 export default RenderFieldDatetime

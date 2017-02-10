@@ -16,7 +16,8 @@ const CategoryEditForm = ({
   pristine,
   reset,
   submitting,
-  invalid
+  invalid,
+  currentPage
 }) => (
   <Form horizontal
         onSubmit={handleSubmit}>
@@ -24,7 +25,7 @@ const CategoryEditForm = ({
 
     <CategoryFormFields />
 
-    <EditFormButtonsGroup cancelTo="/categories"
+    <EditFormButtonsGroup cancelTo={{ pathname: '/categories', query: { page: currentPage } }}
                           deleteTo={`/categories/${category.id}/delete`}
                           submitting={submitting}
                           pristine={pristine}
@@ -43,7 +44,8 @@ CategoryEditForm.propTypes = {
   submitting: PropTypes.bool.isRequired,
   pristine: PropTypes.bool.isRequired,
   invalid: PropTypes.bool.isRequired,
-  reset: PropTypes.func.isRequired
+  reset: PropTypes.func.isRequired,
+  currentPage: PropTypes.number.isRequired
 }
 
 export default reduxForm({

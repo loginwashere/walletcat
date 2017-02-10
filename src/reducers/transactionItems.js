@@ -1,88 +1,98 @@
 import {
-  INVALIDATE_CATEGORY_LIST,
-  REQUEST_CATEGORY_LIST,
-  RECEIVE_CATEGORY_LIST,
-  REQUEST_CATEGORY_CREATE,
-  RECEIVE_CATEGORY_CREATE,
-  REQUEST_CATEGORY_DELETE,
-  RECEIVE_CATEGORY_DELETE,
-  REQUEST_CATEGORY_UPDATE,
-  RECEIVE_CATEGORY_UPDATE,
+  // INVALIDATE_TRANSACTION_ITEM_LIST,
+  // REQUEST_TRANSACTION_ITEM_LIST,
+  RECEIVE_TRANSACTION_ITEM_LIST,
+  // REQUEST_TRANSACTION_ITEM_CREATE,
+  // RECEIVE_TRANSACTION_ITEM_CREATE,
+  // REQUEST_TRANSACTION_ITEM_UPDATE,
+  // RECEIVE_TRANSACTION_ITEM_UPDATE,
+  // REQUEST_TRANSACTION_ITEM_DELETE,
+  // RECEIVE_TRANSACTION_ITEM_DELETE,
+  RECEIVE_TRANSACTION_CREATE,
+  RECEIVE_TRANSACTION_UPDATE,
   LOGOUT_SUCCESS
 } from '../actions'
-import createPaginator from '../utils/createPaginator'
-
-export const categoriesPaginator = createPaginator('/categories/', 'categories')
 
 export const initialState = {
   isFetching: false,
   didInvalidate: false,
   items: {},
-  itemIds: [],
-  lastUpdated: undefined
+  itemIds: []
 }
 
-export default function categories(state = initialState, action) {
+export default function transactions(state = initialState, action) {
   switch (action.type) {
-    case INVALIDATE_CATEGORY_LIST:
+    /*
+    case INVALIDATE_TRANSACTION_LIST:
       return {
         ...state,
         didInvalidate: true
       }
-    case REQUEST_CATEGORY_LIST:
+    case REQUEST_TRANSACTION_LIST:
       return {
         ...state,
         isFetching: true,
         didInvalidate: false
       }
-    case RECEIVE_CATEGORY_LIST:
+    case RECEIVE_TRANSACTION_LIST:
       return {
         ...state,
         isFetching: false,
         didInvalidate: false,
         items: {
           ...state.items,
-          ...action.categories
+          ...action.transactions
             .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
         },
         itemIds: [
           ...state.itemIds,
-          ...action.categories
+          ...action.transactions
             .map(item => item.id)
             .filter(id => state.itemIds.indexOf(id) === -1)
         ],
         lastUpdated: action.receivedAt
       }
-    case REQUEST_CATEGORY_UPDATE:
-    case REQUEST_CATEGORY_CREATE:
-      return {
-        ...state,
-        isFetching: true,
-        didInvalidate: false
-      }
-    case RECEIVE_CATEGORY_UPDATE:
-    case RECEIVE_CATEGORY_CREATE:
+      */
+    case RECEIVE_TRANSACTION_ITEM_LIST:
       return {
         ...state,
         isFetching: false,
         didInvalidate: false,
         items: {
           ...state.items,
-          [action.category.id]: action.category
+          ...action.transactionItems
+            .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
         },
-        itemIds: [
-          ...state.itemIds,
-          ...[action.category]
-            .map(item => item.id)
-            .filter(id => state.itemIds.indexOf(id) === -1)
-        ]
+        lastUpdated: action.receivedAt
       }
-    case REQUEST_CATEGORY_DELETE:
+      /*
+    case REQUEST_TRANSACTION_UPDATE:
+    case REQUEST_TRANSACTION_CREATE:
+      return {
+        ...state,
+        isFetching: true,
+        didInvalidate: false
+      }
+      */
+    case RECEIVE_TRANSACTION_UPDATE:
+    case RECEIVE_TRANSACTION_CREATE:
+      return {
+        ...state,
+        isFetching: false,
+        didInvalidate: false,
+        items: {
+          ...state.items,
+          ...action.transaction.transactionItems
+            .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
+        }
+      }
+      /*
+    case REQUEST_TRANSACTION_DELETE:
       return {
         ...state,
         isFetching: true
       }
-    case RECEIVE_CATEGORY_DELETE:
+    case RECEIVE_TRANSACTION_DELETE:
       return {
         ...state,
         isFetching: false,
@@ -97,15 +107,10 @@ export default function categories(state = initialState, action) {
           ...state.itemIds.slice(state.itemIds.indexOf(action.id) + 1)
         ]
       }
+      */
     case LOGOUT_SUCCESS:
       return initialState
     default:
-      return {
-        ...state,
-        items: {
-          ...state.items,
-          ...categoriesPaginator.itemsReducer(state.items, action)
-        }
-      }
+      return state
   }
 }

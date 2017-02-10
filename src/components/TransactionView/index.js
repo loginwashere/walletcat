@@ -14,14 +14,15 @@ class TransactionView extends Component {
   }
 
   render() {
-    const { transaction, initialValues, customInitialValues } = this.props
+    const { transaction, initialValues, customInitialValues, currentPage } = this.props
     return (
       transaction
         ? <TransactionEditForm onSubmit={this.handleSubmit}
                             transaction={transaction}
                             initialValues={initialValues}
                             customInitialValues={customInitialValues}
-                            enableReinitialize={true} />
+                            enableReinitialize={true}
+                            currentPage={currentPage} />
         : null
     )
   }
@@ -42,36 +43,60 @@ TransactionView.propTypes = {
   customInitialValues: PropTypes.object,
   accountOptions: PropTypes.array,
   categoryOptions: PropTypes.array,
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  currentPage: PropTypes.number.isRequired
 }
 
 function mapStateToProps(state, ownProps) {
   const transactionId = ownProps.params.transactionId
+  const transactionItems = state.transactionItems.items
+  const accounts = state.accounts.items
   const transaction = state.transactions.items[transactionId]
-  const fromAccount = transaction && state.accounts.items[transaction.fromAccountId]
-  const toAccount = transaction && state.accounts.items[transaction.toAccountId]
   const category = transaction && state.categories.items[transaction.categoryId]
-  const initialValues = transaction && fromAccount && toAccount && category && transaction
-  const customInitialValues = initialValues && {
+  const initialValues = transaction && transactionItems && category &&
+    {
+      ...transaction,
+      transactionItems: transaction.transactionItems
+        .map(transactionItemId => {
+          const transactionItem = transactionItems[transactionItemId]
+          return transactionItem && {
+            id: transactionItem.id,
+            accountId: transactionItem.accountId,
+            type: transactionItem.type,
+            amount: transactionItem.amount,
+            rate: transactionItem.rate,
+          }
+        })
+        .filter(Boolean)
+    }
+  const customInitialValues = initialValues && accounts && {
     ...initialValues,
-    fromAccountId: {
-      value: fromAccount.id,
-      label: fromAccount.name,
-      clearableValue: false
-    },
-    toAccountId: {
-      value: toAccount.id,
-      label: toAccount.name,
-      clearableValue: false
-    },
     categoryId: {
       value: category.id,
       label: category.name,
       clearableValue: false
-    }
+    },
+    transactionItems: transaction.transactionItems
+      .map(transactionItemId => {
+        const transactionItem = transactionItems[transactionItemId]
+        const account = transactionItem && accounts[transactionItem.accountId]
+        return transactionItem && account && {
+          accountId: {
+            value: account.id,
+            label: account.name,
+            clearableValue: false
+          },
+          type: transactionItem.type,
+          amount: transactionItem.amount,
+          rate: transactionItem.rate,
+        }
+      })
+      .filter(Boolean)
   }
+  const currentPage = state.pagination.transactions.currentPage || 1
 
   return {
+    currentPage,
     transactionId,
     transaction,
     initialValues: initialValues && selectEditProps(initialValues),

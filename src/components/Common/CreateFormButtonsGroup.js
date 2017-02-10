@@ -38,7 +38,10 @@ const CreateFormButtonsGroup = ({
 )
 
 CreateFormButtonsGroup.propTypes = {
-  cancelTo: PropTypes.string.isRequired,
+  cancelTo: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]).isRequired,
   error: PropTypes.object,
   submitting: PropTypes.bool.isRequired,
   pristine: PropTypes.bool.isRequired,

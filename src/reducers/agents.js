@@ -100,6 +100,12 @@ export default function agents(state = initialState, action) {
     case LOGOUT_SUCCESS:
       return initialState
     default:
-      return agentsPaginator.itemsReducer(state, action)
+      return {
+        ...state,
+        items: {
+          ...state.items,
+          ...agentsPaginator.itemsReducer(state.items, action)
+        }
+      }
   }
 }

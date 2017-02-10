@@ -10,14 +10,24 @@ export class AgentCreate extends Component {
   }
 
   render() {
+    const { currentPage } = this.props
     return (
-      <AgentCreateForm onSubmit={this.handleSubmit} />
+      <AgentCreateForm onSubmit={this.handleSubmit}
+                       currentPage={currentPage} />
     )
   }
 }
 
 AgentCreate.propTypes = {
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  currentPage: PropTypes.number.isRequired
 }
 
-export default connect()(AgentCreate)
+function mapStateToProps(state) {
+  const currentPage = state.pagination.agents.currentPage || 1
+  return {
+    currentPage
+  }
+}
+
+export default connect(mapStateToProps)(AgentCreate)

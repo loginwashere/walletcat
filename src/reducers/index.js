@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
 import { reducer as formReducer } from 'redux-form'
 import transactions, { transactionsPaginator } from './transactions'
+import transactionItems from './transactionItems'
 import currencies, { currenciesPaginator } from './currencies'
 import auth from './auth'
 import alerts from './alerts'
@@ -19,6 +20,7 @@ export default combineReducers({
   accounts,
   agents,
   transactions,
+  transactionItems,
   routing: routerReducer,
   form: formReducer,
   pagination: combineReducers({

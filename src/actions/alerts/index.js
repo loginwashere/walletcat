@@ -16,8 +16,12 @@ const createAlert = error => ({
 
 
 export const convertError = error => ({
-  _error: error.response.data.message,
-  ...error.response.data.errors
+  _error: error.response
+    ? error.response.data.message
+    : error.message,
+  ...(error.response
+    ? error.response.data.errors
+    : {})
 })
 
 export const alertAdd = error => ({

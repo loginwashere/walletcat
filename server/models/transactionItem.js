@@ -1,25 +1,29 @@
 module.exports = (sequelize, Sequelize) => {
-  const transaction = sequelize.define('transaction', {
+  const transaction = sequelize.define('transactionItem', {
     id: {
       type: Sequelize.UUID,
       primaryKey: true
     },
-    description: {
-      type: Sequelize.TEXT
-    },
-    date: {
-      type: Sequelize.DATE,
+    amount: {
+      type: Sequelize.DECIMAL(19, 8),
       allowNull: false
     },
+    type: {
+      type: Sequelize.ENUM('debit', 'credit'),
+      allowNull: false
+    },
+    rate: {
+      type: Sequelize.DECIMAL(19, 8),
+      allowNull: false
+    }
   }, {
     classMethods: {
       associate: function(models) {
-        transaction.belongsTo(models.category)
-        transaction.belongsTo(models.user)
-        transaction.hasMany(models.transactionItem)
+        transaction.belongsTo(models.transaction)
+        transaction.belongsTo(models.account)
       }
     },
-    tableName: 'transactions',
+    tableName: 'transaction_items',
     paranoid: true,
     instanceMethods: {
       toJSON: function() {

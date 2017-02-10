@@ -42,6 +42,11 @@ export default function transactions(state = initialState, action) {
         items: {
           ...state.items,
           ...action.transactions
+            .map(transaction => ({
+              ...transaction,
+              transactionItems: transaction.transactionItems
+                .map(item => item.id)
+            }))
             .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
         },
         itemIds: [
@@ -67,7 +72,11 @@ export default function transactions(state = initialState, action) {
         didInvalidate: false,
         items: {
           ...state.items,
-          [action.transaction.id]: action.transaction
+          [action.transaction.id]: {
+            ...action.transaction,
+            transactionItems: action.transaction.transactionItems
+              .map(item => item.id)
+          }
         },
         itemIds: [
           ...state.itemIds,

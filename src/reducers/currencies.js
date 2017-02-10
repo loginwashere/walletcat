@@ -48,6 +48,12 @@ export default function currencies(state = initialState, action) {
     case LOGOUT_SUCCESS:
       return initialState
     default:
-      return currenciesPaginator.itemsReducer(state, action)
+      return {
+        ...state,
+        items: {
+          ...state.items,
+          ...currenciesPaginator.itemsReducer(state.items, action)
+        }
+      }
   }
 }

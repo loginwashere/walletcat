@@ -21,8 +21,8 @@ describe('routes : accounts', () => {
     server = require('../../server')()
   })
 
-  beforeEach('get token', function() {
-    return helpers.all([
+  beforeEach('get token', function(done) {
+    helpers.all([
       () => models.sequelize.authenticate(),
       () => helpers.umzug.down({ to: 0 }),
       () => helpers.umzug.up(),
@@ -32,6 +32,7 @@ describe('routes : accounts', () => {
       () => agentSeeder.up(models.sequelize.getQueryInterface(), models.Sequelize),
       () => accountSeeder.up(models.sequelize.getQueryInterface(), models.Sequelize),
       () => helpers.getTokenByUsername('admin').then(t => token = t),
+      () => done()
     ])
   })
 

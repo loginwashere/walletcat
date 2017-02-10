@@ -45,7 +45,10 @@ const EditFormButtonsGroup = ({
 )
 
 EditFormButtonsGroup.propTypes = {
-  cancelTo: PropTypes.string.isRequired,
+  cancelTo: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]).isRequired,
   deleteTo: PropTypes.string.isRequired,
   error: PropTypes.object,
   submitting: PropTypes.bool.isRequired,

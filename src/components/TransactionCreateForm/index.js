@@ -45,7 +45,8 @@ export class TransactionCreateForm extends Component {
       pristine,
       reset,
       submitting,
-      invalid
+      invalid,
+      currentPage
     } = this.props
     return (
       <Form horizontal
@@ -53,11 +54,10 @@ export class TransactionCreateForm extends Component {
         <WalletFormHeader error={error}>New Transaction</WalletFormHeader>
 
         <TransactionFormFields type="create"
-                               loadFromAccountOptions={this.loadAccountsOptions}
-                               loadToAccountOptions={this.loadAccountsOptions}
+                               loadAccountOptions={this.loadAccountsOptions}
                                loadCategoriesOptions={this.loadCategoriesOptions}/>
 
-        <CreateFormButtonsGroup cancelTo="/categories"
+        <CreateFormButtonsGroup cancelTo={{ pathname: '/transactions', query: { page: currentPage } }}
                                 submitting={submitting}
                                 pristine={pristine}
                                 reset={reset}
@@ -75,7 +75,8 @@ TransactionCreateForm.propTypes = {
   submitting: PropTypes.bool.isRequired,
   pristine: PropTypes.bool.isRequired,
   invalid: PropTypes.bool.isRequired,
-  reset: PropTypes.func.isRequired
+  reset: PropTypes.func.isRequired,
+  currentPage: PropTypes.number.isRequired
 }
 
 export default reduxForm({

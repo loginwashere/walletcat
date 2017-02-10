@@ -52,7 +52,8 @@ export class AccountCreateForm extends Component {
       pristine,
       reset,
       submitting,
-      invalid
+      invalid,
+      currentPage
     } = this.props
 
     return (
@@ -64,7 +65,7 @@ export class AccountCreateForm extends Component {
                            loadUserCurrenciesOptions={this.loadUserCurrenciesOptions}
                            loadAgentsOptions={this.loadAgentsOptions}/>
 
-        <CreateFormButtonsGroup cancelTo="/accounts"
+        <CreateFormButtonsGroup cancelTo={{ pathname: '/accounts', query: { page: currentPage } }}
                                 submitting={submitting}
                                 pristine={pristine}
                                 reset={reset}
@@ -82,7 +83,8 @@ AccountCreateForm.propTypes = {
   pristine: PropTypes.bool.isRequired,
   invalid: PropTypes.bool.isRequired,
   reset: PropTypes.func.isRequired,
-  dispatch: PropTypes.func
+  dispatch: PropTypes.func,
+  currentPage: PropTypes.number.isRequired
 }
 
 export default reduxForm({

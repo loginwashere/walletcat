@@ -16,7 +16,8 @@ export const AgentEditForm = ({
   pristine,
   reset,
   submitting,
-  invalid
+  invalid,
+  currentPage
 }) => (
   <Form horizontal
         onSubmit={handleSubmit}>
@@ -24,7 +25,7 @@ export const AgentEditForm = ({
 
     <AgentFormFields />
 
-    <EditFormButtonsGroup cancelTo="/agents"
+    <EditFormButtonsGroup cancelTo={{ pathname: '/agents', query: { page: currentPage } }}
                           deleteTo={`/agents/${agent.id}/delete`}
                           submitting={submitting}
                           pristine={pristine}
@@ -44,7 +45,8 @@ AgentEditForm.propTypes = {
   submitting: PropTypes.bool.isRequired,
   pristine: PropTypes.bool.isRequired,
   invalid: PropTypes.bool.isRequired,
-  reset: PropTypes.func.isRequired
+  reset: PropTypes.func.isRequired,
+  currentPage: PropTypes.number.isRequired
 }
 
 export default reduxForm({

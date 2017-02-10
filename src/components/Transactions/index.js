@@ -18,6 +18,7 @@ export class Transactions extends Component {
   render() {
     const {
       transactions,
+      transactionItems,
       accounts,
       categories,
       userCurrencies,
@@ -40,28 +41,16 @@ export class Transactions extends Component {
           <ListGroup>
             {pages[page].ids.map(id => {
               const transaction = transactions[id]
-              const fromAccount = transaction && accounts[transaction.fromAccountId]
-              const fromAccountUserCurrency = fromAccount && userCurrencies[fromAccount.currencyId]
-              const fromAccountCurrency = fromAccountUserCurrency && currencies[fromAccountUserCurrency.currencyId]
-              const toAccount = transaction && accounts[transaction.toAccountId]
-              const toAccountUserCurrency = toAccount && userCurrencies[toAccount.currencyId]
-              const toAccountCurrency = toAccountUserCurrency && currencies[toAccountUserCurrency.currencyId]
               const category = transaction && categories[transaction.categoryId]
               return (
                 transaction &&
-                toAccount &&
-                toAccountUserCurrency &&
-                toAccountCurrency &&
-                fromAccount &&
-                fromAccountUserCurrency &&
-                fromAccountCurrency &&
                 category &&
                 <Transaction key={transaction.id}
                              transaction={transaction}
-                             fromAccount={fromAccount}
-                             fromAccountCurrency={fromAccountCurrency}
-                             toAccount={toAccount}
-                             toAccountCurrency={toAccountCurrency}
+                             accounts={accounts}
+                             transactionItems={transactionItems}
+                             userCurrencies={userCurrencies}
+                             currencies={currencies}
                              category={category} />
               )
             })}
@@ -89,6 +78,7 @@ export class Transactions extends Component {
 
 Transactions.propTypes = {
   transactions: PropTypes.object.isRequired,
+  transactionItems: PropTypes.object.isRequired,
   accounts: PropTypes.object.isRequired,
   categories: PropTypes.object.isRequired,
   currencies: PropTypes.object.isRequired,
@@ -110,11 +100,13 @@ function mapStateToProps(state, ownProps) {
   const { items: categories } = state.categories || { items: {} }
   const { items: currencies } = state.currencies || { items: {} }
   const { items: userCurrencies } = state.userCurrencies || { items: {} }
+  const { items: transactionItems } = state.transactionItems || { items: {} }
 
   const pagination = state.pagination.transactions
 
   return {
     transactions,
+    transactionItems,
     accounts,
     categories,
     userCurrencies,

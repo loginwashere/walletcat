@@ -58,7 +58,8 @@ export class AccountEditForm extends Component {
       submitting,
       reset,
       invalid,
-      customInitialValues
+      customInitialValues,
+      currentPage
     } = this.props
     return (
       <Form horizontal
@@ -70,7 +71,7 @@ export class AccountEditForm extends Component {
                            loadUserCurrenciesOptions={this.loadUserCurrenciesOptions}
                            loadAgentsOptions={this.loadAgentsOptions}/>
 
-        <EditFormButtonsGroup cancelTo="/accounts"
+        <EditFormButtonsGroup cancelTo={{ pathname: '/accounts', query: { page: currentPage } }}
                               deleteTo={`/accounts/${account.id}/delete`}
                               submitting={submitting}
                               pristine={pristine}
@@ -95,7 +96,8 @@ AccountEditForm.propTypes = {
   submitting: PropTypes.bool.isRequired,
   pristine: PropTypes.bool.isRequired,
   invalid: PropTypes.bool.isRequired,
-  reset: PropTypes.func.isRequired
+  reset: PropTypes.func.isRequired,
+  currentPage: PropTypes.number
 }
 export default reduxForm({
   form: 'accountEdit',

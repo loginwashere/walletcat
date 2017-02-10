@@ -6,6 +6,7 @@ const agentSeeder = require('./20170114214456-agent')
 const accountSeeder = require('./20170114214459-account')
 const transactionSeeder = require('./20170114214507-transaction')
 const rateSeeder = require('./20170125173817-rate')
+const transactionItemSeeder = require('./20170208193304-transaction-item')
 
 module.exports = {
   userSeeder,
@@ -15,5 +16,6 @@ module.exports = {
   agentSeeder,
   accountSeeder,
   transactionSeeder,
-  rateSeeder
+  rateSeeder,
+  transactionItemSeeder
 }

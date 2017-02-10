@@ -11,9 +11,11 @@ describe('components:AgentEditForm:', () => {
 
   it('renders without crashing', () => {
     const store = configureStore()
+    const currentPage = 1
     const tree = renderer.create(
       <Provider store={store} >
-        <AgentEditFormDecorated agent={agentSeeder.items[0]} />
+        <AgentEditFormDecorated agent={agentSeeder.items[0]}
+                                currentPage={currentPage} />
       </Provider>
     ).toJSON()
     expect(tree).toMatchSnapshot()

@@ -8,7 +8,7 @@ const helpers = require('./helpers')
 
 chai.use(chaiHttp)
 
-describe('routes : curencies', () => {
+describe('routes : currencies', () => {
   let token
   let server
 

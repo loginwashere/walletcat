@@ -5,19 +5,24 @@ import { CategoryCreateForm } from '.'
 import configureStore from '../../configureStore'
 import { Provider } from 'react-redux'
 
-const spy = jest.fn()
-
 const Decorated = reduxForm({ form: 'testForm' })(CategoryCreateForm)
-it('renders without crashing', () => {
-  const store = configureStore()
-  const tree = renderer.create(
-    <Provider store={store} >
-      <Decorated handleSubmit={spy}
-                 submitting={false}
-                 pristine={true}
-                 invalid={false}
-                 reset={spy} />
-    </Provider>
-  ).toJSON()
-  expect(tree).toMatchSnapshot()
+
+describe('components:CategoryCreateForm:', () => {
+  it('renders without crashing', () => {
+    const store = configureStore()
+    const dispatch = jest.fn()
+    const handleSubmit = jest.fn()
+    const currentPage = 1
+    const tree = renderer.create(
+      <Provider store={store} >
+        <Decorated handleSubmit={handleSubmit}
+                  submitting={false}
+                  pristine={true}
+                  invalid={false}
+                  reset={dispatch}
+                  currentPage={currentPage} />
+      </Provider>
+    ).toJSON()
+    expect(tree).toMatchSnapshot()
+  })
 })

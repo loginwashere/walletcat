@@ -3,11 +3,20 @@ import { FormControl } from 'react-bootstrap'
 import WalletFormGroup from './WalletFormGroup'
 
 const RenderField = ({
-  input, label, type, meta, required, autoFocus
+  input,
+  label,
+  type,
+  meta,
+  required,
+  autoFocus,
+  labelColProps,
+  valueColProps
 }) => (
   <WalletFormGroup name={input.name}
                    label={label}
-                   meta={meta}>
+                   meta={meta}
+                   labelColProps={labelColProps}
+                   valueColProps={valueColProps} >
       <FormControl {...input}
                     required={required}
                     autoFocus={autoFocus}
@@ -22,7 +31,9 @@ RenderField.propTypes = {
   type: PropTypes.string,
   meta: PropTypes.object,
   required: PropTypes.bool,
-  autoFocus: PropTypes.bool
+  autoFocus: PropTypes.bool,
+  labelColProps: PropTypes.object,
+  valueColProps: PropTypes.object
 }
 
 export default RenderField

@@ -5,13 +5,14 @@ import { Provider } from 'react-redux'
 import configureStore from '../../configureStore'
 
 describe('components:AgentCreate:', () => {
-  const dispatch = jest.fn()
-
   it('renders without crashing', () => {
+    const dispatch = jest.fn()
     const store = configureStore()
+    const currentPage = 1
     const tree = renderer.create(
       <Provider store={store}>
-        <AgentCreate dispatch={dispatch} />
+        <AgentCreate dispatch={dispatch}
+                     currentPage={currentPage} />
       </Provider>
     ).toJSON()
     expect(tree).toMatchSnapshot()

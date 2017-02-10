@@ -14,7 +14,7 @@ export class AccountView extends Component {
   }
 
   render() {
-    const { account, initialValues, customInitialValues, dispatch } = this.props
+    const { account, initialValues, customInitialValues, dispatch, currentPage } = this.props
     return (
       account
         ? <AccountEditForm onSubmit={this.handleSubmit}
@@ -22,7 +22,8 @@ export class AccountView extends Component {
                            initialValues={initialValues}
                            customInitialValues={customInitialValues}
                            enableReinitialize={true}
-                           dispatch={dispatch} />
+                           dispatch={dispatch}
+                           currentPage={currentPage} />
         : null
     )
   }
@@ -42,7 +43,8 @@ AccountView.propTypes = {
   }),
   initialValues: PropTypes.object,
   customInitialValues: PropTypes.object,
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  currentPage: PropTypes.number
 }
 
 function mapStateToProps(state, ownProps) {
@@ -59,8 +61,10 @@ function mapStateToProps(state, ownProps) {
       clearableValue: false
     }
   }
+  const currentPage = state.pagination.accounts.currentPage || 1
 
   return {
+    currentPage,
     accountId,
     account,
     initialValues: initialValues && selectEditProps(initialValues),

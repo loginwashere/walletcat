@@ -1,75 +1,138 @@
 import React, { PropTypes } from 'react'
 import { Field } from 'redux-form'
+import { Row, Col } from 'react-bootstrap'
 import {
   RenderField,
   WalletFormGroupSelect,
   RenderFieldDatetime
 } from '../Common'
 
-const AccountFormFields = ({
+const TransactionFormFields = ({
   type,
   customInitialValues,
-  loadFromAccountOptions,
-  loadToAccountOptions,
+  loadAccountOptions,
   loadCategoriesOptions
 }) => (
   <div>
-    {(type === 'create' || customInitialValues) &&
-      <Field required={true}
-             name="fromAccountId"
-             component={WalletFormGroupSelect}
-             label="From Account"
-             loadOptions={loadFromAccountOptions} />}
-    {(type === 'create' || customInitialValues) &&
-      <Field required={true}
-             name="toAccountId"
-             component={WalletFormGroupSelect}
-             label="To Account"
-             loadOptions={loadToAccountOptions} />}
-    <Field required={true}
-           name="fromAmount"
-           component={RenderField}
-           label="From Amount"
-           type="number" />
-    <Field required={true}
-           name="toAmount"
-           component={RenderField}
-           label="To Amount"
-           type="number" />
-    <Field required={true}
-           name="fromRate"
-           component={RenderField}
-           label="From Rate"
-           type="number" />
-    <Field required={true}
-           name="toRate"
-           component={RenderField}
-           label="To Rate"
-           type="number" />
-    <Field required={true}
-           name="date"
-           component={RenderFieldDatetime}
-           label="Date"
-           type="text" />
-    {(type === 'create' || customInitialValues) &&
-      <Field required={true}
-             name="categoryId"
-             component={WalletFormGroupSelect}
-             label="Category"
-             loadOptions={loadCategoriesOptions} />}
+    <Row>
+      <Col sm={12}>
+        From
+      </Col>
+    </Row>
+    <Row>
+      <Col sm={4}>
+        {type === 'edit' && customInitialValues &&
+          <Field type="hidden"
+                  component="input"
+                  name="transactionItems[0][id]" />}
+        {(type === 'create' || customInitialValues) &&
+          <Field required={true}
+                name="transactionItems[0][accountId]"
+                component={WalletFormGroupSelect}
+                label="Account"
+                loadOptions={loadAccountOptions}
+                labelColProps={{ sm: 3 }}
+                valueColProps={{ sm: 9 }} />}
+      </Col>
+      <Col sm={4}>
+        <Field required={true}
+              name="transactionItems[0][amount]"
+              component={RenderField}
+              label="Amount"
+              type="number"
+              labelColProps={{ sm: 3 }}
+              valueColProps={{ sm: 9 }} />
+        <Field type="hidden"
+               component="input"
+               name="transactionItems[1][type]" />
+      </Col>
+      <Col sm={4}>
+        <Field required={true}
+              name="transactionItems[0][rate]"
+              component={RenderField}
+              label="Rate"
+              type="number"
+              labelColProps={{ sm: 3 }}
+              valueColProps={{ sm: 9 }} />
+      </Col>
+    </Row>
+    <Row>
+      <Col sm={12}>
+        To
+      </Col>
+    </Row>
+    <Row>
+      <Col sm={4}>
+        {type === 'edit' && customInitialValues &&
+          <Field type="hidden"
+               component="input"
+               name="transactionItems[1][id]" />}
+        {(type === 'create' || customInitialValues) &&
+          <Field required={true}
+                name="transactionItems[1][accountId]"
+                component={WalletFormGroupSelect}
+                label="Account"
+                loadOptions={loadAccountOptions}
+                labelColProps={{ sm: 3 }}
+                valueColProps={{ sm: 9 }} />}
+      </Col>
+      <Col sm={4}>
+        <Field required={true}
+              name="transactionItems[1][amount]"
+              component={RenderField}
+              label="Amount"
+              type="number"
+              labelColProps={{ sm: 3 }}
+              valueColProps={{ sm: 9 }} />
+        <Field type="hidden"
+               component="input"
+               name="transactionItems[1][type]" />
+      </Col>
+      <Col sm={4}>
+        <Field required={true}
+              name="transactionItems[1][rate]"
+              component={RenderField}
+              label="Rate"
+              type="number"
+              labelColProps={{ sm: 3 }}
+              valueColProps={{ sm: 9 }} />
+      </Col>
+    </Row>
+    <Row>
+      <Col sm={6}>
+        <Field required={true}
+              name="date"
+              component={RenderFieldDatetime}
+              label="Date"
+              type="text"
+              labelColProps={{ sm: 2 }}
+              valueColProps={{ sm: 10 }} />
+      </Col>
+      <Col sm={6}>
+        {(type === 'create' || customInitialValues) &&
+          <Field required={true}
+                name="categoryId"
+                component={WalletFormGroupSelect}
+                label="Category"
+                loadOptions={loadCategoriesOptions}
+                labelColProps={{ sm: 2 }}
+                valueColProps={{ sm: 10 }} />}
+      </Col>
+    </Row>
     <Field name="description"
            component={RenderField}
            label="Description"
-           type="text" />
+           type="text"
+           labelColProps={{ sm: 1 }}
+           valueColProps={{ sm: 11 }} />
   </div>
 )
 
-AccountFormFields.propTypes = {
+TransactionFormFields.propTypes = {
   type: PropTypes.string.isRequired,
   customInitialValues: PropTypes.object,
-  loadFromAccountOptions: PropTypes.func.isRequired,
-  loadToAccountOptions: PropTypes.func.isRequired,
+  loadAccountOptions: PropTypes.func.isRequired,
   loadCategoriesOptions: PropTypes.func.isRequired
 }
 
-export default AccountFormFields
+export default TransactionFormFields

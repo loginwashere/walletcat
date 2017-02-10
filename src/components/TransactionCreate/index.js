@@ -11,20 +11,37 @@ export class TransactionCreate extends Component {
   }
 
   render() {
-    const { dispatch } = this.props
+    const { dispatch, currentPage } = this.props
     const initialValues = {
-      date: format(new Date())
+      date: format(new Date()),
+      transactionItems: [
+        {
+          type: 'credit'
+        },
+        {
+          type: 'debit'
+        }
+      ]
     }
     return (
       <TransactionCreateForm onSubmit={this.handleSubmit}
                              initialValues={initialValues}
-                             dispatch={dispatch} />
+                             dispatch={dispatch}
+                             currentPage={currentPage} />
     )
   }
 }
 
 TransactionCreate.propTypes = {
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  currentPage: PropTypes.number.isRequired
 }
 
-export default connect()(TransactionCreate)
+function mapStateToProps(state) {
+  const currentPage = state.pagination.transactions.currentPage || 1
+  return {
+    currentPage
+  }
+}
+
+export default connect(mapStateToProps)(TransactionCreate)

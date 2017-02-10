@@ -30,6 +30,18 @@ function receiveTransactions(json) {
   }
 }
 
+export const RECEIVE_TRANSACTION_ITEM_LIST = 'RECEIVE_TRANSACTION_ITEM_LIST'
+
+function receiveTransactionItems(json) {
+  return {
+    type: RECEIVE_TRANSACTION_ITEM_LIST,
+    transactionItems: json.data.transactions
+      .map(transaction => transaction.transactionItems)
+      .reduce((result, current) => result.concat(current), []),
+    receivedAt: Date.now()
+  }
+}
+
 const fetchTransactions = ({ page, limit, filter }) => dispatch => {
   dispatch(requestTransactions())
   !filter && dispatch(transactionsPaginator.requestPage(page, limit))
@@ -37,6 +49,7 @@ const fetchTransactions = ({ page, limit, filter }) => dispatch => {
     .fetchAll({ page, limit, filter })
     .then(json => {
       dispatch(receiveTransactions(json))
+      dispatch(receiveTransactionItems(json))
       !filter && dispatch(
           transactionsPaginator.receivePage(
             parseInt(json.data.meta.page, 10),

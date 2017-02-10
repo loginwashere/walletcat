@@ -4,10 +4,12 @@ import { AccountCreate } from '.'
 
 describe('components:AccountCreate:', () => {
   const shallowRenderer = ReactTestUtils.createRenderer()
-  const dispatch = jest.fn()
   it('renders without crashing', () => {
+    const dispatch = jest.fn()
+    const currentPage = 1
     shallowRenderer.render(
-      <AccountCreate dispatch={dispatch} />
+      <AccountCreate dispatch={dispatch}
+                     currentPage={currentPage} />
     )
   })
 })

@@ -4,15 +4,42 @@ import reducer, {
   initialState as expectedDefaultInitialState
 } from '../transactions'
 import * as actions from '../../actions'
+import { transactionSeeder, transactionItemSeeder } from '../../../server/seeds'
 
 describe('transactions reducer', () => {
-  const firstTransaction = { id: v4(), description: 'Inceprion' }
-  const secondTransaction = { id: v4(), description: 'Seven' }
+  const transactionItems = transactionItemSeeder.items
+
+  const firstInitialTransaction = transactionSeeder.items[0]
+  const firstTransaction = {
+    ...firstInitialTransaction,
+    transactionItems: transactionItems
+      .filter(transactionItem => transactionItem.transactionId === firstInitialTransaction.id)
+  }
+  const firstTransactionReceived = {
+    ...firstTransaction,
+    transactionItems: transactionItems
+      .filter(transactionItem => transactionItem.transactionId === firstInitialTransaction.id)
+      .map(transactionItem => transactionItem.id)
+  }
+
+  const secondInitialTransaction = transactionSeeder.items[1]
+  const secondTransaction = {
+    ...secondInitialTransaction,
+    transactionItems: transactionItems
+      .filter(transactionItem => transactionItem.transactionId === secondInitialTransaction.id)
+  }
+  const secondTransactionReceived = {
+    ...secondTransaction,
+    transactionItems: transactionItems
+      .filter(transactionItem => transactionItem.transactionId === secondInitialTransaction.id)
+      .map(transactionItem => transactionItem.id)
+  }
+
   const initialState = undefined
   const expectedAfterFirstListReceive = {
     ...expectedDefaultInitialState,
     items: {
-      [firstTransaction.id]: firstTransaction
+      [firstTransaction.id]: firstTransactionReceived
     },
     itemIds: [firstTransaction.id],
     lastUpdated: 1317416400000
@@ -48,8 +75,8 @@ describe('transactions reducer', () => {
       })
     ).toEqual({
       items: {
-        [firstTransaction.id]: firstTransaction,
-        [secondTransaction.id]: secondTransaction
+        [firstTransaction.id]: firstTransactionReceived,
+        [secondTransaction.id]: secondTransactionReceived
       },
       itemIds: [firstTransaction.id, secondTransaction.id],
       didInvalidate: false,
@@ -85,8 +112,8 @@ describe('transactions reducer', () => {
       })
     ).toEqual({
       items: {
-        [firstTransaction.id]: firstTransaction,
-        [secondTransaction.id]: secondTransaction
+        [firstTransaction.id]: firstTransactionReceived,
+        [secondTransaction.id]: secondTransactionReceived
       },
       itemIds: [firstTransaction.id, secondTransaction.id],
       didInvalidate: false,

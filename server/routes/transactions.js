@@ -17,6 +17,11 @@ router.get('/', validate.query(paginationSchema), (req, res, next) => {
     order: [
       ['date', 'DESC'],
       ['createdAt', 'DESC']
+    ],
+    include: [
+      {
+        model: models.transactionItem
+      }
     ]
   }
   if (req.query.filterName && req.query.filterValue) {
@@ -42,50 +47,70 @@ router.post('/', validate.body(transactionSchema), (req, res, next) => {
     .create({
       id: v4(),
       userId: req.user.sub,
-      fromAccountId: req.body.fromAccountId,
-      toAccountId: req.body.toAccountId,
-      fromRate: req.body.fromRate,
-      toRate: req.body.toRate,
-      fromAmount: req.body.fromAmount,
-      toAmount: req.body.toAmount,
+      transactionItems: req.body.transactionItems.map(transactionItem => Object.assign({}, transactionItem, {
+        id: v4(),
+        createdAt: format(new Date()),
+        updatedAt: format(new Date())
+      })),
       description: req.body.description,
       categoryId: req.body.categoryId,
       date: req.body.date,
       createdAt: format(new Date()),
       updatedAt: format(new Date())
+    }, {
+      include: [ models.transactionItem ]
     })
     .then(res.json.bind(res))
     .catch(next)
 })
 
 router.put('/:id', validate.body(transactionSchema), (req, res, next) => {
-  models.transaction
-    .findOne({
-      where: {
-        $and: [
-          { id: req.params.id },
-          { userId: req.user.sub }
-        ]
+  const options = {
+    where: {
+      $and: [
+        { id: req.params.id },
+        { userId: req.user.sub }
+      ]
+    },
+    include: [
+      {
+        model: models.transactionItem
       }
-    })
+    ]
+  }
+  models.transaction
+    .findOne(options)
     .then(transaction => {
       if (!transaction) {
         return next(new NotFoundError('Transaction not found'))
       }
-      return transaction
-        .update({
-          fromAccountId: req.body.fromAccountId,
-          toAccountId: req.body.toAccountId,
-          fromRate: req.body.fromRate,
-          toRate: req.body.toRate,
-          fromAmount: req.body.fromAmount,
-          toAmount: req.body.toAmount,
-          description: req.body.description,
-          categoryId: req.body.categoryId,
-          date: req.body.date,
-          updatedAt: format(new Date())
-        })
-        .then(transaction => res.json(transaction))
+      return models.sequelize.transaction((t) => {
+        const updateOptions = Object.assign({}, options, { transaction: t })
+        return transaction
+          .update({
+            description: req.body.description,
+            categoryId: req.body.categoryId,
+            date: req.body.date,
+            updatedAt: format(new Date())
+          }, updateOptions)
+          .then(transaction => Promise
+            .all(transaction.transactionItems
+              .map(transactionItem => {
+                if (transactionItem.changed()) {
+                  transactionItem.transactionId = transaction.id
+                  transactionItem.updatedAt = format(new Date())
+                  if (!transactionItem.id) {
+                    transactionItem.id = v4()
+                    transactionItem.createdAt = format(new Date())
+                  }
+                  return transactionItem.save(updateOptions)
+                }
+                return Promise.resolve()
+              })
+            )
+            .then(() => transaction.reload()
+              .then(transaction => res.json(transaction))))
+      })
     })
     .catch(next)
 })

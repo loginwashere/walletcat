@@ -3,6 +3,8 @@ const userSeederItems = require('./20170114212746-user').items
 const userCurrencySeederItems = require('./20170114214446-user-currency').items
 const agentSeederItems = require('./20170114214456-agent').items
 
+const DEFAULT_DATE = '1995-02-10 18:45:43.948+00'
+
 const accounts = [
   {
     id: '00000000-5a23-4ef3-0005-000000000000',
@@ -12,8 +14,8 @@ const accounts = [
     name: 'Wallet',
     description: 'My Wallet',
     amount: '0.00000000',
-    createdAt: format(new Date()),
-    updatedAt: format(new Date())
+    createdAt: DEFAULT_DATE,
+    updatedAt: DEFAULT_DATE
   },
   {
     id: '00000000-5a23-4ef3-0005-000000000001',
@@ -23,8 +25,8 @@ const accounts = [
     name: 'Stash',
     description: 'My Stash',
     amount: '0.00000000',
-    createdAt: format(new Date()),
-    updatedAt: format(new Date())
+    createdAt: DEFAULT_DATE,
+    updatedAt: DEFAULT_DATE
   }
 ]
 
@@ -37,5 +39,8 @@ module.exports = {
     return queryInterface.bulkDelete('accounts', null, {})
   },
 
-  items: accounts
+  items: accounts,
+
+  itemsById: accounts
+    .reduce((obj, item) => Object.assign({}, obj, { [item.id]: item }), {}),
 }
