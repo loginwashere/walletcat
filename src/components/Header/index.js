@@ -109,7 +109,7 @@ export class Header extends Component {
             {!isAuthenticated && <LinkContainer to="/register">
               <NavItem eventKey={12} href="#">Create an account</NavItem>
             </LinkContainer>}
-            <NavItem componentClass={SwitchLocale} />
+            <SwitchLocale eventKey={13} />
           </Nav>
         </Navbar.Collapse>
       </Navbar>

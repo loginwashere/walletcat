@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { API_URL } from './common'
+import { API_URL } from '../config'
 
 const login = params => axios
   .post(`${API_URL}auth`, params)

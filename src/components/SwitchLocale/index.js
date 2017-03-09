@@ -82,7 +82,7 @@ export class SwitchLocale extends Component {
 SwitchLocale.propTypes = {
   updateIntl: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
-  eventKey: PropTypes.number.isRequired,
+  eventKey: PropTypes.number,
   currentLocale: PropTypes.string.isRequired
 }
 

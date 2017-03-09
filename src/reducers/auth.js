@@ -1,18 +1,6 @@
-/* global localStorage */
-
-import {
-  LOGIN_REQUEST,
-  LOGIN_SUCCESS,
-  LOGIN_FAILURE,
-  LOGOUT_SUCCESS,
-  REGISTER_REQUEST,
-  REGISTER_SUCCESS,
-  REGISTER_FAILURE,
-  RECEIVE_RESEND_EMAIL_CONFIRM,
-  RECEIVE_EMAIL_CONFIRM,
-  SET_REDIRECT_URL
-} from '../actions'
+import { createReducer } from 'redux-act'
 import jwtDecode from 'jwt-decode'
+import * as authActions from '../actions/auth'
 
 const getToken = () => localStorage.getItem('token')
 const getUser = () => localStorage.getItem('user')
@@ -44,72 +32,61 @@ const initialState = () => ({
   redirectUrl: ''
 })
 
-export default function auth(
-  state = initialState(),
-  action
-) {
-  switch (action.type) {
-    case LOGIN_REQUEST:
-      return Object.assign({}, state, {
-        isFetching: true,
-        isAuthenticated: false,
-        user: action.creds
-      })
-    case LOGIN_SUCCESS:
-      return Object.assign({}, state, {
-        isFetching: false,
-        isAuthenticated: true,
-        tokenExpirationDate: getTokenExpirationDate(decodeToken(getToken())),
-        errorMessage: '',
-        user: action.user
-      })
-    case LOGIN_FAILURE:
-      return Object.assign({}, state, {
-        isFetching: false,
-        isAuthenticated: false,
-        errorMessage: action.message
-      })
-    case LOGOUT_SUCCESS:
-      return Object.assign({}, state, initialState())
-    case REGISTER_REQUEST:
-      return Object.assign({}, state, {
-        isFetching: true,
-        isAuthenticated: false,
-        user: action.params
-      })
-    case REGISTER_SUCCESS:
-      return Object.assign({}, state, {
-        isFetching: false,
-        isAuthenticated: false,
-        errorMessage: '',
-        user: action.user
-      })
-    case REGISTER_FAILURE:
-      return Object.assign({}, state, {
-        isFetching: false,
-        isAuthenticated: false,
-        errorMessage: action.message
-      })
-    case RECEIVE_EMAIL_CONFIRM:
-      return {
-        ...state,
-        user: {
-          ...state.user || {},
-          emailConfirmed: true
-        }
-      }
-    case RECEIVE_RESEND_EMAIL_CONFIRM:
-      console.log(action)
-      return {
-        ...state,
-        isEmailConfirmResent: true
-      }
-    case SET_REDIRECT_URL:
-      return {
-        ...state,
-        redirectUrl: action.url
-      }
-    default:
-      return state
-  }
-}
+const auth = createReducer({
+  [authActions.loginRequest]: state => ({
+    ...state,
+    isFetching: true
+  }),
+  [authActions.loginSuccess]: (state, payload) => ({
+    ...state,
+    isFetching: false,
+    tokenExpirationDate: getTokenExpirationDate(decodeToken(getToken())),
+    errorMessage: '',
+    isAuthenticated: true,
+    user: payload.data.user
+  }),
+  [authActions.loginFailure]: (state, payload) => ({
+    ...state,
+    isFetching: false,
+    errorMessage: payload.message
+  }),
+  [authActions.logoutSuccess]: state => ({
+    ...state,
+    ...initialState()
+  }),
+  [authActions.setRedirectUrl]: (state, url) => ({
+    ...state,
+    redirectUrl: url
+  }),
+  [authActions.registerRequest]: (state) => ({
+    ...state,
+    isFetching: true
+  }),
+  [authActions.registerFailure]: (state) => ({
+    ...state,
+    isFetching: false
+  }),
+  [authActions.resendConfirmEmailRequest]: (state) => ({
+    ...state,
+    isFetching: true
+  }),
+  [authActions.resendConfirmEmailSuccess]: (state) => ({
+    ...state,
+    isEmailConfirmResent: true,
+    isFetching: false
+  }),
+  [authActions.resendConfirmEmailFailure]: (state) => ({
+    ...state,
+    isFetching: false
+  }),
+  [authActions.confirmEmailRequest]: (state) => ({
+    ...state,
+    isFetching: true
+  }),
+  [authActions.confirmEmailFailure]: (state) => ({
+    ...state,
+    isFetching: false
+  }),
+}, initialState())
+
+export default auth

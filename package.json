@@ -106,6 +106,7 @@
     "react-select": "^1.0.0-rc.3",
     "react-waypoint": "^5.0.3",
     "redux": "^3.6.0",
+    "redux-act": "^1.1.1",
     "redux-form": "^6.4.3",
     "redux-logger": "^2.7.4",
     "redux-thunk": "^2.1.0",

@@ -94,7 +94,6 @@ export const fetchAppCurrenciesPageWithDependencies = ({ page, limit, filter }) 
 export const fetchTransactionsPageWithDependencies = ({ page, limit, filter }) => dispatch =>
   dispatch(fetchTransactionsIfNeeded({ page, limit, filter }))
     .then(data => {
-      console.log('fetchTransactionsPageWithDependencies', data)
       if (data && data.transactions && data.transactions.length) {
         const accountsIds = data.transactions
           .map(transaction => transaction.transactionItems)

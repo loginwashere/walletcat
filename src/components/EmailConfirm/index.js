@@ -1,16 +1,12 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import {
-  Alert
-} from 'react-bootstrap'
+import { bindActionCreators } from 'redux'
+import { Alert } from 'react-bootstrap'
 import ResendEmailConfirmForm from '../ResendEmailConfirmForm'
 import { confirmEmail, resendConfirmEmail } from '../../actions'
 
 export class EmailConfirm extends Component {
-  handleResendConfirmEmail = (values) => {
-    const { dispatch } = this.props
-    return dispatch(resendConfirmEmail(values.email))
-  }
+  handleResendConfirmEmail = (values) => this.props.resendConfirmEmail(values.email)
 
   render() {
     const { isEmailConfirmed, isEmailConfirmResent, isFetching } = this.props
@@ -39,9 +35,9 @@ export class EmailConfirm extends Component {
   }
 
   componentDidMount() {
-    const { dispatch, code, isEmailConfirmed } = this.props
+    const { confirmEmail, code, isEmailConfirmed } = this.props
     if (!isEmailConfirmed) {
-      dispatch(confirmEmail(code))
+      confirmEmail(code)
     }
   }
 }
@@ -51,21 +47,22 @@ EmailConfirm.propTypes = {
   isEmailConfirmed: PropTypes.bool.isRequired,
   isEmailConfirmResent: PropTypes.bool.isRequired,
   isFetching: PropTypes.bool.isRequired,
-  dispatch: PropTypes.func.isRequired
+  confirmEmail: PropTypes.func.isRequired,
+  resendConfirmEmail: PropTypes.func.isRequired,
 }
 
-function mapStateToProps(state, ownProps) {
+const mapStateToProps = (state, ownProps) => {
   const user = state.auth.user || {}
   const isEmailConfirmed = user.emailConfirmed || false
-  const isEmailConfirmResent = state.auth.isEmailConfirmResent
-  const isFetching = state.auth.isFetching || true
-  const code = ownProps.params.code
   return {
     isEmailConfirmed,
-    isEmailConfirmResent,
-    isFetching,
-    code
+    isEmailConfirmResent: state.auth.isEmailConfirmResent,
+    isFetching: state.auth.isFetching,
+    code: ownProps.params.code
   }
 }
 
-export default connect(mapStateToProps)(EmailConfirm)
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ confirmEmail, resendConfirmEmail }, dispatch)
+
+export default connect(mapStateToProps, mapDispatchToProps)(EmailConfirm)
