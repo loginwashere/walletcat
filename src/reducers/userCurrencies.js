@@ -16,7 +16,6 @@ export const initialState = {
   isFetching: false,
   didInvalidate: false,
   items: {},
-  itemIds: [],
   itemsByCurrencyId: {}
 }
 
@@ -43,12 +42,6 @@ export default function userCurrencies(state = initialState, action) {
           ...action.userCurrencies
             .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
         },
-        itemIds: [
-          ...state.itemIds,
-          ...action.userCurrencies
-            .map(item => item.id)
-            .filter(id => state.itemIds.indexOf(id) === -1)
-        ],
         itemsByCurrencyId: {
           ...state.itemsByCurrencyId,
           ...action.userCurrencies
@@ -71,12 +64,6 @@ export default function userCurrencies(state = initialState, action) {
           ...state.items,
           [action.userCurrency.id]: action.userCurrency
         },
-        itemIds: [
-          ...state.itemIds,
-          ...[action.userCurrency]
-            .map(item => item.id)
-            .filter(id => state.itemIds.indexOf(id) === -1)
-        ],
         itemsByCurrencyId: {
           ...state.itemsByCurrencyId,
           [action.userCurrency.currencyId]: action.userCurrency.id
@@ -99,10 +86,6 @@ export default function userCurrencies(state = initialState, action) {
             result[current] = state.items[current]
             return result
           }, {}),
-        itemIds: [
-          ...state.itemIds.slice(0, state.itemIds.indexOf(action.userCurrency.id)),
-          ...state.itemIds.slice(state.itemIds.indexOf(action.userCurrency.id) + 1)
-        ],
         itemsByCurrencyId: Object.keys(state.itemsByCurrencyId)
           .filter(key => key !== action.userCurrency.currencyId)
           .reduce((result, current) => {

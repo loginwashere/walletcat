@@ -18,7 +18,6 @@ export const initialState = {
   isFetching: false,
   didInvalidate: false,
   items: {},
-  itemIds: [],
   lastUpdated: undefined
 }
 
@@ -45,12 +44,6 @@ export default function accounts(state = initialState, action) {
           ...action.accounts
             .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
         },
-        itemIds: [
-          ...state.itemIds,
-          ...action.accounts
-            .map(item => item.id)
-            .filter(id => state.itemIds.indexOf(id) === -1)
-        ],
         lastUpdated: action.receivedAt
       }
     case REQUEST_ACCOUNT_UPDATE:
@@ -70,12 +63,6 @@ export default function accounts(state = initialState, action) {
           ...state.items,
           [action.account.id]: action.account
         },
-        itemIds: [
-          ...state.itemIds,
-          ...[action.account]
-            .map(item => item.id)
-            .filter(id => state.itemIds.indexOf(id) === -1)
-        ]
       }
     case REQUEST_ACCOUNT_DELETE:
       return {
@@ -92,10 +79,6 @@ export default function accounts(state = initialState, action) {
             result[current] = state.items[current]
             return result
           }, {}),
-        itemIds: [
-          ...state.itemIds.slice(0, state.itemIds.indexOf(action.id)),
-          ...state.itemIds.slice(state.itemIds.indexOf(action.id) + 1)
-        ]
       }
     case LOGOUT_SUCCESS:
       return initialState

@@ -17,8 +17,7 @@ export const transactionsPaginator = createPaginator('/transactions/', 'transact
 export const initialState = {
   isFetching: false,
   didInvalidate: false,
-  items: {},
-  itemIds: []
+  items: {}
 }
 
 export default function transactions(state = initialState, action) {
@@ -49,12 +48,6 @@ export default function transactions(state = initialState, action) {
             }))
             .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
         },
-        itemIds: [
-          ...state.itemIds,
-          ...action.transactions
-            .map(item => item.id)
-            .filter(id => state.itemIds.indexOf(id) === -1)
-        ],
         lastUpdated: action.receivedAt
       }
     case REQUEST_TRANSACTION_UPDATE:
@@ -78,12 +71,6 @@ export default function transactions(state = initialState, action) {
               .map(item => item.id)
           }
         },
-        itemIds: [
-          ...state.itemIds,
-          ...[action.transaction]
-            .map(item => item.id)
-            .filter(id => state.itemIds.indexOf(id) === -1)
-        ]
       }
     case REQUEST_TRANSACTION_DELETE:
       return {
@@ -100,10 +87,6 @@ export default function transactions(state = initialState, action) {
             result[current] = state.items[current]
             return result
           }, {}),
-        itemIds: [
-          ...state.itemIds.slice(0, state.itemIds.indexOf(action.id)),
-          ...state.itemIds.slice(state.itemIds.indexOf(action.id) + 1)
-        ]
       }
     case LOGOUT_SUCCESS:
       return initialState

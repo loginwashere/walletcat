@@ -42,7 +42,6 @@ export default function currencies(state = initialState, action) {
         isFetching: false,
         didInvalidate: false,
         items: newItems,
-        itemIds: Object.keys(newItems),
         lastUpdated: action.receivedAt
       }
     case LOGOUT_SUCCESS:
