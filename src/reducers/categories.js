@@ -1,94 +1,98 @@
-import {
-  INVALIDATE_CATEGORY_LIST,
-  REQUEST_CATEGORY_LIST,
-  RECEIVE_CATEGORY_LIST,
-  REQUEST_CATEGORY_CREATE,
-  RECEIVE_CATEGORY_CREATE,
-  REQUEST_CATEGORY_DELETE,
-  RECEIVE_CATEGORY_DELETE,
-  REQUEST_CATEGORY_UPDATE,
-  RECEIVE_CATEGORY_UPDATE,
-  LOGOUT_SUCCESS
-} from '../actions'
-import createPaginator from '../utils/createPaginator'
-
-export const categoriesPaginator = createPaginator('/categories/', 'categories')
+import { createReducer } from 'redux-act'
+import * as categoriesActions from '../actions/categories'
+import * as authActions from '../actions/auth'
+import { categoriesPaginator } from './pagination'
 
 export const initialState = {
   isFetching: false,
   didInvalidate: false,
-  items: {},
-  lastUpdated: undefined
+  items: {}
 }
 
-export default function categories(state = initialState, action) {
-  switch (action.type) {
-    case INVALIDATE_CATEGORY_LIST:
-      return {
-        ...state,
-        didInvalidate: true
-      }
-    case REQUEST_CATEGORY_LIST:
-      return {
-        ...state,
-        isFetching: true,
-        didInvalidate: false
-      }
-    case RECEIVE_CATEGORY_LIST:
-      return {
-        ...state,
-        isFetching: false,
-        didInvalidate: false,
-        items: {
-          ...state.items,
-          ...action.categories
-            .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
-        },
-        lastUpdated: action.receivedAt
-      }
-    case REQUEST_CATEGORY_UPDATE:
-    case REQUEST_CATEGORY_CREATE:
-      return {
-        ...state,
-        isFetching: true,
-        didInvalidate: false
-      }
-    case RECEIVE_CATEGORY_UPDATE:
-    case RECEIVE_CATEGORY_CREATE:
-      return {
-        ...state,
-        isFetching: false,
-        didInvalidate: false,
-        items: {
-          ...state.items,
-          [action.category.id]: action.category
-        },
-      }
-    case REQUEST_CATEGORY_DELETE:
-      return {
-        ...state,
-        isFetching: true
-      }
-    case RECEIVE_CATEGORY_DELETE:
-      return {
-        ...state,
-        isFetching: false,
-        items: Object.keys(state.items)
-          .filter(key => key !== action.id)
-          .reduce((result, current) => {
-            result[current] = state.items[current]
-            return result
-          }, {}),
-      }
-    case LOGOUT_SUCCESS:
-      return initialState
-    default:
-      return {
-        ...state,
-        items: {
-          ...state.items,
-          ...categoriesPaginator.itemsReducer(state.items, action)
-        }
-      }
-  }
-}
+export const categories = createReducer({
+  [categoriesActions.invalidateCategories]: state => ({
+    ...state,
+    didInvalidate: true
+  }),
+  [categoriesActions.fetchCategoriesRequest]: state => ({
+    ...state,
+    isFetching: true
+  }),
+  [categoriesActions.fetchCategoriesSuccess]: (state, payload) => ({
+    ...state,
+    isFetching: false,
+    didInvalidate: false,
+    items: {
+      ...state.items,
+      ...payload.data.categories
+        .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
+    }
+  }),
+  [categoriesActions.fetchCategoriesFailure]: (state) => ({
+    ...state,
+    isFetching: false,
+  }),
+  [categoriesActions.createCategoryRequest]: state => ({
+    ...state,
+    isFetching: true
+  }),
+  [categoriesActions.createCategorySuccess]: (state, payload) => ({
+    ...state,
+    isFetching: false,
+    didInvalidate: false,
+    items: {
+      ...state.items,
+      [payload.data.id]: payload.data
+    },
+  }),
+  [categoriesActions.createCategoryFailure]: state => ({
+    ...state,
+    isFetching: false
+  }),
+  [categoriesActions.updateCategoryRequest]: state => ({
+    ...state,
+    isFetching: true
+  }),
+  [categoriesActions.updateCategorySuccess]: (state, payload) => ({
+    ...state,
+    isFetching: false,
+    didInvalidate: false,
+    items: {
+      ...state.items,
+      [payload.data.id]: payload.data
+    },
+  }),
+  [categoriesActions.updateCategoryFailure]: state => ({
+    ...state,
+    isFetching: false
+  }),
+
+  [categoriesActions.deleteCategoryRequest]: state => ({
+    ...state,
+    isFetching: true
+  }),
+  [categoriesActions.deleteCategorySuccess]: (state, id) => ({
+    ...state,
+    isFetching: false,
+    items: Object.keys(state.items)
+      .filter(key => key !== id)
+      .reduce((result, current) => {
+        result[current] = state.items[current]
+        return result
+      }, {}),
+  }),
+  [categoriesActions.deleteCategoryFailure]: state => ({
+    ...state,
+    isFetching: false
+  }),
+  [categoriesPaginator.receivePage]: (state, payload) => ({
+    ...state,
+    items: {
+      ...state.items,
+      ...categoriesPaginator.itemsReducer(state.items, payload)
+    }
+  }),
+  [authActions.logoutSuccess]: () => initialState,
+}, initialState)
+
+export default categories

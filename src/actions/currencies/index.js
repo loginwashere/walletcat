@@ -1,48 +1,51 @@
+import { createAction } from 'redux-act'
 import { alertAdd } from '..'
 import api from '../../api'
-import { currenciesPaginator } from '../../reducers/currencies'
+import { currenciesPaginator } from '../../reducers/pagination'
+import { PROJECT_ID } from '../../config'
 
-export const INVALIDATE_APP_CURRENCY_LIST = 'INVALIDATE_APP_CURRENCY_LIST'
+export const invalidateCurrencies = createAction(`${PROJECT_ID}__CURRENCY_LIST__INVALIDATE`)
 
-export const invalidateAppCurrencies = () => ({
-  type: INVALIDATE_APP_CURRENCY_LIST
-})
+export const fetchCurrenciesRequest = createAction(`${PROJECT_ID}__CURRENCY_LIST__REQUEST`)
+export const fetchCurrenciesSuccess = createAction(`${PROJECT_ID}__CURRENCY_LIST__SUCCESS`)
+export const fetchCurrenciesFailure = createAction(`${PROJECT_ID}__CURRENCY_LIST__FAILURE`)
 
-export const REQUEST_APP_CURRENCY_LIST = 'REQUEST_APP_CURRENCY_LIST'
-
-export const requestAppCurrencies = () => ({
-  type: REQUEST_APP_CURRENCY_LIST
-})
-
-export const RECEIVE_APP_CURRENCY_LIST = 'RECEIVE_APP_CURRENCY_LIST'
-
-export const receiveAppCurrencies = json => ({
-  type: RECEIVE_APP_CURRENCY_LIST,
-  currencies: json.data.currencies,
-  receivedAt: Date.now()
-})
-
-const fetchAppCurrencies = ({ page, limit, filter }) => dispatch => {
-  dispatch(requestAppCurrencies())
-  !filter && dispatch(currenciesPaginator.requestPage(page, limit))
+const fetchCurrenciesPage = ({ page, limit }) => dispatch => {
+  dispatch(currenciesPaginator.requestPage(page, limit))
   return api.currencies
-    .fetchAll({ page, limit, filter })
-    .then(json => {
-      dispatch(receiveAppCurrencies(json))
-      !filter  && dispatch(
-          currenciesPaginator.receivePage(
-            parseInt(json.data.meta.page, 10),
-            parseInt(json.data.meta.limit, 10),
-            Boolean(json.data.meta.hasNextPage),
-            json.data.currencies
-          )
+    .fetchAll({ page, limit })
+    .then(response => {
+      dispatch(
+        currenciesPaginator.receivePage(
+          response.data.meta.page,
+          response.data.meta.limit,
+          response.data.meta.hasNextPage,
+          response.data.currencies
         )
-      return Promise.resolve(json.data)
+      )
+      return Promise.resolve(response.data)
     })
-    .catch(error => dispatch(alertAdd(error)))
+    .catch(error => {
+      dispatch(fetchCurrenciesFailure(error))
+      dispatch(alertAdd(error))
+    })
 }
 
-const shouldFetchAppCurrencies = ({
+const fetchCurrenciesFilter = (filter) => dispatch => {
+  dispatch(fetchCurrenciesRequest())
+  return api.currencies
+    .fetchAll({ filter })
+    .then(response => {
+      dispatch(fetchCurrenciesSuccess({ data: response.data }))
+      return Promise.resolve(response.data)
+    })
+    .catch(error => {
+      dispatch(fetchCurrenciesFailure(error))
+      dispatch(alertAdd(error))
+    })
+}
+
+const shouldFetchCurrencies = ({
   currencies: { isFetching, didInvalidate },
   pagination: { currencies: { currentPage } }
 }, page, filter) => {
@@ -50,13 +53,16 @@ const shouldFetchAppCurrencies = ({
     return true
   } else if (isFetching) {
     return false
+  } else {
+    return didInvalidate
   }
-  return didInvalidate
 }
 
 export const fetchAppCurrenciesIfNeeded = ({ page, limit, filter }) => (dispatch, getState) => {
-  if (shouldFetchAppCurrencies(getState(), page, filter)) {
-    return dispatch(fetchAppCurrencies({ page, limit, filter }))
+  if (shouldFetchCurrencies(getState(), page, filter)) {
+    return filter
+      ? dispatch(fetchCurrenciesFilter(filter))
+      : dispatch(fetchCurrenciesPage({ page, limit }))
   } else {
     return Promise.resolve()
   }

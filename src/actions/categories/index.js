@@ -1,55 +1,50 @@
+import { createAction } from 'redux-act'
 import { push } from 'react-router-redux'
 import { alertAdd, convertError } from '..'
 import { SubmissionError } from 'redux-form'
 import api from '../../api'
-import { categoriesPaginator } from '../../reducers/categories'
+import { categoriesPaginator } from '../../reducers/pagination'
+import { PROJECT_ID } from '../../config'
 
-export const INVALIDATE_CATEGORY_LIST = 'INVALIDATE_CATEGORY_LIST'
+export const invalidateCategories = createAction(`${PROJECT_ID}__CATEGORY_LIST__INVALIDATE`)
 
-export function invalidateCategories() {
-  return {
-    type: INVALIDATE_CATEGORY_LIST
-  }
+export const fetchCategoriesRequest = createAction(`${PROJECT_ID}__CATEGORY_LIST__REQUEST`)
+export const fetchCategoriesSuccess = createAction(`${PROJECT_ID}__CATEGORY_LIST__SUCCESS`)
+export const fetchCategoriesFailure = createAction(`${PROJECT_ID}__CATEGORY_LIST__FAILURE`)
+
+const fetchCategoriesPage = ({ page, limit }) => dispatch => {
+  dispatch(categoriesPaginator.requestPage(page, limit))
+  return api.categories
+    .fetchAll({ page, limit })
+    .then(response => {
+      dispatch(
+        categoriesPaginator.receivePage(
+          response.data.meta.page,
+          response.data.meta.limit,
+          response.data.meta.hasNextPage,
+          response.data.categories
+        )
+      )
+      return Promise.resolve(response.data)
+    })
+    .catch(error => {
+      dispatch(fetchCategoriesFailure(error))
+      dispatch(alertAdd(error))
+    })
 }
 
-export const REQUEST_CATEGORY_LIST = 'REQUEST_CATEGORY_LIST'
-
-export function requestCategories() {
-  return {
-    type: REQUEST_CATEGORY_LIST
-  }
-}
-
-export const RECEIVE_CATEGORY_LIST = 'RECEIVE_CATEGORY_LIST'
-
-export function receiveCategories(json) {
-  return {
-    type: RECEIVE_CATEGORY_LIST,
-    categories: json.data.categories,
-    receivedAt: Date.now()
-  }
-}
-
-function fetchCategories({ page, limit, filter }) {
-  return dispatch => {
-    dispatch(requestCategories())
-    !filter && dispatch(categoriesPaginator.requestPage(page, limit))
-    return api.categories
-      .fetchAll({ page, limit, filter })
-      .then(json => {
-        dispatch(receiveCategories(json))
-        !filter && dispatch(
-            categoriesPaginator.receivePage(
-              parseInt(json.data.meta.page, 10),
-              parseInt(json.data.meta.limit, 10),
-              Boolean(json.data.meta.hasNextPage),
-              json.data.categories
-            )
-          )
-        return Promise.resolve(json.data)
-      })
-      .catch(error => dispatch(alertAdd(error)))
-  }
+const fetchCategoriesFilter = (filter) => dispatch => {
+  dispatch(fetchCategoriesRequest())
+  return api.categories
+    .fetchAll({ filter })
+    .then(response => {
+      dispatch(fetchCategoriesSuccess({ data: response.data }))
+      return Promise.resolve(response.data)
+    })
+    .catch(error => {
+      dispatch(fetchCategoriesFailure(error))
+      dispatch(alertAdd(error))
+    })
 }
 
 const shouldFetchCategories = ({
@@ -67,108 +62,66 @@ const shouldFetchCategories = ({
 
 export const fetchCategoriesIfNeeded = ({ page, limit, filter }) => (dispatch, getState) => {
   if (shouldFetchCategories(getState(), page, filter)) {
-    return dispatch(fetchCategories({ page, limit, filter }))
+    return filter
+      ? dispatch(fetchCategoriesFilter(filter))
+      : dispatch(fetchCategoriesPage({ page, limit }))
   } else {
     return Promise.resolve()
   }
 }
 
-export const REQUEST_CATEGORY_CREATE = 'REQUEST_CATEGORY_CREATE'
+export const createCategoryRequest = createAction(`${PROJECT_ID}__CATEGORY_CREATE__REQUEST`)
+export const createCategorySuccess = createAction(`${PROJECT_ID}__CATEGORY_CREATE__SUCCESS`)
+export const createCategoryFailure = createAction(`${PROJECT_ID}__CATEGORY_CREATE__FAILURE`)
 
-export function requestCategoryCreate() {
-  return {
-    type: REQUEST_CATEGORY_CREATE
-  }
+export const createCategory = params => dispatch => {
+  dispatch(createCategoryRequest(params))
+  return api.categories
+    .create(params)
+    .then(response => {
+      dispatch(createCategorySuccess({ data: response.data }))
+      dispatch(invalidateCategories())
+      dispatch(push('/categories'))
+    })
+    .catch(error => {
+      dispatch(createCategoryFailure(error))
+      throw new SubmissionError(convertError(error))
+    })
 }
 
-export const RECEIVE_CATEGORY_CREATE = 'RECEIVE_CATEGORY_CREATE'
+export const deleteCategoryRequest = createAction(`${PROJECT_ID}__CATEGORY_DELETE__REQUEST`)
+export const deleteCategorySuccess = createAction(`${PROJECT_ID}__CATEGORY_DELETE__SUCCESS`)
+export const deleteCategoryFailure = createAction(`${PROJECT_ID}__CATEGORY_DELETE__FAILURE`)
 
-export function receiveCategoryCreate(json) {
-  return {
-    type: RECEIVE_CATEGORY_CREATE,
-    category: json.data,
-    receivedAt: Date.now()
-  }
+export const deleteCategory = id => dispatch => {
+  dispatch(deleteCategoryRequest(id))
+  return api.categories
+    .del(id)
+    .then(() => {
+      dispatch(deleteCategorySuccess(id))
+      dispatch(invalidateCategories())
+      dispatch(push('/categories'))
+    })
+    .catch(error => {
+      dispatch(deleteCategoryFailure(error))
+      dispatch(alertAdd(error))
+    })
 }
 
-export function createCategory(params) {
-  return dispatch => {
-    dispatch(requestCategoryCreate())
-    return api.categories
-      .create(params)
-      .then(json => {
-        dispatch(receiveCategoryCreate(json))
-        dispatch(invalidateCategories())
-        dispatch(push('/categories'))
-      })
-      .catch(error => {
-        throw new SubmissionError(convertError(error))
-      })
-  }
-}
+export const updateCategoryRequest = createAction(`${PROJECT_ID}__CATEGORY_UPDATE__REQUEST`)
+export const updateCategorySuccess = createAction(`${PROJECT_ID}__CATEGORY_UPDATE__SUCCESS`)
+export const updateCategoryFailure = createAction(`${PROJECT_ID}__CATEGORY_UPDATE__FAILURE`)
 
-export const REQUEST_CATEGORY_DELETE = 'REQUEST_CATEGORY_DELETE'
-
-function requestCategoryDelete(id) {
-  return {
-    type: REQUEST_CATEGORY_DELETE,
-    id
-  }
-}
-
-export const RECEIVE_CATEGORY_DELETE = 'RECEIVE_CATEGORY_DELETE'
-
-function receiveCategoryDelete(id) {
-  return {
-    type: RECEIVE_CATEGORY_DELETE,
-    id
-  }
-}
-
-export function deleteCategory(id) {
-  return dispatch => {
-    dispatch(requestCategoryDelete(id))
-    return api.categories
-      .del(id)
-      .then(() => {
-        dispatch(receiveCategoryDelete(id))
-        dispatch(invalidateCategories())
-        dispatch(push('/categories'))
-      })
-      .catch(error => dispatch(alertAdd(error)))
-  }
-}
-
-export const REQUEST_CATEGORY_UPDATE = 'REQUEST_CATEGORY_UPDATE'
-
-function requestCategoryUpdate(id, params) {
-  return {
-    type: REQUEST_CATEGORY_UPDATE,
-    id,
-    params
-  }
-}
-
-export const RECEIVE_CATEGORY_UPDATE = 'RECEIVE_CATEGORY_UPDATE'
-
-function receiveCategoryUpdate(json) {
-  return {
-    type: RECEIVE_CATEGORY_UPDATE,
-    category: json.data
-  }
-}
-
-export function updateCategory(id, params) {
-  return dispatch => {
-    dispatch(requestCategoryUpdate(id, params))
-    return api.categories
-      .update(id, params)
-      .then(json => {
-        dispatch(receiveCategoryUpdate(json))
-        dispatch(push('/categories'))
-      })
-      .catch(error => {
-        throw new SubmissionError(convertError(error))
-      })
-  }
+export const updateCategory = (id, params) => dispatch => {
+  dispatch(updateCategoryRequest({ id, params }))
+  return api.categories
+    .update(id, params)
+    .then(response => {
+      dispatch(updateCategorySuccess({ data: response.data }))
+      dispatch(push('/categories'))
+    })
+    .catch(error => {
+      dispatch(updateCategoryFailure(error))
+      throw new SubmissionError(convertError(error))
+    })
 }

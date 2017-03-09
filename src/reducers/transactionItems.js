@@ -1,9 +1,6 @@
-import {
-  RECEIVE_TRANSACTION_ITEM_LIST,
-  RECEIVE_TRANSACTION_CREATE,
-  RECEIVE_TRANSACTION_UPDATE,
-  LOGOUT_SUCCESS
-} from '../actions'
+import { createReducer } from 'redux-act'
+import * as transactionsActions from '../actions/transactions'
+import * as authActions from '../actions/auth'
 
 export const initialState = {
   isFetching: false,
@@ -11,35 +8,43 @@ export const initialState = {
   items: {}
 }
 
-export default function transactions(state = initialState, action) {
-  switch (action.type) {
-    case RECEIVE_TRANSACTION_ITEM_LIST:
-      return {
-        ...state,
-        isFetching: false,
-        didInvalidate: false,
-        items: {
-          ...state.items,
-          ...action.transactionItems
-            .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
-        },
-        lastUpdated: action.receivedAt
-      }
-    case RECEIVE_TRANSACTION_UPDATE:
-    case RECEIVE_TRANSACTION_CREATE:
-      return {
-        ...state,
-        isFetching: false,
-        didInvalidate: false,
-        items: {
-          ...state.items,
-          ...action.transaction.transactionItems
-            .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
-        }
-      }
-    case LOGOUT_SUCCESS:
-      return initialState
-    default:
-      return state
-  }
-}
+const transactionItems = createReducer({
+  [transactionsActions.fetchTransactionItemsSuccess]: (state, payload) => {
+    const transactionItems = payload.data.transactions
+      .map(transaction => transaction.transactionItems)
+      .reduce((result, current) => result.concat(current), [])
+    return {
+      ...state,
+      isFetching: false,
+      didInvalidate: false,
+      items: {
+        ...state.items,
+        ...transactionItems
+          .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
+      },
+    }
+  },
+  [transactionsActions.updateTransactionSuccess]: (state, payload) => ({
+    ...state,
+    isFetching: false,
+    didInvalidate: false,
+    items: {
+      ...state.items,
+      ...payload.data.transaction.transactionItems
+        .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
+    }
+  }),
+  [transactionsActions.createTransactionSuccess]: (state, payload) => ({
+    ...state,
+    isFetching: false,
+    didInvalidate: false,
+    items: {
+      ...state.items,
+      ...payload.data.transaction.transactionItems
+        .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
+    }
+  }),
+  [authActions.logoutSuccess]: () => initialState,
+}, initialState)
+
+export default transactionItems

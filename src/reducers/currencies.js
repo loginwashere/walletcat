@@ -1,58 +1,45 @@
-import {
-  INVALIDATE_APP_CURRENCY_LIST,
-  REQUEST_APP_CURRENCY_LIST,
-  RECEIVE_APP_CURRENCY_LIST,
-  LOGOUT_SUCCESS
-} from '../actions'
-import createPaginator from '../utils/createPaginator'
-
-export const currenciesPaginator = createPaginator('/currencies/', 'currencies')
+import { createReducer } from 'redux-act'
+import * as currenciesActions from '../actions/currencies'
+import * as authActions from '../actions/auth'
+import { currenciesPaginator } from './pagination'
 
 export const initialState = {
   isFetching: false,
   didInvalidate: false,
-  items: {},
-  itemIds: [],
-  lastUpdated: undefined
+  items: {}
 }
 
-export default function currencies(state = initialState, action) {
-  let items, newItems
-  switch (action.type) {
-    case INVALIDATE_APP_CURRENCY_LIST:
-      return {
-        ...state,
-        didInvalidate: true
-      }
-    case REQUEST_APP_CURRENCY_LIST:
-      return {
-        ...state,
-        isFetching: true,
-        didInvalidate: false
-      }
-    case RECEIVE_APP_CURRENCY_LIST:
-      items = {}
-      action.currencies.forEach(item => items[item.id] = item)
-      newItems = {
-        ...state.items,
-        ...items
-      }
-      return {
-        ...state,
-        isFetching: false,
-        didInvalidate: false,
-        items: newItems,
-        lastUpdated: action.receivedAt
-      }
-    case LOGOUT_SUCCESS:
-      return initialState
-    default:
-      return {
-        ...state,
-        items: {
-          ...state.items,
-          ...currenciesPaginator.itemsReducer(state.items, action)
-        }
-      }
-  }
-}
+export const currencies = createReducer({
+  [currenciesActions.invalidateCurrencies]: state => ({
+    ...state,
+    didInvalidate: true
+  }),
+  [currenciesActions.fetchCurrenciesRequest]: state => ({
+    ...state,
+    isFetching: true
+  }),
+  [currenciesActions.fetchCurrenciesSuccess]: (state, payload) => ({
+    ...state,
+    isFetching: false,
+    didInvalidate: false,
+    items: {
+      ...state.items,
+      ...payload.data.currencies
+        .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
+    }
+  }),
+  [currenciesActions.fetchCurrenciesFailure]: (state) => ({
+    ...state,
+    isFetching: false,
+  }),
+  [currenciesPaginator.receivePage]: (state, payload) => ({
+    ...state,
+    items: {
+      ...state.items,
+      ...currenciesPaginator.itemsReducer(state.items, payload)
+    }
+  }),
+  [authActions.logoutSuccess]: () => initialState,
+}, initialState)
+
+export default currencies

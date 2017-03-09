@@ -1,47 +1,50 @@
+import { createAction } from 'redux-act'
 import { push } from 'react-router-redux'
 import { alertAdd, convertError } from '..'
 import { SubmissionError } from 'redux-form'
 import api from '../../api'
-import { accountsPaginator } from '../../reducers/accounts'
+import { accountsPaginator } from '../../reducers/pagination'
+import { PROJECT_ID } from '../../config'
 
-export const INVALIDATE_ACCOUNT_LIST = 'INVALIDATE_ACCOUNT_LIST'
+export const invalidateAccounts = createAction(`${PROJECT_ID}__ACCOUNT_LIST__INVALIDATE`)
 
-export const invalidateAccounts = () => ({
-  type: INVALIDATE_ACCOUNT_LIST
-})
+export const fetchAccountsRequest = createAction(`${PROJECT_ID}__ACCOUNT_LIST__REQUEST`)
+export const fetchAccountsSuccess = createAction(`${PROJECT_ID}__ACCOUNT_LIST__SUCCESS`)
+export const fetchAccountsFailure = createAction(`${PROJECT_ID}__ACCOUNT_LIST__FAILURE`)
 
-export const REQUEST_ACCOUNT_LIST = 'REQUEST_ACCOUNT_LIST'
-
-export const requestAccounts = () => ({
-  type: REQUEST_ACCOUNT_LIST
-})
-
-export const RECEIVE_ACCOUNT_LIST = 'RECEIVE_ACCOUNT_LIST'
-
-export const receiveAccounts = (json) => ({
-  type: RECEIVE_ACCOUNT_LIST,
-  accounts: json.data.accounts,
-  receivedAt: Date.now()
-})
-
-const fetchAccounts = ({ page, limit, filter }) => dispatch => {
-  dispatch(requestAccounts())
-  !filter && dispatch(accountsPaginator.requestPage(page, limit))
+const fetchAccountsPage = ({ page, limit }) => dispatch => {
+  dispatch(accountsPaginator.requestPage(page, limit))
   return api.accounts
-    .fetchAll({ page, limit, filter })
-    .then(json => {
-      dispatch(receiveAccounts(json))
-      !filter && dispatch(
+    .fetchAll({ page, limit })
+    .then(response => {
+      dispatch(
         accountsPaginator.receivePage(
-          parseInt(json.data.meta.page, 10),
-          parseInt(json.data.meta.limit, 10),
-          Boolean(json.data.meta.hasNextPage),
-          json.data.accounts
+          response.data.meta.page,
+          response.data.meta.limit,
+          response.data.meta.hasNextPage,
+          response.data.accounts
         )
       )
-      return Promise.resolve(json.data)
+      return Promise.resolve(response.data)
     })
-    .catch(error => dispatch(alertAdd(error)))
+    .catch(error => {
+      dispatch(fetchAccountsFailure(error))
+      dispatch(alertAdd(error))
+    })
+}
+
+const fetchAccountsFilter = (filter) => dispatch => {
+  dispatch(fetchAccountsRequest())
+  return api.accounts
+    .fetchAll({ filter })
+    .then(response => {
+      dispatch(fetchAccountsSuccess({ data: response.data }))
+      return Promise.resolve(response.data)
+    })
+    .catch(error => {
+      dispatch(fetchAccountsFailure(error))
+      dispatch(alertAdd(error))
+    })
 }
 
 const shouldFetchAccounts = ({
@@ -59,90 +62,66 @@ const shouldFetchAccounts = ({
 
 export const fetchAccountsIfNeeded = ({ page, limit, filter }) => (dispatch, getState) => {
   if (shouldFetchAccounts(getState(), page, filter)) {
-    return dispatch(fetchAccounts({ page, limit, filter }))
+    return filter
+      ? dispatch(fetchAccountsFilter(filter))
+      : dispatch(fetchAccountsPage({ page, limit }))
   } else {
     return Promise.resolve()
   }
 }
 
-export const REQUEST_ACCOUNT_CREATE = 'REQUEST_ACCOUNT_CREATE'
-export const RECEIVE_ACCOUNT_CREATE = 'RECEIVE_ACCOUNT_CREATE'
-export const ACCOUNT_CREATE_FAILURE = 'ACCOUNT_CREATE_FAILURE'
-
-const accountCreateRequest = () => ({
-  type: REQUEST_ACCOUNT_CREATE
-})
-
-const accountCreateReceive = (json) => ({
-  type: RECEIVE_ACCOUNT_CREATE,
-  account: json.data,
-  receivedAt: Date.now()
-})
+export const createAccountRequest = createAction(`${PROJECT_ID}__ACCOUNT_CREATE__REQUEST`)
+export const createAccountSuccess = createAction(`${PROJECT_ID}__ACCOUNT_CREATE__SUCCESS`)
+export const createAccountFailure = createAction(`${PROJECT_ID}__ACCOUNT_CREATE__FAILURE`)
 
 export const createAccount = params => dispatch => {
-  dispatch(accountCreateRequest())
+  dispatch(createAccountRequest(params))
   return api.accounts
     .create(params)
-    .then(json => {
-      dispatch(accountCreateReceive(json))
+    .then(response => {
+      dispatch(createAccountSuccess({ data: response.data }))
       dispatch(invalidateAccounts())
       dispatch(push('/accounts'))
     })
     .catch(error => {
+      dispatch(createAccountFailure(error))
       throw new SubmissionError(convertError(error))
     })
 }
 
-export const REQUEST_ACCOUNT_DELETE = 'REQUEST_ACCOUNT_DELETE'
-
-const requestAccountDelete = id => ({
-  type: REQUEST_ACCOUNT_DELETE,
-  id
-})
-
-export const RECEIVE_ACCOUNT_DELETE = 'RECEIVE_ACCOUNT_DELETE'
-
-const receiveAccountDelete = id => ({
-  type: RECEIVE_ACCOUNT_DELETE,
-  id
-})
+export const deleteAccountRequest = createAction(`${PROJECT_ID}__ACCOUNT_DELETE__REQUEST`)
+export const deleteAccountSuccess = createAction(`${PROJECT_ID}__ACCOUNT_DELETE__SUCCESS`)
+export const deleteAccountFailure = createAction(`${PROJECT_ID}__ACCOUNT_DELETE__FAILURE`)
 
 export const deleteAccount = id => dispatch => {
-  dispatch(requestAccountDelete(id))
+  dispatch(deleteAccountRequest(id))
   return api.accounts
     .del(id)
     .then(() => {
-      dispatch(receiveAccountDelete(id))
+      dispatch(deleteAccountSuccess(id))
       dispatch(invalidateAccounts())
       dispatch(push('/accounts'))
     })
-    .catch(error => dispatch(alertAdd(error)))
+    .catch(error => {
+      dispatch(deleteAccountFailure(error))
+      dispatch(alertAdd(error))
+    })
 }
 
-export const REQUEST_ACCOUNT_UPDATE = 'REQUEST_ACCOUNT_UPDATE'
-
-const requestAccountUpdate = (id, params) => ({
-  type: REQUEST_ACCOUNT_UPDATE,
-  id,
-  params
-})
-
-export const RECEIVE_ACCOUNT_UPDATE = 'RECEIVE_ACCOUNT_UPDATE'
-
-const receiveAccountUpdate = json => ({
-  type: RECEIVE_ACCOUNT_UPDATE,
-  account: json.data
-})
+export const updateAccountRequest = createAction(`${PROJECT_ID}__ACCOUNT_UPDATE__REQUEST`)
+export const updateAccountSuccess = createAction(`${PROJECT_ID}__ACCOUNT_UPDATE__SUCCESS`)
+export const updateAccountFailure = createAction(`${PROJECT_ID}__ACCOUNT_UPDATE__FAILURE`)
 
 export const updateAccount = (id, params) => dispatch => {
-  dispatch(requestAccountUpdate(id, params))
+  dispatch(updateAccountRequest({ id, params }))
   return api.accounts
     .update(id, params)
-    .then(json => {
-      dispatch(receiveAccountUpdate(json))
+    .then(response => {
+      dispatch(updateAccountSuccess({ data: response.data }))
       dispatch(push('/accounts'))
     })
     .catch(error => {
+      dispatch(updateAccountFailure(error))
       throw new SubmissionError(convertError(error))
     })
 }

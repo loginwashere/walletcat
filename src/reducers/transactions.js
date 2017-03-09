@@ -1,18 +1,7 @@
-import {
-  INVALIDATE_TRANSACTION_LIST,
-  REQUEST_TRANSACTION_LIST,
-  RECEIVE_TRANSACTION_LIST,
-  REQUEST_TRANSACTION_CREATE,
-  RECEIVE_TRANSACTION_CREATE,
-  REQUEST_TRANSACTION_UPDATE,
-  RECEIVE_TRANSACTION_UPDATE,
-  REQUEST_TRANSACTION_DELETE,
-  RECEIVE_TRANSACTION_DELETE,
-  LOGOUT_SUCCESS
-} from '../actions'
-import createPaginator from '../utils/createPaginator'
-
-export const transactionsPaginator = createPaginator('/transactions/', 'transactions')
+import { createReducer } from 'redux-act'
+import * as transactionsActions from '../actions/transactions'
+import * as authActions from '../actions/auth'
+import { transactionsPaginator } from './pagination'
 
 export const initialState = {
   isFetching: false,
@@ -20,77 +9,112 @@ export const initialState = {
   items: {}
 }
 
-export default function transactions(state = initialState, action) {
-  switch (action.type) {
-    case INVALIDATE_TRANSACTION_LIST:
-      return {
-        ...state,
-        didInvalidate: true
+export const transactions = createReducer({
+  [transactionsActions.invalidateTransactions]: state => ({
+    ...state,
+    didInvalidate: true
+  }),
+  [transactionsActions.fetchTransactionsRequest]: state => ({
+    ...state,
+    isFetching: true
+  }),
+  [transactionsActions.fetchTransactionsSuccess]: (state, payload) => ({
+    ...state,
+    isFetching: false,
+    didInvalidate: false,
+    items: {
+      ...state.items,
+      ...payload.data.transactions
+        .map(transaction => ({
+          ...transaction,
+          transactionItems: transaction.transactionItems
+            .map(item => item.id)
+        }))
+        .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
+    }
+  }),
+  [transactionsActions.fetchTransactionsFailure]: (state) => ({
+    ...state,
+    isFetching: false,
+  }),
+  [transactionsActions.createTransactionRequest]: state => ({
+    ...state,
+    isFetching: true
+  }),
+  [transactionsActions.createTransactionSuccess]: (state, payload) => ({
+    ...state,
+    isFetching: false,
+    didInvalidate: false,
+    items: {
+      ...state.items,
+      [payload.data.id]: {
+        ...payload.data,
+        transactionItems: payload.data.transactionItems
+          .map(item => item.id)
       }
-    case REQUEST_TRANSACTION_LIST:
-      return {
-        ...state,
-        isFetching: true,
-        didInvalidate: false
+    },
+  }),
+  [transactionsActions.createTransactionFailure]: state => ({
+    ...state,
+    isFetching: false
+  }),
+  [transactionsActions.updateTransactionRequest]: state => ({
+    ...state,
+    isFetching: true
+  }),
+  [transactionsActions.updateTransactionSuccess]: (state, payload) => ({
+    ...state,
+    isFetching: false,
+    didInvalidate: false,
+    items: {
+      ...state.items,
+      [payload.data.id]: {
+        ...payload.data,
+        transactionItems: payload.data.transactionItems
+          .map(item => item.id)
       }
-    case RECEIVE_TRANSACTION_LIST:
-      return {
-        ...state,
-        isFetching: false,
-        didInvalidate: false,
-        items: {
-          ...state.items,
-          ...action.transactions
-            .map(transaction => ({
-              ...transaction,
-              transactionItems: transaction.transactionItems
-                .map(item => item.id)
-            }))
-            .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
-        },
-        lastUpdated: action.receivedAt
-      }
-    case REQUEST_TRANSACTION_UPDATE:
-    case REQUEST_TRANSACTION_CREATE:
-      return {
-        ...state,
-        isFetching: true,
-        didInvalidate: false
-      }
-    case RECEIVE_TRANSACTION_UPDATE:
-    case RECEIVE_TRANSACTION_CREATE:
-      return {
-        ...state,
-        isFetching: false,
-        didInvalidate: false,
-        items: {
-          ...state.items,
-          [action.transaction.id]: {
-            ...action.transaction,
-            transactionItems: action.transaction.transactionItems
+    },
+  }),
+  [transactionsActions.updateTransactionFailure]: state => ({
+    ...state,
+    isFetching: false
+  }),
+
+  [transactionsActions.deleteTransactionRequest]: state => ({
+    ...state,
+    isFetching: true
+  }),
+  [transactionsActions.deleteTransactionSuccess]: (state, id) => ({
+    ...state,
+    isFetching: false,
+    items: Object.keys(state.items)
+      .filter(key => key !== id)
+      .reduce((result, current) => {
+        result[current] = state.items[current]
+        return result
+      }, {}),
+  }),
+  [transactionsActions.deleteTransactionFailure]: state => ({
+    ...state,
+    isFetching: false
+  }),
+  [transactionsPaginator.receivePage]: (state, payload) => {
+    const items = transactionsPaginator.itemsReducer(state.items, payload)
+    return {
+      ...state,
+      items: {
+        ...state.items,
+        ...Object.keys(items)
+          .map(id => ({
+            ...items[id],
+            transactionItems: items[id].transactionItems
               .map(item => item.id)
-          }
-        },
+          }))
+          .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
       }
-    case REQUEST_TRANSACTION_DELETE:
-      return {
-        ...state,
-        isFetching: true
-      }
-    case RECEIVE_TRANSACTION_DELETE:
-      return {
-        ...state,
-        isFetching: false,
-        items: Object.keys(state.items)
-          .filter(key => key !== action.id)
-          .reduce((result, current) => {
-            result[current] = state.items[current]
-            return result
-          }, {}),
-      }
-    case LOGOUT_SUCCESS:
-      return initialState
-    default:
-      return state
-  }
-}
+    }
+  },
+  [authActions.logoutSuccess]: () => initialState,
+}, initialState)
+
+export default transactions

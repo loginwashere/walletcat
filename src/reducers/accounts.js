@@ -1,94 +1,98 @@
-import {
-  INVALIDATE_ACCOUNT_LIST,
-  REQUEST_ACCOUNT_LIST,
-  RECEIVE_ACCOUNT_LIST,
-  REQUEST_ACCOUNT_CREATE,
-  RECEIVE_ACCOUNT_CREATE,
-  REQUEST_ACCOUNT_UPDATE,
-  RECEIVE_ACCOUNT_UPDATE,
-  REQUEST_ACCOUNT_DELETE,
-  RECEIVE_ACCOUNT_DELETE,
-  LOGOUT_SUCCESS
-} from '../actions'
-import createPaginator from '../utils/createPaginator'
-
-export const accountsPaginator = createPaginator('/accounts/', 'accounts')
+import { createReducer } from 'redux-act'
+import * as accountsActions from '../actions/accounts'
+import * as authActions from '../actions/auth'
+import { accountsPaginator } from './pagination'
 
 export const initialState = {
   isFetching: false,
   didInvalidate: false,
-  items: {},
-  lastUpdated: undefined
+  items: {}
 }
 
-export default function accounts(state = initialState, action) {
-  switch (action.type) {
-    case INVALIDATE_ACCOUNT_LIST:
-      return {
-        ...state,
-        didInvalidate: true
-      }
-    case REQUEST_ACCOUNT_LIST:
-      return {
-        ...state,
-        isFetching: true,
-        didInvalidate: false
-      }
-    case RECEIVE_ACCOUNT_LIST:
-      return {
-        ...state,
-        isFetching: false,
-        didInvalidate: false,
-        items: {
-          ...state.items,
-          ...action.accounts
-            .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
-        },
-        lastUpdated: action.receivedAt
-      }
-    case REQUEST_ACCOUNT_UPDATE:
-    case REQUEST_ACCOUNT_CREATE:
-      return {
-        ...state,
-        isFetching: true,
-        didInvalidate: false
-      }
-    case RECEIVE_ACCOUNT_UPDATE:
-    case RECEIVE_ACCOUNT_CREATE:
-      return {
-        ...state,
-        isFetching: false,
-        didInvalidate: false,
-        items: {
-          ...state.items,
-          [action.account.id]: action.account
-        },
-      }
-    case REQUEST_ACCOUNT_DELETE:
-      return {
-        ...state,
-        isFetching: true
-      }
-    case RECEIVE_ACCOUNT_DELETE:
-      return {
-        ...state,
-        isFetching: false,
-        items: Object.keys(state.items)
-          .filter(key => key !== action.id)
-          .reduce((result, current) => {
-            result[current] = state.items[current]
-            return result
-          }, {}),
-      }
-    case LOGOUT_SUCCESS:
-      return initialState
-    default:
-      return {
-        ...state,
-        items: {
-          ...state.items,
-          ...accountsPaginator.itemsReducer(state.items, action)
-        }
-      }
-  }
-}
+export const accounts = createReducer({
+  [accountsActions.invalidateAccounts]: state => ({
+    ...state,
+    didInvalidate: true
+  }),
+  [accountsActions.fetchAccountsRequest]: state => ({
+    ...state,
+    isFetching: true
+  }),
+  [accountsActions.fetchAccountsSuccess]: (state, payload) => ({
+    ...state,
+    isFetching: false,
+    didInvalidate: false,
+    items: {
+      ...state.items,
+      ...payload.data.accounts
+        .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
+    }
+  }),
+  [accountsActions.fetchAccountsFailure]: (state) => ({
+    ...state,
+    isFetching: false,
+  }),
+  [accountsActions.createAccountRequest]: state => ({
+    ...state,
+    isFetching: true
+  }),
+  [accountsActions.createAccountSuccess]: (state, payload) => ({
+    ...state,
+    isFetching: false,
+    didInvalidate: false,
+    items: {
+      ...state.items,
+      [payload.data.id]: payload.data
+    },
+  }),
+  [accountsActions.createAccountFailure]: state => ({
+    ...state,
+    isFetching: false
+  }),
+  [accountsActions.updateAccountRequest]: state => ({
+    ...state,
+    isFetching: true
+  }),
+  [accountsActions.updateAccountSuccess]: (state, payload) => ({
+    ...state,
+    isFetching: false,
+    didInvalidate: false,
+    items: {
+      ...state.items,
+      [payload.data.id]: payload.data
+    },
+  }),
+  [accountsActions.updateAccountFailure]: state => ({
+    ...state,
+    isFetching: false
+  }),
+
+  [accountsActions.deleteAccountRequest]: state => ({
+    ...state,
+    isFetching: true
+  }),
+  [accountsActions.deleteAccountSuccess]: (state, id) => ({
+    ...state,
+    isFetching: false,
+    items: Object.keys(state.items)
+      .filter(key => key !== id)
+      .reduce((result, current) => {
+        result[current] = state.items[current]
+        return result
+      }, {}),
+  }),
+  [accountsActions.deleteAccountFailure]: state => ({
+    ...state,
+    isFetching: false
+  }),
+  [accountsPaginator.receivePage]: (state, payload) => ({
+    ...state,
+    items: {
+      ...state.items,
+      ...accountsPaginator.itemsReducer(state.items, payload)
+    }
+  }),
+  [authActions.logoutSuccess]: () => initialState,
+}, initialState)
+
+export default accounts

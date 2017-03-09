@@ -1,92 +1,78 @@
+import { createAction } from 'redux-act'
 import { alertAdd } from '..'
 import api from '../../api'
-import { userCurrenciesPaginator } from '../../reducers/userCurrencies'
+import { userCurrenciesPaginator } from '../../reducers/pagination'
+import { PROJECT_ID } from '../../config'
 
-export const REQUEST_ADD_USER_CURRENCY = 'REQUEST_ADD_USER_CURRENCY'
-export const RECEIVE_ADD_USER_CURRENCY = 'RECEIVE_ADD_USER_CURRENCY'
-export const REQUEST_REMOVE_USER_CURRENCY = 'REQUEST_REMOVE_USER_CURRENCY'
-export const RECEIVE_REMOVE_USER_CURRENCY = 'RECEIVE_REMOVE_USER_CURRENCY'
-
-export const requestAddUserCurrency = currency => ({
-  type: REQUEST_ADD_USER_CURRENCY,
-  currency
-})
-
-export const receiveAddUserCurrency = json => ({
-  type: RECEIVE_ADD_USER_CURRENCY,
-  userCurrency: json.data
-})
+export const addUserCurrencyRequest = createAction(`${PROJECT_ID}__USER_CURRENCY_ADD__REQUEST`)
+export const addUserCurrencySuccess = createAction(`${PROJECT_ID}__USER_CURRENCY_ADD__SUCCESS`)
+export const addUserCurrencyFailure = createAction(`${PROJECT_ID}__USER_CURRENCY_ADD__FAILURE`)
 
 export const addUserCurrency = currency => dispatch => {
-  dispatch(requestAddUserCurrency(currency))
+  dispatch(addUserCurrencyRequest(currency))
   return api.userCurrencies
     .create({ currencyId: currency.id })
-    .then(json => dispatch(receiveAddUserCurrency(json)))
-    .catch(error => dispatch(alertAdd(error)))
-}
-
-export const requestRemoveUserCurrency = userCurrency => ({
-  type: REQUEST_REMOVE_USER_CURRENCY,
-  userCurrency
-})
-
-export const receiveRemoveUserCurrency = userCurrency => ({
-  type: RECEIVE_REMOVE_USER_CURRENCY,
-  userCurrency
-})
-
-export function removeUserCurrency(userCurrency) {
-  return dispatch => {
-    dispatch(requestRemoveUserCurrency(userCurrency))
-    return api.userCurrencies
-      .del(userCurrency.id)
-      .then(() => dispatch(receiveRemoveUserCurrency(userCurrency)))
-      .catch(error => dispatch(alertAdd(error)))
-  }
-}
-
-
-export const INVALIDATE_USER_CURRENCY_LIST = 'INVALIDATE_USER_CURRENCY_LIST'
-
-export const invalidateUserCurrencies = () => ({
-  type: INVALIDATE_USER_CURRENCY_LIST
-})
-
-export const REQUEST_USER_CURRENCY_LIST = 'REQUEST_USER_CURRENCY_LIST'
-
-export function requestUserCurrencies() {
-  return {
-    type: REQUEST_USER_CURRENCY_LIST
-  }
-}
-
-export const RECEIVE_USER_CURRENCY_LIST = 'RECEIVE_USER_CURRENCY_LIST'
-
-export function receiveUserCurrencies(json) {
-  return {
-    type: RECEIVE_USER_CURRENCY_LIST,
-    userCurrencies: json.data.userCurrencies,
-    receivedAt: Date.now()
-  }
-}
-
-const fetchUserCurrencies = ({ page, limit, filter }) => dispatch => {
-  dispatch(requestUserCurrencies())
-  !filter && dispatch(userCurrenciesPaginator.requestPage(page, limit))
-  return api.userCurrencies
-    .fetchAll({ page, limit, filter })
-    .then(json => {
-      dispatch(receiveUserCurrencies(json))
-      !filter && dispatch(
-          userCurrenciesPaginator.receivePage(
-            parseInt(json.data.meta.page, 10),
-            parseInt(json.data.meta.limit, 10),
-            Boolean(json.data.meta.hasNextPage),
-            json.data.userCurrencies)
-        )
-      return Promise.resolve(json.data)
+    .then(json => dispatch(addUserCurrencySuccess(json)))
+    .catch(error => {
+      dispatch(addUserCurrencyFailure(error))
+      dispatch(alertAdd(error))
     })
-    .catch(error => dispatch(alertAdd(error)))
+}
+
+export const removeUserCurrencyRequest = createAction(`${PROJECT_ID}__USER_CURRENCY_REMOVE__REQUEST`)
+export const removeUserCurrencySuccess = createAction(`${PROJECT_ID}__USER_CURRENCY_REMOVE__SUCCESS`)
+export const removeUserCurrencyFailure = createAction(`${PROJECT_ID}__USER_CURRENCY_REMOVE__FAILURE`)
+
+export const removeUserCurrency = userCurrency => dispatch => {
+  dispatch(removeUserCurrencyRequest(userCurrency))
+  return api.userCurrencies
+    .del(userCurrency.id)
+    .then(() => dispatch(removeUserCurrencySuccess(userCurrency)))
+    .catch(error => {
+      dispatch(removeUserCurrencyFailure(error))
+      dispatch(alertAdd(error))
+    })
+}
+
+export const invalidateUserCurrencies = createAction(`${PROJECT_ID}__USER_CURRENCY_LIST__INVALIDATE`)
+
+export const fetchUserCurrenciesRequest = createAction(`${PROJECT_ID}__USER_CURRENCY_LIST__REQUEST`)
+export const fetchUserCurrenciesSuccess = createAction(`${PROJECT_ID}__USER_CURRENCY_LIST__SUCCESS`)
+export const fetchUserCurrenciesFailure = createAction(`${PROJECT_ID}__USER_CURRENCY_LIST__FAILURE`)
+
+const fetchUserCurrenciesPage = ({ page, limit }) => dispatch => {
+  dispatch(userCurrenciesPaginator.requestPage(page, limit))
+  return api.userCurrencies
+    .fetchAll({ page, limit })
+    .then(response => {
+      dispatch(
+        userCurrenciesPaginator.receivePage(
+          response.data.meta.page,
+          response.data.meta.limit,
+          response.data.meta.hasNextPage,
+          response.data.userCurrencies
+        )
+      )
+      return Promise.resolve(response.data)
+    })
+    .catch(error => {
+      dispatch(fetchUserCurrenciesFailure(error))
+      dispatch(alertAdd(error))
+    })
+}
+
+const fetchUserCurrenciesFilter = (filter) => dispatch => {
+  dispatch(fetchUserCurrenciesRequest(filter))
+  return api.userCurrencies
+    .fetchAll({ filter })
+    .then(response => {
+      dispatch(fetchUserCurrenciesSuccess({ data: response.data }))
+      return Promise.resolve(response.data)
+    })
+    .catch(error => {
+      dispatch(fetchUserCurrenciesFailure(error))
+      dispatch(alertAdd(error))
+    })
 }
 
 const shouldFetchUserCurrencies = ({
@@ -104,7 +90,9 @@ const shouldFetchUserCurrencies = ({
 
 export const fetchUserCurrenciesIfNeeded = ({ page, limit, filter }) => (dispatch, getState) => {
   if (shouldFetchUserCurrencies(getState(), page, filter)) {
-    return dispatch(fetchUserCurrencies({ page, limit, filter }))
+    return filter
+      ? dispatch(fetchUserCurrenciesFilter(filter))
+      : dispatch(fetchUserCurrenciesPage({ page, limit }))
   } else {
     return Promise.resolve()
   }

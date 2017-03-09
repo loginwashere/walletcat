@@ -2,15 +2,16 @@ import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
 import { reducer as formReducer } from 'redux-form'
 import { intlReducer } from 'react-intl-redux'
-import transactions, { transactionsPaginator } from './transactions'
+import transactions from './transactions'
 import transactionItems from './transactionItems'
-import currencies, { currenciesPaginator } from './currencies'
+import currencies from './currencies'
 import auth from './auth'
 import alerts from './alerts'
-import userCurrencies, { userCurrenciesPaginator } from './userCurrencies'
-import categories, { categoriesPaginator } from './categories'
-import accounts, { accountsPaginator } from './accounts'
-import agents, { agentsPaginator } from './agents'
+import userCurrencies from './userCurrencies'
+import categories from './categories'
+import accounts from './accounts'
+import agents from './agents'
+import pagination from './pagination'
 
 export default combineReducers({
   alerts,
@@ -25,12 +26,5 @@ export default combineReducers({
   routing: routerReducer,
   form: formReducer,
   intl: intlReducer,
-  pagination: combineReducers({
-    currencies: currenciesPaginator.reducer,
-    userCurrencies: userCurrenciesPaginator.reducer,
-    categories: categoriesPaginator.reducer,
-    accounts: accountsPaginator.reducer,
-    agents: agentsPaginator.reducer,
-    transactions: transactionsPaginator.reducer,
-  })
+  pagination
 })

@@ -1,94 +1,98 @@
-import {
-  INVALIDATE_AGENT_LIST,
-  REQUEST_AGENT_LIST,
-  RECEIVE_AGENT_LIST,
-  REQUEST_AGENT_CREATE,
-  RECEIVE_AGENT_CREATE,
-  REQUEST_AGENT_DELETE,
-  RECEIVE_AGENT_DELETE,
-  REQUEST_AGENT_UPDATE,
-  RECEIVE_AGENT_UPDATE,
-  LOGOUT_SUCCESS
-} from '../actions'
-import createPaginator from '../utils/createPaginator'
-
-export const agentsPaginator = createPaginator('/agents/', 'agents')
+import { createReducer } from 'redux-act'
+import * as agentsActions from '../actions/agents'
+import * as authActions from '../actions/auth'
+import { agentsPaginator } from './pagination'
 
 export const initialState = {
   isFetching: false,
   didInvalidate: false,
-  items: {},
-  lastUpdated: undefined
+  items: {}
 }
 
-export default function agents(state = initialState, action) {
-  switch (action.type) {
-    case INVALIDATE_AGENT_LIST:
-      return {
-        ...state,
-        didInvalidate: true
-      }
-    case REQUEST_AGENT_LIST:
-      return {
-        ...state,
-        isFetching: true,
-        didInvalidate: false
-      }
-    case RECEIVE_AGENT_LIST:
-      return {
-        ...state,
-        isFetching: false,
-        didInvalidate: false,
-        items: {
-          ...state.items,
-          ...action.agents
-            .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
-        },
-        lastUpdated: action.receivedAt
-      }
-    case REQUEST_AGENT_UPDATE:
-    case REQUEST_AGENT_CREATE:
-      return {
-        ...state,
-        isFetching: true,
-        didInvalidate: false
-      }
-    case RECEIVE_AGENT_UPDATE:
-    case RECEIVE_AGENT_CREATE:
-      return {
-        ...state,
-        isFetching: false,
-        didInvalidate: false,
-        items: {
-          ...state.items,
-          [action.agent.id]: action.agent
-        },
-      }
-    case REQUEST_AGENT_DELETE:
-      return {
-        ...state,
-        isFetching: true
-      }
-    case RECEIVE_AGENT_DELETE:
-      return {
-        ...state,
-        isFetching: false,
-        items: Object.keys(state.items)
-          .filter(key => key !== action.id)
-          .reduce((result, current) => {
-            result[current] = state.items[current]
-            return result
-          }, {}),
-      }
-    case LOGOUT_SUCCESS:
-      return initialState
-    default:
-      return {
-        ...state,
-        items: {
-          ...state.items,
-          ...agentsPaginator.itemsReducer(state.items, action)
-        }
-      }
-  }
-}
+export const agents = createReducer({
+  [agentsActions.invalidateAgents]: state => ({
+    ...state,
+    didInvalidate: true
+  }),
+  [agentsActions.fetchAgentsRequest]: state => ({
+    ...state,
+    isFetching: true
+  }),
+  [agentsActions.fetchAgentsSuccess]: (state, payload) => ({
+    ...state,
+    isFetching: false,
+    didInvalidate: false,
+    items: {
+      ...state.items,
+      ...payload.data.agents
+        .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
+    }
+  }),
+  [agentsActions.fetchAgentsFailure]: (state) => ({
+    ...state,
+    isFetching: false,
+  }),
+  [agentsActions.createAgentRequest]: state => ({
+    ...state,
+    isFetching: true
+  }),
+  [agentsActions.createAgentSuccess]: (state, payload) => ({
+    ...state,
+    isFetching: false,
+    didInvalidate: false,
+    items: {
+      ...state.items,
+      [payload.data.id]: payload.data
+    },
+  }),
+  [agentsActions.createAgentFailure]: state => ({
+    ...state,
+    isFetching: false
+  }),
+  [agentsActions.updateAgentRequest]: state => ({
+    ...state,
+    isFetching: true
+  }),
+  [agentsActions.updateAgentSuccess]: (state, payload) => ({
+    ...state,
+    isFetching: false,
+    didInvalidate: false,
+    items: {
+      ...state.items,
+      [payload.data.id]: payload.data
+    },
+  }),
+  [agentsActions.updateAgentFailure]: state => ({
+    ...state,
+    isFetching: false
+  }),
+
+  [agentsActions.deleteAgentRequest]: state => ({
+    ...state,
+    isFetching: true
+  }),
+  [agentsActions.deleteAgentSuccess]: (state, id) => ({
+    ...state,
+    isFetching: false,
+    items: Object.keys(state.items)
+      .filter(key => key !== id)
+      .reduce((result, current) => {
+        result[current] = state.items[current]
+        return result
+      }, {}),
+  }),
+  [agentsActions.deleteAgentFailure]: state => ({
+    ...state,
+    isFetching: false
+  }),
+  [agentsPaginator.receivePage]: (state, payload) => ({
+    ...state,
+    items: {
+      ...state.items,
+      ...agentsPaginator.itemsReducer(state.items, payload)
+    }
+  }),
+  [authActions.logoutSuccess]: () => initialState,
+}, initialState)
+
+export default agents
