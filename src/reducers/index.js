@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
 import { reducer as formReducer } from 'redux-form'
+import { intlReducer } from 'react-intl-redux'
 import transactions, { transactionsPaginator } from './transactions'
 import transactionItems from './transactionItems'
 import currencies, { currenciesPaginator } from './currencies'
@@ -23,6 +24,7 @@ export default combineReducers({
   transactionItems,
   routing: routerReducer,
   form: formReducer,
+  intl: intlReducer,
   pagination: combineReducers({
     currencies: currenciesPaginator.reducer,
     userCurrencies: userCurrenciesPaginator.reducer,

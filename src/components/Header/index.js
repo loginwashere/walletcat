@@ -10,12 +10,15 @@ import {
 import { LinkContainer } from 'react-router-bootstrap'
 import { HeaderProfile } from '..'
 import HeaderBrandLink from '../HeaderBrandLink'
+import SwitchLocale from '../SwitchLocale'
+
+import './style.less'
 
 export class Header extends Component {
   render() {
     const { user, isAuthenticated, dispatch } = this.props
     return (
-      <Navbar collapseOnSelect fixedTop>
+      <Navbar collapseOnSelect fixedTop className="Header">
         <Navbar.Header>
             <HeaderBrandLink to="/" />
           <Navbar.Toggle />
@@ -106,6 +109,7 @@ export class Header extends Component {
             {!isAuthenticated && <LinkContainer to="/register">
               <NavItem eventKey={12} href="#">Create an account</NavItem>
             </LinkContainer>}
+            <NavItem componentClass={SwitchLocale} />
           </Nav>
         </Navbar.Collapse>
       </Navbar>

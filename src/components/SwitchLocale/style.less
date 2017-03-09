@@ -1,0 +1,58 @@
+@import "~flag-icon-css/less/variables.less";
+
+@flag-icon-css-path: "~flag-icon-css/less/../flags";
+
+@import "~flag-icon-css/less/flag-icon-base.less";
+@import "~flag-icon-css/less/flag-icon-list.less";
+@import "~flag-icon-css/less/flag-icon-more.less";
+
+.SwitchLocale {
+  padding: 15px 10px;
+
+  ul {
+    min-width: 50px;
+  }
+
+  a,
+  a:hover,
+  a:focus {
+    background-color: transparent;
+    text-decoration:  none;
+  }
+}
+
+.landing {
+  .navbar-default .navbar-nav .SwitchLocale {
+    a,
+    a:hover,
+    a:focus {
+      background-color: transparent;
+      text-decoration:  none;
+    }
+    a:hover,
+    a:focus {
+      .caret {
+        color: white;
+      }
+    }
+    a {
+      .caret {
+        color: rgba(255, 255, 255, 0.7);
+      }
+    }
+  }
+
+  .navbar-default .navbar-nav .open.SwitchLocale {
+    a:hover,
+    a:focus {
+      .caret {
+        color: white;
+      }
+    }
+    a {
+      .caret {
+        color: rgba(255, 255, 255, 0.7);
+      }
+    }
+  }
+}

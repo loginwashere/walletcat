@@ -11,6 +11,7 @@ import {
 import HeaderBrandLink from '../HeaderBrandLink'
 import { LinkContainer } from 'react-router-bootstrap'
 import { HeaderProfile } from '..'
+import SwitchLocale from '../SwitchLocale'
 
 import image from './img/demo-screen1.png'
 
@@ -77,6 +78,7 @@ export class Landing extends Component {
               {!isAuthenticated && <LinkContainer to="/register">
                 <NavItem eventKey={12} href="#">Create an account</NavItem>
               </LinkContainer>}
+              <NavItem componentClass={SwitchLocale} />
             </Nav>
           </Navbar.Collapse>
         </Navbar>
@@ -189,7 +191,7 @@ export class Landing extends Component {
         <section className="cta">
           <div className="cta-content">
             <div className="container">
-              <h2>Stop waiting.<br />Start building.</h2>
+              <h2>Stop waiting.<br />Start manage your finances.</h2>
               <Link to="/register" className="btn btn-outline btn-xl page-scroll">Let's Get Started!</Link>
             </div>
           </div>

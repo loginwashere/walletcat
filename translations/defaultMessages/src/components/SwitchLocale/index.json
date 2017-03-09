@@ -1,0 +1,10 @@
+[
+  {
+    "id": "SwitchLocale.english.label",
+    "defaultMessage": "English"
+  },
+  {
+    "id": "SwitchLocale.swedish.label",
+    "defaultMessage": "Swedish"
+  }
+]

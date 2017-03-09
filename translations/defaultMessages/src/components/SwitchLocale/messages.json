@@ -1,0 +1,14 @@
+[
+  {
+    "id": "SwitchLocale.english.label",
+    "defaultMessage": "English"
+  },
+  {
+    "id": "SwitchLocale.russian.label",
+    "defaultMessage": "Russian"
+  },
+  {
+    "id": "SwitchLocale.ukrainian.label",
+    "defaultMessage": "Ukrainian"
+  }
+]

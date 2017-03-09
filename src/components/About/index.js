@@ -1,7 +1,20 @@
 import React from 'react'
+import { intlShape, injectIntl, defineMessages } from 'react-intl'
 
-const About = () => (
-  <h1>About</h1>
+const messages = defineMessages({
+  header: {
+    id: 'About.header',
+    defaultMessage: 'About',
+    description: 'About header'
+  }
+})
+
+const About = ({ intl }) => (
+  <h1>{intl.formatMessage(messages.header)}</h1>
 )
 
-export default About
+About.propTypes = {
+  intl: intlShape.isRequired,
+}
+
+export default injectIntl(About)
