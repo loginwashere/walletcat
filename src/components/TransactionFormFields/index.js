@@ -21,7 +21,34 @@ const TransactionItems = ({ fields, meta: { touched, error }, ...props }) => (
     {fields.map((transactionItem, index) =>
       <Row key={index}>
         <FormGroup>
-        <Col sm={1} xs={3}>
+          <Col sm={1} xs={3} smHidden mdHidden lgHidden>
+            <Button
+              type="button"
+              bsStyle={ fields.get(index).type === 'debit'
+                ? 'success'
+                : 'danger' }
+              title="Change type"
+              onClick={toggleType(fields, index)}>
+              <Glyphicon glyph={ fields.get(index).type === 'debit'
+                ? 'plus'
+                : 'minus' } />
+            </Button>
+            <Field
+              type="hidden"
+              component="input"
+              name={`${transactionItem}.type`} />
+          </Col>
+          <Col xs={3} xsOffset={6} smHidden mdHidden lgHidden>
+            <Button
+              type="button"
+              title="Remove Transaction Item"
+              bsStyle="danger"
+              onClick={() => fields.remove(index)}>
+              <Glyphicon glyph="remove" />
+            </Button>
+          </Col>
+        </FormGroup>
+        <Col sm={1} xsHidden>
           <Button
             type="button"
             bsStyle={ fields.get(index).type === 'debit'
@@ -38,16 +65,6 @@ const TransactionItems = ({ fields, meta: { touched, error }, ...props }) => (
             component="input"
             name={`${transactionItem}.type`} />
         </Col>
-        <Col xs={3} xsOffset={6} smHidden mdHidden lgHidden>
-          <Button
-            type="button"
-            title="Remove Transaction Item"
-            bsStyle="danger"
-            onClick={() => fields.remove(index)}>
-            <Glyphicon glyph="remove" />
-          </Button>
-        </Col>
-        </FormGroup>
         <Col sm={3} xs={12}>
           {props.type === 'edit' && props.customInitialValues &&
             <Field
