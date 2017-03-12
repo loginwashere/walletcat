@@ -9,7 +9,7 @@ import { LinkContainer } from 'react-router-bootstrap'
 export class Footer extends Component {
   render() {
     return (
-      <Navbar collapseOnSelect fixedBottom>
+      <Navbar collapseOnSelect fluid fixedBottom>
         <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav>

@@ -30,7 +30,7 @@ const transactionItems = createReducer({
     didInvalidate: false,
     items: {
       ...state.items,
-      ...payload.data.transaction.transactionItems
+      ...payload.data.transactionItems
         .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
     }
   }),
@@ -40,7 +40,7 @@ const transactionItems = createReducer({
     didInvalidate: false,
     items: {
       ...state.items,
-      ...payload.data.transaction.transactionItems
+      ...payload.data.transactionItems
         .reduce((obj, item) => ({ ...obj, [item.id]: item }), {})
     }
   }),

@@ -18,7 +18,7 @@ export class Header extends Component {
   render() {
     const { user, isAuthenticated, dispatch } = this.props
     return (
-      <Navbar collapseOnSelect fixedTop className="Header">
+      <Navbar collapseOnSelect fixedTop fluid className="Header">
         <Navbar.Header>
             <HeaderBrandLink to="/" />
           <Navbar.Toggle />

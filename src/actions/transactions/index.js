@@ -129,6 +129,7 @@ export const updateTransaction = (id, params) => dispatch => {
     .update(id, params)
     .then(response => {
       dispatch(updateTransactionSuccess({ data: response.data }))
+      dispatch(invalidateTransactions())
       dispatch(push('/transactions'))
     })
     .catch(error => {

@@ -7,20 +7,34 @@ import './style.less'
 
 const TransactionItem = ({ transactionItem, account, currency, type, first }) => (
   <Row>
-    {first && <Col sm={1} xs={3}>
+    {first && <Col sm={1} xs={12}>
       {type === 'credit'
         ? 'From'
         : 'To'}
     </Col>}
-    <Col sm={9}
+    <Col sm={7}
          smOffset={!first
           ? 1
           : 0}
          xs={7}
          xsOffset={!first
-          ? 3
-          : 9}><b>{account.name}</b></Col>
-    <Col sm={2} xs={2}>
+          ? 0
+          : 0}>
+      <b>{account.name}</b>
+    </Col>
+    <Col sm={2}
+         xs={5}>
+      <Badge bsStyle={type === 'credit'
+              ? 'danger'
+              : 'success'}
+             pullRight>
+        {transactionItem.amount} {currency.name}
+      </Badge>
+    </Col>
+    <Col sm={2}
+         xs={5}
+         smOffset={0}
+         xsOffset={7}>
       <Badge bsStyle={type === 'credit'
               ? 'danger'
               : 'success'}

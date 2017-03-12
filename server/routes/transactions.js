@@ -8,6 +8,7 @@ const validate = require('../middleware/validate')
 const transactionSchema = require('../../common/validation').transactionSchema
 const paginationSchema = require('../../common/validation').paginationSchema
 const pagination = require('../utils/pagination')
+const debug = require('debug')('routes:transactions')
 
 router.get('/', validate.query(paginationSchema), (req, res, next) => {
   const defaultQuery = {
@@ -86,6 +87,10 @@ router.put('/:id', validate.body(transactionSchema), (req, res, next) => {
       }
       return models.sequelize.transaction((t) => {
         const updateOptions = Object.assign({}, options, { transaction: t })
+        const transactionItemsDataByItemId = req.body.transactionItems
+          .reduce((obj, item) => Object.assign({}, obj, { [item.id]: item }), {})
+        const transactionItemsByItemId = transaction.transactionItems
+          .reduce((obj, item) => Object.assign({}, obj, { [item.id]: item }), {})
         return transaction
           .update({
             description: req.body.description,
@@ -94,22 +99,56 @@ router.put('/:id', validate.body(transactionSchema), (req, res, next) => {
             updatedAt: format(new Date())
           }, updateOptions)
           .then(transaction => Promise
-            .all(transaction.transactionItems
-              .map(transactionItem => {
-                if (transactionItem.changed()) {
+            .all(req.body.transactionItems
+              .map(transactionItemData => {
+                const transactionItem = transactionItemsByItemId[transactionItemData.id]
+                debug(transactionItemData, transactionItem)
+                if (transactionItem) {
                   transactionItem.transactionId = transaction.id
+                  transactionItem.accountId = transactionItemData.accountId
+                  transactionItem.amount = transactionItemData.amount
+                  transactionItem.rate = transactionItemData.rate
+                  transactionItem.type = transactionItemData.type
                   transactionItem.updatedAt = format(new Date())
                   if (!transactionItem.id) {
                     transactionItem.id = v4()
                     transactionItem.createdAt = format(new Date())
                   }
                   return transactionItem.save(updateOptions)
+                } else {
+                  return models.transactionItem.create(
+                    Object.assign({}, transactionItemData, {
+                      id: v4(),
+                      transactionId: transaction.id,
+                      createdAt: format(new Date()),
+                      updatedAt: format(new Date())
+                    }),
+                    {
+                      transaction: updateOptions.transaction
+                    }
+                  )
                 }
-                return Promise.resolve()
               })
+              .concat(transaction.transactionItems
+                .map(transactionItem => {
+                  const transactionItemData = transactionItemsDataByItemId[transactionItem.id]
+                  if (!transactionItemData) {
+                    return models.transactionItem.destroy({
+                      where: {
+                        $and: [
+                          { id: transactionItem.id },
+                          { transactionId: transaction.id }
+                        ]
+                      },
+                      transaction: updateOptions.transaction
+                    })
+                  }
+                })
+              )
             )
-            .then(() => transaction.reload()
-              .then(transaction => res.json(transaction))))
+          )
+          .then(() => transaction.reload()
+            .then(transaction => res.json(transaction)))
       })
     })
     .catch(next)
