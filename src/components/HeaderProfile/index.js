@@ -24,7 +24,7 @@ export class HeaderProfile extends Component {
     return (
       <NavDropdown eventKey={9}
                    title={Profile(user)}
-                   className="profile dropdown"
+                   className="profile"
                    id="profile-menu-item-dropdown"
                    onSelect={onSelect}>
         <LinkContainer to="/profile">

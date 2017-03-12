@@ -6,7 +6,7 @@
 @import "~flag-icon-css/less/flag-icon-list.less";
 @import "~flag-icon-css/less/flag-icon-more.less";
 
-.SwitchLocale {
+li.SwitchLocale.dropdown {
   ul {
     min-width: 50px;
   }
@@ -16,6 +16,9 @@
   a:focus {
     background-color: transparent;
     text-decoration:  none;
+  }
+  a.dropdown-toggle {
+    padding-top: 14px;
   }
 }
 
@@ -52,5 +55,11 @@
         color: rgba(255, 255, 255, 0.7);
       }
     }
+  }
+}
+
+.SwitchLocale.dropdown.active {
+  .dropdown-toggle {
+    background-color: transparent;
   }
 }
