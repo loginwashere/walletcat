@@ -6,8 +6,8 @@ const DEFAULT_LIMIT = 10
 const DEFAULT_PAGE = 1
 
 const createPaginator = (endpoint, resultKey) => {
-  const REQUEST_PAGE = `${PROJECT_ID.toUpperCase()}__${resultKey.toUpperCase()}_PAGE__REQUEST`
-  const RECEIVE_PAGE = `${PROJECT_ID.toUpperCase()}__${resultKey.toUpperCase()}_PAGE__RECEIVE`
+  const REQUEST_PAGE = `${PROJECT_ID}__${resultKey.toUpperCase()}_PAGE__REQUEST`
+  const RECEIVE_PAGE = `${PROJECT_ID}__${resultKey.toUpperCase()}_PAGE__RECEIVE`
 
   const requestPage = createAction(REQUEST_PAGE, (page = DEFAULT_PAGE, limit = DEFAULT_LIMIT) => ({
     type: REQUEST_PAGE,
